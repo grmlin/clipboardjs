@@ -1,0 +1,172 @@
+html {
+    background: #fff url(/img/skin_side_up.png) repeat center 0;
+}
+
+body {
+    background: transparent;
+}
+
+.centered {
+    text-align: center;
+}
+.blocker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8) url(/img/load.gif) no-repeat center;
+}
+
+.modal {
+    overflow: hidden;
+    margin-top: -4px;
+    top: 0;
+}
+
+.container > .page-header {
+    position: relative;
+}
+
+.user {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.user .change,
+.user .create,
+.user.changed .login{
+    display: none;
+}
+
+.user.changed .change,
+.user.changed .create {
+    display: inline-block;
+}
+
+.user .name {
+    text-decoration: underline;
+    padding: 4px 6px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.user .name:active,
+.user .name:focus,
+.user .name:hover {
+    background: #fff;
+    outline-color: #717F8B;
+    outline-style: auto;
+    outline-width: 5px;
+    text-decoration: none;
+
+}
+
+.create,
+.board-list h2 {
+    text-align: center;
+}
+
+.create + .board-list {
+    margin-top: 50px;
+}
+
+.board-list .available-boards ul {
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+}
+
+.board-list .available-boards ul li {
+    padding: 5px 10px;
+    background: #fff;
+    -webkit-transition: background 250ms ease-in;
+    -moz-transition: background 250ms ease-in;
+    -ms-transition: background 250ms ease-in;
+    -o-transition: background 250ms ease-in;
+    transition: background 250ms ease-in;
+    position: relative;
+}
+
+.board-list .available-boards ul li:hover {
+    background: #f5f5f5;
+}
+
+.board-list .available-boards ul li + li {
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.board-list .available-boards ul li a {
+    color: #333;
+    display: block;
+    overflow: hidden;
+}
+
+.board-list .available-boards ul li a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+.board-list .available-boards ul li a .user-name {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.show {
+    background: #f5f5f5;
+}
+
+.show .editable-board-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 2px 6px;
+    text-decoration: underline;
+
+}
+
+.show .editable-board-title:active,
+.show .editable-board-title:focus,
+.show .editable-board-title:hover {
+    background: #fff;
+    color: #333;
+    outline-color: #717F8B;
+    outline-style: auto;
+    outline-width: 5px;
+    text-decoration: none;
+}
+
+.show .board-name .change {
+    display: none;
+    margin: 0 15px;
+}
+
+.show .board-name .changed .change {
+    display: inline-block;
+}
+                    
+.show .messages-list .table-wrapper {
+    margin: 0 -19px;
+}
+
+
+.show .drop-zone {
+    text-align: center;
+    border: 2px dashed #ccc;
+    color: #ccc;
+}
+
+.show .drop-zone p {
+    padding: 25px 0;
+    margin: 0;
+}
+
+.show textarea.text-board {
+    width: 100%;
+    height: 150px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.show .alert {
+    text-align: center;
+}

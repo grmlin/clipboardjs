@@ -1,0 +1,238 @@
+<head>
+    <title>ClipboardJS</title>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <a id="logo" href="/"><h1>ClipboardJS</h1></a>
+        {{> user}}
+    </div>
+    {{> list}}
+</div>
+
+<div class="container">
+    {{> show}}
+</div>
+{{> blocker}}
+</body>
+
+<template name="user">
+    <div class="row">
+        <div class="user clearfix">
+            {{#with user}}
+            <p>
+                Howdy
+                <span {{#if is_registered}} {{else}}class="name" contenteditable="true"{{/if}}>{{user_name}}</span>!
+            </p>
+
+            <p class="pull-right">
+                {{#if is_registered}}
+                <button class="logout btn btn-small">logout</button>
+                {{else}}
+                <button class="create btn btn-small"><i class="icon-user"></i> register</button>
+                <button class="login btn btn-small"><i class="icon-lock"></i> login</button>
+                {{/if}}
+            </p>
+            {{/with}}
+        </div>
+    </div>
+</template>
+
+<template name="list">
+    {{#if show }}
+    {{> create}}
+    {{> board_list}}
+    {{/if}}
+</template>
+
+<template name="create">
+    <div class="create">
+        <div class="row">
+            <div class="span12">
+                <h2>You want to paste?</h2>
+
+                <p>
+                    <button class="btn btn-primary btn-large">Create a Clipboard</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="board_list">
+    <div class="board-list">
+        <div class="row">
+            <div class="span12">
+                <h2>Or open an existing board</h2>
+            </div>
+        </div>
+        <div class="row">
+            {{#if are_boards_available}}
+            <div class="available-boards span8 offset2">
+                <ul class="unstyled">
+                    {{#each available_boards}}
+                    {{> board}}
+                    {{/each}}
+                </ul>
+            </div>
+            {{else}}
+            <div class="centered">
+                <div class="span12"><span
+                        class="label label-info">Sorry! No boards available yet.</span></div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</template>
+
+<template name="board">
+    <li>
+        <a href="/board/{{_id}}">
+            <h4>{{title}}</h4>
+            <span class="user-name">
+                {{#if is_private}}<i class="icon-lock"></i>{{/if}}
+                <span class="label label-inverse">{{user_name}}</span> 
+            </span>
+        </a>
+    </li>
+</template>
+
+<template name="show">
+    {{#if show}}
+    {{#if is_authorized}}
+    <div class="show well">
+        <div class="board-name">
+            <ul class="unstyled">
+                <li>
+                    Title: <span class="editable-board-title" contenteditable="true">{{board_name}}</span>
+                    <button class="change btn btn-small">save</button>
+                </li>
+                <li>
+                    Owner: <span class="label label-inverse user-name">{{user_name}}</span>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div class="messages-list">
+            <h4>1. View the latest snippets</h4>
+
+            <div class="table-wrapper">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <th>Owner</th>
+                    <th>pasted</th>
+                    </thead>
+                    <tbody>
+                    {{#each messages}}
+                    {{> message_abstr}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div>
+            <h4>2. Add new snippets</h4>
+            <h5>Paste some text</h5>
+            <textarea class="text-board"></textarea>
+
+            <p>
+                <button class="btn btn-small paste-text-board">paste</button>
+            </p>
+            <h5>Or images</h5>
+
+            <div class="drop-zone">
+                <p>Drop Images on here</p>
+            </div>
+        </div>
+    </div>
+
+    {{else}}
+    <div class="show row">
+        <div class="span6 offset3 alert alert-block">
+            <strong>Sorry!</strong> You're not allowed to view this clipboard.
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+</template>
+
+<template name="message_abstr">
+    <tr>
+        <td><span class="label user-name">{{user_name}}</span></td>
+        <td><span class="message">{{message}}</span></td>
+    </tr>
+</template>
+
+<template name="blocker">
+    {{#if block}}
+    <div class="blocker">
+        <div></div>
+    </div>
+    {{/if}}
+</template>
+
+<template name="user_create_modal">
+    <div class="modal-backdrop fade in"></div>
+    <div class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>{{title}}</h3>
+        </div>
+        <form class="form-horizontal">
+            <div class="modal-body">
+                <div class="control-group username">
+                    <label class="control-label" for="username">Username</label>
+
+                    <div class="controls">
+                        <input type="text" id="username" name="username" value="{{user_name}}">
+                        <span class="help-block">Select a unique username with at least 4 characters</span>
+                    </div>
+                </div>
+                <div class="control-group pwd">
+                    <label class="control-label" for="pwd">Your password</label>
+
+                    <div class="controls">
+                        <input type="password" id="pwd" name="pwd">
+                        <span class="help-block">Add a password with at least 6 characters</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button class="btn cancel">Close</button>
+            <button class="btn btn-primary save">{{submit_text}}</button>
+        </div>
+    </div>
+</template>
+<template name="board_create_modal">
+    <div class="modal-backdrop fade in"></div>
+    <div class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Create a new Clipboard</h3>
+        </div>
+        <form class="form-horizontal">
+            <div class="modal-body">
+                <div class="control-group">
+                    <label class="control-label" for="board-title">Board Title</label>
+
+                    <div class="controls">
+                        <input type="text" id="board-title" name="board-title" placeholder="New Board">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="board-private"> private clipboard
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <a href="#" class="btn cancel">Close</a>
+            <a href="#" class="btn btn-primary save">Save changes</a>
+        </div>
+    </div>
+</template>
