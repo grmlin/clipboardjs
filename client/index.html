@@ -104,11 +104,12 @@
         <div class="board-name">
             <ul class="unstyled">
                 <li>
-                    Title: <span class="editable-board-title" contenteditable="true">{{board_name}}</span>
+                    Title: <strong><span{{#if is_editable}} class="editable-board-title"
+                    contenteditable="true"{{/if}}>{{board_name}}</span></strong>
                     <button class="change btn btn-small">save</button>
                 </li>
                 <li>
-                    Owner: <span class="label label-inverse user-name">{{user_name}}</span>
+                    Owner: <strong>{{user_name}}</strong>
                 </li>
             </ul>
         </div>
@@ -134,10 +135,27 @@
         <div>
             <h4>2. Add new snippets</h4>
             <h5>Paste some text</h5>
-            <textarea class="text-board"></textarea>
-
+            <hr>
+            <div class="row">
+                <div class="span3 text-type-wrapper">
+                    <label for="text-type">Type of text</label>
+                    <select name="text-type" id="text-type">
+                        <option value="plain">plain text</option>
+                        <option value="html">HTML</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="Coffeescript">Coffeescript</option>
+                    </select>
+                </div>
+                <div class="span8 text-board-wrapper">
+                    <label for="text-content">Your text <span class="muted">you can drop txt-files below, too</span></label>
+                    <textarea class="text-board" id="text-content"></textarea>
+                </div>
+                <hr>
+                <div class="offset3 span8">
+                    <button class=" btn btn-large btn-block btn-primary paste-text-board">paste</button>
+                </div>
+            </div>
             <p>
-                <button class="btn btn-small paste-text-board">paste</button>
             </p>
             <h5>Or images</h5>
 
@@ -160,7 +178,7 @@
 <template name="message_abstr">
     <tr>
         <td><span class="label user-name">{{user_name}}</span></td>
-        <td><span class="message">{{message}}</span></td>
+        <td><span class="message">{{abstract}}</span></td>
     </tr>
 </template>
 

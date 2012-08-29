@@ -20,18 +20,22 @@ class BoardsController
     Boards.update(board_id, $set:
       {title: name})
 
+  isOwner: (user_id, board_id) ->
+    board = Boards.findOne board_id
+    user_id is board?.user_id
+    
   canViewBoard: (user_id, board_id) ->
     board = Boards.findOne board_id
     not board?.is_private or (user_id is board?.user_id)
-  #Meteor.call "canViewBoard", user_id, board_id, (err, canView) =>
-  #  callback.call null, canView
 
-  createMessage: (boardId, message) ->
-    userid = Session.get(SESSION_USER)
-
-    newid = Messages.insert
-      user_id: userid
-      user_name: Users.findOne(userid)?.user_name
-      time: (new Date()).getTime()
-      board_id: boardId
-      message: message
+  createMessage: (boardId, message, type) ->
+    userId = Session.get(SESSION_USER)
+    Meteor.call("createMessage", userId, boardId, message, type, (err, res) ->
+      console.log res
+    )
+    #newid = Messages.insert
+    #  user_id: userid
+    #  user_name: Users.findOne(userid)?.user_name
+    #  time: (new Date()).getTime()
+    #  board_id: boardId
+     # message: message

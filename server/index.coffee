@@ -16,4 +16,9 @@ Meteor.startup ->
     })
     
   Meteor.publish "messages", ->
-    Messages.find()
+    Messages.find({}, {
+      fields:
+        {
+          message: false
+        }
+    })
