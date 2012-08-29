@@ -34,8 +34,7 @@ body {
     top: 0;
 }
 .user .change,
-.user .create,
-.user.changed .login{
+.user .create {
     display: none;
 }
 
@@ -85,11 +84,15 @@ body {
     transition: background 250ms ease-in;
     position: relative;
 }
-
+.board-list .available-boards ul li.locked {
+    opacity: 0.5;
+}
 .board-list .available-boards ul li:hover {
     background: #f5f5f5;
 }
-
+.board-list .available-boards ul li.locked:hover {
+    background: #fff;
+}
 .board-list .available-boards ul li + li {
     border-top: 2px solid rgba(0, 0, 0, 0.2);
 }
@@ -105,11 +108,24 @@ body {
     text-decoration: none;
 }
 
+.board-list .available-boards ul li.locked a:hover {
+    cursor: not-allowed;
+}
+.board-list .available-boards ul li a i {
+    display: none;    
+}
+
+.board-list .available-boards ul li.private a i {
+    display: inline-block;    
+}
+
 .board-list .available-boards ul li a .user-name {
     position: absolute;
     right: 5px;
     top: 5px;
 }
+
+
 
 .show {
     background: #f5f5f5;

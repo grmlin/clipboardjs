@@ -3,7 +3,7 @@ Meteor.startup ->
     Boards.find({}, {
     fields:
       {
-      user_id: false
+      #user_id: false
       }
     })
 
@@ -14,3 +14,6 @@ Meteor.startup ->
       pwd: false
       }
     })
+    
+  Meteor.publish "messages", ->
+    Messages.find()

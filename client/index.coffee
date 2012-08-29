@@ -28,3 +28,5 @@ Meteor.startup ->
 
         if Backbone.history.fragment is ""
           boardsRouter.navigate "list", trigger: true
+
+    Meteor.subscribe 'messages'

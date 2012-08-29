@@ -1,12 +1,12 @@
 Template.show.is_authorized = ->
   boardsController.canViewBoard(Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID))
 
-  
+
 Template.show.show = ->
   boardId = Session.get(SESSION_BOARD_ID)
   isRightState = appState.getState() is appState.SHOW
   isBoardSelected = boardId isnt ""
-  
+
   isRightState and isBoardSelected
 
 Template.show.board_name = ->
@@ -16,9 +16,9 @@ Template.show.board_name = ->
 Template.show.user_name = ->
   Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
 
-  
+
 Template.show.messages = ->
-  Messages.find({board_id: Session.get(SESSION_BOARD_ID)}, 
+  Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
     {sort:
       {time: -1}
     }).fetch().slice(0, 10)
@@ -30,6 +30,6 @@ Template.show.events =
 
   "keyup .board-name .editable-board-title": (evt) ->
     $(evt.currentTarget).parent().addClass("changed")
-    
+
   "click .board-name .change": (evt) ->
     boardsController.setBoardName(Session.get(SESSION_BOARD_ID), $(evt.currentTarget).prev('.editable-board-title').text())          

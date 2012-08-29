@@ -86,11 +86,11 @@
 </template>
 
 <template name="board">
-    <li>
+    <li class="{{#if is_private}} private{{/if}}{{#if is_locked _id}} locked{{/if}}">
         <a href="/board/{{_id}}">
             <h4>{{title}}</h4>
             <span class="user-name">
-                {{#if is_private}}<i class="icon-lock"></i>{{/if}}
+                <i class="icon-lock"></i>
                 <span class="label label-inverse">{{user_name}}</span> 
             </span>
         </a>
@@ -226,6 +226,10 @@
                         <label class="checkbox">
                             <input type="checkbox" name="board-private"> private clipboard
                         </label>
+
+                        <span class="help-block">
+                            Don't paste important data into the clipboard, it's currently not <strong>that</strong> secure
+                        </span>
                     </div>
                 </div>
             </div>

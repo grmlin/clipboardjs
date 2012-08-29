@@ -15,6 +15,10 @@ do ->
     getUserId: (name, pwd) ->
       user = Users.findOne({user_name: name, is_registered: true})
       if user and user.pwd is getHash pwd
-       return user._id
+        return user._id
       else
-       throw Meteor.Error(403, "Access Denied")
+        throw new Meteor.Error(403, "Access Denied")
+
+    canViewBoard: (userId, boardId) ->
+      board = Boards.findOne boardId
+      not board?.is_private or (userId is board?.user_id)

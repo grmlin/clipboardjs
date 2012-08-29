@@ -1,6 +1,6 @@
 class BoardsController
   constructor: ->
-        
+
   resetBoardSession: ->
     Session.set SESSION_BOARD_ID, ""
 
@@ -20,13 +20,12 @@ class BoardsController
     Boards.update(board_id, $set:
       {title: name})
 
-  isOwner: (user_id, board) ->
-    user_id is board?.user_id
-    
   canViewBoard: (user_id, board_id) ->
     board = Boards.findOne board_id
-    not board?.is_private or @isOwner user_id, board
-    
+    not board?.is_private or (user_id is board?.user_id)
+  #Meteor.call "canViewBoard", user_id, board_id, (err, canView) =>
+  #  callback.call null, canView
+
   createMessage: (boardId, message) ->
     userid = Session.get(SESSION_USER)
 
