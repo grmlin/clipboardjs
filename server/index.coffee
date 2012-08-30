@@ -14,11 +14,12 @@ Meteor.startup ->
       pwd: false
       }
     })
-    
+
   Meteor.publish "messages", ->
     Messages.find({}, {
-      fields:
-        {
-          message: false
-        }
+    fields:
+      {
+      raw: false
+      highlighted: false
+      }
     })

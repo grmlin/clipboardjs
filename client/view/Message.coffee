@@ -1,61 +1,47 @@
-Template.show.is_authorized = ->
-  boardsController.canViewBoard(Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID))
+Template.message_view.is_authorized = ->
+  messagesController.canViewMessage(Session.get(SESSION_USER), Session.get(SESSION_MESSAGE_ID))
 
 
-Template.show.show = ->
-  boardId = Session.get(SESSION_BOARD_ID)
-  isRightState = appState.getState() is appState.SHOW
-  isBoardSelected = boardId isnt ""
+Template.message_view.show = ->
+  messageId = Session.get(SESSION_MESSAGE_ID)
+  isRightState = appState.getState() is appState.MESSAGE
+  isMessageSelected = messageId isnt ""
 
-  isRightState and isBoardSelected
+  isRightState and isMessageSelected
 
-Template.show.is_editable = ->
-  boardsController.isOwner(Session.get(SESSION_USER),Session.get(SESSION_BOARD_ID))
-  
-Template.show.board_name = ->
-  board = Boards.findOne(Session.get(SESSION_BOARD_ID))
-  return if board then board.title else "UNKNOWN"
+Template.message_view.board_name = (boardId) ->
+  Boards.findOne(boardId)?.title
 
-Template.show.user_name = ->
-  Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
+Template.message_view.message = ->
+  Messages.findOne Session.get(SESSION_MESSAGE_ID)
 
+Template.message_view.prettyprint = ->
+  uuid = Meteor.uuid()
+  messagesController.getHighlightedMessage(Session.get(SESSION_MESSAGE_ID), (message) ->
+    $('#' + uuid).html(message).removeClass("loading")
+  )
+  uuid
 
-Template.show.messages = ->
-  Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
-    {sort:
-      {time: -1}
-    }).fetch().slice(0, 10)
-
-Template.show.events =
-  "click .paste-text-board": (evt) ->
-    $textarea = $(evt.currentTarget)
-    txt = $textarea.parent().prevAll('.text-board-wrapper').find("textarea").val()
-    type = $textarea.parent().prevAll('.text-type-wrapper').find("select").val()
-
-    messagesController.createMessage Session.get(SESSION_BOARD_ID), txt, type unless txt is ""
-
-  "keyup .board-name .editable-board-title": (evt) ->
-    $(evt.currentTarget).parent().addClass("changed")
-
-  "click .board-name .change": (evt) ->
-    boardsController.setBoardName(Session.get(SESSION_BOARD_ID), $(evt.currentTarget).prev('.editable-board-title').text())
-
-  'dragenter .file-drop': (evt) ->
-    $(evt.currentTarget).addClass('over')
-
-  'dragleave .file-drop': (evt) ->
-    $(evt.currentTarget).removeClass('over')
-
-  'drop .file-drop': (evt) ->
-    evt.preventDefault()
-    target = evt.currentTarget
-    text = $(evt.currentTarget).removeClass('over').find('textarea')
-
-    files = evt.dataTransfer.files
-    for file in files
-      do (file) ->
-        reader = new FileReader()
-        reader.onload = (readerEvent) ->
-          text.val readerEvent.target.result
+Template.message_view.events =
+  "click .raw": (evt) ->
+    messagesController.getRawMessage(Session.get(SESSION_MESSAGE_ID), (message) ->
+      raw = $ Template.message_raw({message: message})
+      $('body').append(raw)
+      $('body').children('.app').hide()
+      
+      $('.raw-file .close').click(->
+        raw.remove()
+        $('body').children('.app').show()
+      )
+    )
     
-        reader.readAsText(file)  
+
+  "click .prettyprint code": (evt) ->
+    if document.selection
+      range = document.body.createTextRange()
+      range.moveToElementText(evt.currentTarget)
+      range.select()
+    else if window.getSelection
+      range = document.createRange()
+      range.selectNode(evt.currentTarget)
+      window.getSelection().addRange(range)

@@ -4,6 +4,7 @@ appState = do() ->
     LOADED: "loaded"
     LIST : "list"
     SHOW : "show"
+    MESSAGE: "message"
     
     setState: (state) ->
       Session.set(SESSION_STATE, state)

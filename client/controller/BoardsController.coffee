@@ -3,11 +3,11 @@ BoardsController = do () ->
   insert = Boards.insert
   doInsert = ->
     insert.apply Boards, arguments
-    
+
   update = Boards.update
   doUpdate = ->
     update.apply Boards, arguments
-    
+
   Boards.remove = ->
   Boards.insert = ->
   Boards.update = ->
@@ -30,14 +30,23 @@ BoardsController = do () ->
         is_private: isPrivate
 
       boardsRouter.navigate "/board/#{newid}", trigger: true
-      
+
     deleteBoard: (userId, boardId) ->
       Meteor.call("deleteBoard", userId, boardId, (err, wasSuccessful) ->
+        boardsRouter.navigate("/list", trigger: true) if typeof err is "undefined"
       )
     #TODO validate user
     setBoardName: (board_id, name)->
       doUpdate(board_id, $set:
         {title: name})
+
+    updateUserName: (id, name) ->
+      doUpdate(
+        {user_id: id},
+        {$set:
+          {user_name: name}
+        }, multi: true
+      )
 
     isOwner: (user_id, board_id) ->
       board = Boards.findOne board_id

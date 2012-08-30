@@ -1,6 +1,8 @@
 Template.show.is_authorized = ->
   boardsController.canViewBoard(Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID))
 
+Template.show.is_owner = ->
+  boardsController.isOwner(Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID))
 
 Template.show.show = ->
   boardId = Session.get(SESSION_BOARD_ID)
@@ -19,7 +21,6 @@ Template.show.board_name = ->
 Template.show.user_name = ->
   Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
 
-
 Template.show.messages = ->
   Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
     {sort:
@@ -27,35 +28,46 @@ Template.show.messages = ->
     }).fetch().slice(0, 10)
 
 Template.show.events =
-  "click .paste-text-board": (evt) ->
-    $textarea = $(evt.currentTarget)
-    txt = $textarea.parent().prevAll('.text-board-wrapper').find("textarea").val()
-    type = $textarea.parent().prevAll('.text-type-wrapper').find("select").val()
-    
-    boardsController.createMessage Session.get(SESSION_BOARD_ID), txt, type unless txt is ""
+  "click .paste-text-board:not(:disabled)": (evt) ->
+    $button = $(evt.currentTarget)
+    txt = $button.parent().prevAll('.text-board-wrapper').find("textarea").val()
+    type = $button.parent().prevAll('.text-type-wrapper').find("select").val()
+
+    if txt isnt ""
+      $button.attr("disabled","disabled")
+      messagesController.createMessage Session.get(SESSION_BOARD_ID), txt, type 
 
   "keyup .board-name .editable-board-title": (evt) ->
-    $(evt.currentTarget).parent().addClass("changed")
+    $(evt.currentTarget).parents('li:first').addClass("changed")
 
   "click .board-name .change": (evt) ->
-    boardsController.setBoardName(Session.get(SESSION_BOARD_ID), $(evt.currentTarget).prev('.editable-board-title').text())
+    text = $(evt.currentTarget).prev('.editable-board-title').text()
+    boardsController.setBoardName(Session.get(SESSION_BOARD_ID), text) unless text is ""
 
-  'dragenter .text-board': (evt) ->
+  'click .board-actions .delete': (evt) ->
+    if confirm("Are you sure?\n The board and all messages will be deleted")
+      boardsController.deleteBoard Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID)  
+    
+  'click .messages-list ul li a': (evt) ->
+    evt.preventDefault()
+    boardsRouter.navigate evt.currentTarget.getAttribute("href"), trigger: true
+    
+  'dragenter .file-drop': (evt) ->
     $(evt.currentTarget).addClass('over')
 
-  'dragleave .text-board': (evt) ->
+  'dragleave .file-drop': (evt) ->
     $(evt.currentTarget).removeClass('over')
 
-  'drop .text-board': (evt) ->
-    target = evt.currentTarget
+  'drop .file-drop': (evt) ->
     evt.preventDefault()
-    $(evt.currentTarget).removeClass('over')
+    target = evt.currentTarget
+    text = $(evt.currentTarget).removeClass('over').find('textarea')
 
     files = evt.dataTransfer.files
     for file in files
       do (file) ->
         reader = new FileReader()
         reader.onload = (readerEvent) ->
-          target.value = readerEvent.target.result
+          text.val readerEvent.target.result
     
         reader.readAsText(file)  

@@ -2,16 +2,19 @@
     <title>ClipboardJS</title>
 </head>
 <body>
-<div class="container">
-    <div class="page-header">
-        <a id="logo" href="/"><h1>ClipboardJS</h1></a>
-        {{> user}}
+<div class="app">
+    <div class="container">
+        <div class="page-header">
+            <a id="logo" href="/"><h1>ClipboardJS</h1></a>
+            {{> user}}
+        </div>
+        {{> list}}
     </div>
-    {{> list}}
-</div>
 
-<div class="container">
-    {{> show}}
+    <div class="container">
+        {{> show}}
+        {{> message_view}}
+    </div>
 </div>
 {{> blocker}}
 </body>
@@ -88,11 +91,12 @@
 <template name="board">
     <li class="{{#if is_private}} private{{/if}}{{#if is_locked _id}} locked{{/if}}">
         <a href="/board/{{_id}}">
-            <h4>{{title}}</h4>
             <span class="user-name">
                 <i class="icon-lock"></i>
                 <span class="label label-inverse">{{user_name}}</span> 
             </span>
+
+            <p><strong>{{title}}</strong></p>
         </a>
     </li>
 </template>
@@ -104,8 +108,8 @@
         <div class="board-name">
             <ul class="unstyled">
                 <li>
-                    Title: <strong><span{{#if is_editable}} class="editable-board-title"
-                    contenteditable="true"{{/if}}>{{board_name}}</span></strong>
+                    Title: <span{{#if is_editable}} class="editable-board-title"
+                    contenteditable="true"{{/if}}>{{board_name}}</span>
                     <button class="change btn btn-small">save</button>
                 </li>
                 <li>
@@ -113,55 +117,63 @@
                 </li>
             </ul>
         </div>
-        <hr>
-        <div class="messages-list">
-            <h4>1. View the latest snippets</h4>
-
-            <div class="table-wrapper">
-                <table class="table table-striped table-hover">
-                    <thead>
-                    <th>Owner</th>
-                    <th>pasted</th>
-                    </thead>
-                    <tbody>
-                    {{#each messages}}
-                    {{> message_abstr}}
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-
+        <div class="board-actions">
+            <p>
+                {{#if is_owner}}
+                <button class="delete btn btn-small btn-danger"><i class="icon-trash icon-white"></i> delete board
+                </button>
+                {{/if}}
+            </p>
         </div>
+        <hr>
         <div>
-            <h4>2. Add new snippets</h4>
-            <h5>Paste some text</h5>
+            <h4>1. Add new snippets</h4>
+
+            <div class="alert alert-info">
+                Paste your text snippets into the textarea below. <br>
+                Alternatively feel free to drag and drop an image or text file into the textbox.
+            </div>
             <hr>
             <div class="row">
                 <div class="span3 text-type-wrapper">
-                    <label for="text-type">Type of text</label>
+                    <h5>1. Choose the text type
+                        <br>
+                        <small>for syntax highlighting</small>
+                    </h5>
                     <select name="text-type" id="text-type">
-                        <option value="plain">plain text</option>
+                        <option value="auto">auto detect</option>
                         <option value="html">HTML</option>
                         <option value="javascript">Javascript</option>
-                        <option value="Coffeescript">Coffeescript</option>
+                        <option value="coffeescript">Coffeescript</option>
+                        <option value="plain" selected>plain text</option>
                     </select>
                 </div>
                 <div class="span8 text-board-wrapper">
-                    <label for="text-content">Your text <span class="muted">you can drop txt-files below, too</span></label>
-                    <textarea class="text-board" id="text-content"></textarea>
+                    <h5>2. Add the text snippet or image
+                        <br>
+                        <small>Paste some text or drag and drop files in here</small>
+                    </h5>
+
+                    <div class="file-drop"><textarea class="text-board" id="text-content"></textarea></div>
                 </div>
                 <hr>
                 <div class="offset3 span8">
                     <button class=" btn btn-large btn-block btn-primary paste-text-board">paste</button>
                 </div>
             </div>
-            <p>
-            </p>
-            <h5>Or images</h5>
+        </div>
+        <hr>
+        <div class="messages-list">
+            <h4>2. View the latest snippets</h4>
 
-            <div class="drop-zone">
-                <p>Drop Images on here</p>
+            <div class="">
+                <ul class="unstyled">
+                    {{#each messages}}
+                    {{> message_abstr}}
+                    {{/each}}
+                </ul>
             </div>
+
         </div>
     </div>
 
@@ -176,12 +188,43 @@
 </template>
 
 <template name="message_abstr">
-    <tr>
-        <td><span class="label user-name">{{user_name}}</span></td>
-        <td><span class="message">{{abstract}}</span></td>
-    </tr>
+    <li>
+        <a href="/message/{{_id}}">
+            <span class="user-name">
+                <code>{{language}}</code> | 
+                <span class="label label-inverse">{{user_name}}</span> 
+            </span>
+
+            <p>{{abstract}}</p>
+        </a>
+    </li>
 </template>
 
+<template name="message_view">
+    {{#if show}}
+    {{#if is_authorized}}
+    {{#with message}}
+    <h2><a href="/board/{{board_id}}">{{board_name board_id}}</a></h2>
+
+    <p class="pull-right">
+        <button class="raw btn btn-mini">raw</button>
+    </p>
+    <p>
+        <code>{{language}}</code> | <span class="label label-inverse">{{user_name}}</span>
+    </p>
+    <pre id="{{prettyprint}}" class="prettyprint loading">
+    </pre>
+    {{/with}}
+    {{/if}}
+    {{/if}}
+</template>
+
+<template name="message_raw">
+    <div class="raw-file">
+        <button class="close">&times;</button>
+        <textarea>{{message}}</textarea>
+    </div>
+</template>
 <template name="blocker">
     {{#if block}}
     <div class="blocker">

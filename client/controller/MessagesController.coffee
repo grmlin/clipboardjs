@@ -2,6 +2,8 @@ MessagesController = do () ->
   remove = Messages.remove
   insert = Messages.insert
   update = Messages.update
+  doUpdate = ->
+    update.call Messages, arguments
   
   Messages.remove = ->
   Messages.insert = ->
@@ -23,6 +25,13 @@ MessagesController = do () ->
   
     deleteMessage: (user_id, message_id) ->
       
+    updateUserName: (id, name) ->
+      doUpdate(
+        {user_id: id},
+        {$set:
+          {user_name: name}
+        }, multi: true
+      )
       
     getHighlightedMessage: (messageId, callback) ->
       Meteor.call("getHighlightedMessage", Session.get(SESSION_USER), messageId, (err, message) ->

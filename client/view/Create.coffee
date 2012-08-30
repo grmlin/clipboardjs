@@ -6,7 +6,6 @@ Template.create.events =
     $modal.removeClass "hide fade"
     
     $modal.on "click", ".save", =>
-      console.log("create board")
       title = $modal.find("[name=board-title]").val()
       title = "Empty Board" if title is ""
       #Meteor.call 'getPwHash', "Test", (err, res) ->

@@ -1,10 +1,22 @@
 boardsRouter = new BoardsRouter()
 boardsController = new BoardsController()
+messagesController = new MessagesController()
 usersController = new UsersController()
 
 Meteor.startup ->
   areUsersLoaded = false
   boardsController.resetBoardSession()
+
+  modelsNeeded = 2
+  checkDataAvailability = ->
+    modelsNeeded--
+    if modelsNeeded is 0
+      if Session.get(SESSION_STATE) is appState.LOADING
+        appState.setState(appState.LOADED)
+        Backbone.history.start({pushState: true})
+
+        if Backbone.history.fragment is ""
+          boardsRouter.navigate "list", trigger: true
 
   $('#logo').click (evt) ->
     evt.preventDefault()
@@ -20,13 +32,10 @@ Meteor.startup ->
           usersController.createUser()
         else
           usersController.loadUser(userid)
-        
+
     Meteor.subscribe 'boards', ->
-      if Session.get(SESSION_STATE) is appState.LOADING
-        appState.setState(appState.LOADED)
-        Backbone.history.start({pushState: true})
+      checkDataAvailability()
 
-        if Backbone.history.fragment is ""
-          boardsRouter.navigate "list", trigger: true
-
-    Meteor.subscribe 'messages'
+    Meteor.subscribe 'messages', ->
+      checkDataAvailability()
+      

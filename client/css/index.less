@@ -1,3 +1,141 @@
+/*---------------------------------------------------
+    LESS Elements 0.6
+  ---------------------------------------------------
+    A set of useful LESS mixins by Dmitry Fadeyev
+    Special thanks for mixin suggestions to:
+      Kris Van Herzeele,
+      Benoit Adam,
+      Portenart Emile-Victor,
+      Ryan Faerman
+
+    More info at: http://lesselements.com
+-----------------------------------------------------*/
+
+.gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
+    background: @color;
+    background: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0, @start),
+    color-stop(1, @stop));
+    background: -ms-linear-gradient(bottom,
+        @start,
+        @stop);
+    background: -moz-linear-gradient(center bottom,
+        @start 0%,
+        @stop 100%);
+}
+.bw-gradient(@color: #F5F5F5, @start: 0, @stop: 255) {
+    background: @color;
+    background: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(@start,@start,@start)),
+    color-stop(1, rgb(@stop,@stop,@stop)));
+    background: -ms-linear-gradient(bottom,
+    rgb(@start,@start,@start) 0%,
+    rgb(@start,@start,@start) 100%);
+    background: -moz-linear-gradient(center bottom,
+    rgb(@start,@start,@start) 0%,
+    rgb(@stop,@stop,@stop) 100%);
+}
+.bordered(@top-color: #EEE, @right-color: #EEE, @bottom-color: #EEE, @left-color: #EEE) {
+    border-top: solid 1px @top-color;
+    border-left: solid 1px @left-color;
+    border-right: solid 1px @right-color;
+    border-bottom: solid 1px @bottom-color;
+}
+.drop-shadow(@x-axis: 0, @y-axis: 1px, @blur: 2px, @alpha: 0.1) {
+    -webkit-box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+    -moz-box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+    box-shadow: @x-axis @y-axis @blur rgba(0, 0, 0, @alpha);
+}
+.rounded(@radius: 2px) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+}
+.border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0) {
+    -webkit-border-top-right-radius: @topright;
+    -webkit-border-bottom-right-radius: @bottomright;
+    -webkit-border-bottom-left-radius: @bottomleft;
+    -webkit-border-top-left-radius: @topleft;
+    -moz-border-radius-topright: @topright;
+    -moz-border-radius-bottomright: @bottomright;
+    -moz-border-radius-bottomleft: @bottomleft;
+    -moz-border-radius-topleft: @topleft;
+    border-top-right-radius: @topright;
+    border-bottom-right-radius: @bottomright;
+    border-bottom-left-radius: @bottomleft;
+    border-top-left-radius: @topleft;
+    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+}
+.opacity(@opacity: 0.5) {
+    -moz-opacity: @opacity;
+    -khtml-opacity: @opacity;
+    -webkit-opacity: @opacity;
+    opacity: @opacity;
+}
+.transition-duration(@duration: 0.2s) {
+    -moz-transition-duration: @duration;
+    -webkit-transition-duration: @duration;
+    transition-duration: @duration;
+}
+.rotation(@deg:5deg){
+    -webkit-transform: rotate(@deg);
+    -moz-transform: rotate(@deg);
+    transform: rotate(@deg);
+}
+.scale(@ratio:1.5){
+    -webkit-transform:scale(@ratio);
+    -moz-transform:scale(@ratio);
+    transform:scale(@ratio);
+}
+.transition(@duration:0.2s, @ease:ease-out) {
+    -webkit-transition: all @duration @ease;
+    -moz-transition: all @duration @ease;
+    transition: all @duration @ease;
+}
+.inner-shadow(@horizontal:0, @vertical:1px, @blur:2px, @alpha: 0.4) {
+    -webkit-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+    -moz-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+    box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+}
+.box-shadow(@arguments) {
+    -webkit-box-shadow: @arguments;
+    -moz-box-shadow: @arguments;
+    box-shadow: @arguments;
+}
+.columns(@colwidth: 250px, @colcount: 0, @colgap: 50px, @columnRuleColor: #EEE, @columnRuleStyle: solid, @columnRuleWidth: 1px) {
+    -moz-column-width: @colwidth;
+    -moz-column-count: @colcount;
+    -moz-column-gap: @colgap;
+    -moz-column-rule-color: @columnRuleColor;
+    -moz-column-rule-style: @columnRuleStyle;
+    -moz-column-rule-width: @columnRuleWidth;
+    -webkit-column-width: @colwidth;
+    -webkit-column-count: @colcount;
+    -webkit-column-gap: @colgap;
+    -webkit-column-rule-color: @columnRuleColor;
+    -webkit-column-rule-style: @columnRuleStyle;
+    -webkit-column-rule-width: @columnRuleWidth;
+    column-width: @colwidth;
+    column-count: @colcount;
+    column-gap: @colgap;
+    column-rule-color: @columnRuleColor;
+    column-rule-style: @columnRuleStyle;
+    column-rule-width: @columnRuleWidth;
+}
+.translate(@x:0, @y:0) {
+    -moz-transform: translate(@x, @y);
+    -webkit-transform: translate(@x, @y);
+    -o-transform: translate(@x, @y);
+    -ms-transform: translate(@x, @y);
+    transform: translate(@x, @y);
+}
+
+
 html {
     background: #fff url(/img/skin_side_up.png) repeat center 0;
 }
@@ -6,6 +144,11 @@ body {
     background: transparent;
 }
 
+.box-sizing(@sizing : border-box) {
+    -moz-box-sizing: @sizing;
+    -webkit-box-sizing: @sizing;
+    box-sizing: @sizing;
+}
 .centered {
     text-align: center;
 }
@@ -70,11 +213,13 @@ body {
     margin-top: 50px;
 }
 
-.board-list .available-boards ul {
+.board-list .available-boards ul,
+.messages-list ul {
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
 }
 
-.board-list .available-boards ul li {
+.board-list .available-boards ul li,
+.messages-list ul li {
     padding: 5px 10px;
     background: #fff;
     -webkit-transition: background 250ms ease-in;
@@ -87,23 +232,27 @@ body {
 .board-list .available-boards ul li.locked {
     opacity: 0.5;
 }
-.board-list .available-boards ul li:hover {
+.board-list .available-boards ul li:hover,
+.messages-list ul li:hover{
     background: #f5f5f5;
 }
 .board-list .available-boards ul li.locked:hover {
     background: #fff;
 }
-.board-list .available-boards ul li + li {
+.board-list .available-boards ul li + li,
+.messages-list ul li + li {
     border-top: 2px solid rgba(0, 0, 0, 0.2);
 }
 
-.board-list .available-boards ul li a {
+.board-list .available-boards ul li a,
+.messages-list ul li a {
     color: #333;
     display: block;
     overflow: hidden;
 }
 
-.board-list .available-boards ul li a:hover {
+.board-list .available-boards ul li a:hover,
+.messages-list ul li a:hover {
     color: #333;
     text-decoration: none;
 }
@@ -119,16 +268,27 @@ body {
     display: inline-block;    
 }
 
-.board-list .available-boards ul li a .user-name {
-    position: absolute;
+.board-list .available-boards ul li a .user-name,
+.messages-list ul li a .user-name {
+    float: right;
+    position: relative;
     right: 5px;
-    top: 5px;
 }
-
-
+.board-list .available-boards ul li a .user-name + p,
+.messages-list ul li a .user-name + p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+}
+.board-list .available-boards ul li a p,
+.messages-list ul li a p {
+    margin: 0;
+}
 
 .show {
     background: #f5f5f5;
+    position: relative;
 }
 
 .show .editable-board-title {
@@ -136,7 +296,7 @@ body {
     font-weight: bold;
     padding: 2px 6px;
     text-decoration: underline;
-
+    font-weight: bold;
 }
 
 .show .editable-board-title:active,
@@ -158,11 +318,15 @@ body {
 .show .board-name .changed .change {
     display: inline-block;
 }
-                    
+   
+.show .board-actions {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
 .show .messages-list .table-wrapper {
     margin: 0 -19px;
 }
-
 
 .show .drop-zone {
     text-align: center;
@@ -175,17 +339,53 @@ body {
     margin: 0;
 }
 
+.show .file-drop {
+    //background: #fff;
+}
+
 .show textarea.text-board {
     width: 100%;
     height: 150px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+    background: #fff;
+    .box-sizing();
 }
-.show textarea.text-board.over {
+.show .over textarea.text-board {
     background: #ccc;
 }
 
 .show .alert {
     text-align: center;
+}
+
+.raw-file {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px 10px 10px;
+    background: #f5f5f5;
+}
+.raw-file .close {
+    position: absolute;
+    right: 13px;
+    top: -2px;
+}
+.raw-file textarea {
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    font-family: monospace;
+    .box-sizing();
+}
+.prettyprint {
+    background: #363731;
+}
+.prettyprint.loading {
+    background: #363731 url(/img/load.gif) no-repeat center;
+    min-height: 40px;
+}
+
+.prettyprint code {
+    .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5))
 }
