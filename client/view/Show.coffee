@@ -21,6 +21,8 @@ Template.show.board_name = ->
 Template.show.user_name = ->
   Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
 
+Template.show.are_messages_available = ->
+  Messages.find({board_id: Session.get(SESSION_BOARD_ID)}).count() > 0
 Template.show.messages = ->
   Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
     {sort:

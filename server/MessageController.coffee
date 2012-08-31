@@ -1,8 +1,26 @@
 do() ->
-  ABSTRACT_LENGTH = 100
-
+  # loading node_modules from public folder
   require = __meteor_bootstrap__.require
-  highlight = require "highlight.js"
+  path    = require("path")
+  fs      = require('fs')
+
+  highlightPath = 'node_modules/highlight.js'
+
+  base = path.resolve('.')
+  if base == '/'
+    base = path.dirname(global.require.main.filename)
+
+  publicPath = path.resolve(base + '/public/' + highlightPath)
+  staticPath = path.resolve(base + '/bundle/static/' + highlightPath)
+
+  if path.existsSync(publicPath)
+    highlight = require(publicPath)
+  else if path.existsSync(staticPath)
+    highlight = require(staticPath)
+  else
+    console.log('node_modules not found')
+
+  ABSTRACT_LENGTH = 100
 
   Meteor.methods
     getHighlightedMessage: (userId, messageId) ->
@@ -10,7 +28,7 @@ do() ->
       message = Messages.findOne messageId
       if typeof message isnt "undefined"
         return "<code class=#{message.language}>#{message.highlighted}</code>"
-      else 
+      else
         throw new Meteor.Error(404, "Message not found")
 
     getRawMessage: (userId, messageId) ->
@@ -19,7 +37,7 @@ do() ->
         return message.raw
       else
         throw new Meteor.Error(404, "Message not found")
-        
+
     createMessage: (userId, boardId, content, type) ->
       message_raw = content
       message_abstract = content.slice 0, ABSTRACT_LENGTH
@@ -45,7 +63,6 @@ do() ->
 
       message_highlighted = highlightResult.value if highlightResult isnt null
       lang = highlightResult.language if lang is null
-
 
 
       newid = Messages.insert

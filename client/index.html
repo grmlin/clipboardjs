@@ -149,9 +149,9 @@
                     </select>
                 </div>
                 <div class="span8 text-board-wrapper">
-                    <h5>2. Add the text snippet or image
+                    <h5>2. Add the text snippet
                         <br>
-                        <small>Paste some text or drag and drop files in here</small>
+                        <small>Paste some text or drag and drop text files in here</small>
                     </h5>
 
                     <div class="file-drop"><textarea class="text-board" id="text-content"></textarea></div>
@@ -167,11 +167,18 @@
             <h4>2. View the latest snippets</h4>
 
             <div class="">
+                {{#if are_messages_available}}
                 <ul class="unstyled">
                     {{#each messages}}
                     {{> message_abstr}}
                     {{/each}}
                 </ul>
+                {{else}}
+                <div class="centered">
+                    <div class="span12"><span
+                            class="label label-info">Sorry! No pasted messages available yet.</span></div>
+                </div>
+                {{/if}}
             </div>
 
         </div>
