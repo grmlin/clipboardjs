@@ -1,27 +1,8 @@
 do() ->
-  # loading node_modules from public folder
-  require = __meteor_bootstrap__.require
-  path    = require("path")
-  fs      = require('fs')
-
-  highlightPath = 'node_modules/highlight.js'
-
-  base = path.resolve('.')
-  if base == '/'
-    base = path.dirname(global.require.main.filename)
-
-  publicPath = path.resolve(base + '/public/' + highlightPath)
-  staticPath = path.resolve(base + '/bundle/static/' + highlightPath)
-
-  if path.existsSync(publicPath)
-    highlight = require(publicPath)
-  else if path.existsSync(staticPath)
-    highlight = require(staticPath)
-  else
-    console.log('node_modules not found')
-
   ABSTRACT_LENGTH = 100
-
+  
+  highlight = meteorNpm.require "highlight.js"
+  
   Meteor.methods
     getHighlightedMessage: (userId, messageId) ->
       #TODO validation "canView..." for server and client
