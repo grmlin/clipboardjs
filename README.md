@@ -12,7 +12,7 @@ A *work in progress* version can be seen here: [clipboardjs.meteor.com](http://c
 
 **Websockets will not work on meteor.com!**
 
-open `.meteor/local/build/static/packages/stream` and add websockets to the connection
+open `.meteor/local/build/static/packages/stream/client.js` and add websockets to the connection
     
     self.socket = new SockJS(self.url, undefined, {
           debug: false, protocols_whitelist: [
