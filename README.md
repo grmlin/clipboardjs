@@ -20,3 +20,12 @@ open `.meteor/local/build/static/packages/stream/client.js` and add websockets t
             // streaming makes safari spin, and websockets hurt chrome.
             'websocket', 'xdr-polling', 'xhr-polling', 'iframe-xhr-polling', 'jsonp-polling'
           ]});
+          
+## TODO
+
+* message delete
+* message editing
+* all boards/messages views
+* board search
+* board password protection
+* board/message short url sharing

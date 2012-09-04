@@ -3,6 +3,13 @@ BoardsRouter = Backbone.Router.extend
     "list": "list"
     "board/:board_id": "board"
     "message/:message_id": "message"
+    
+  initialize: ->
+    $ =>
+      $("body").on "click", ".internal-link", (evt) =>
+        evt.preventDefault()
+        @navigate evt.currentTarget.getAttribute("href"), trigger: true
+    
   _closeRawFileDialog: ->
     $('.raw-file .close').click()
     
@@ -21,6 +28,7 @@ BoardsRouter = Backbone.Router.extend
       appState.setState appState.SHOW
       messagesController.resetMessageSession()
       Session.set SESSION_BOARD_ID, board_id
+      Session.set SESSION_BOARD_TITLE, board.title
     else
       this.navigate "list", trigger: true
 
@@ -30,7 +38,10 @@ BoardsRouter = Backbone.Router.extend
     
     if typeof message isnt "undefined"
       appState.setState appState.MESSAGE
-      boardsController.resetBoardSession()
+      #boardsController.resetBoardSession()
       Session.set SESSION_MESSAGE_ID, message_id
+      Session.set SESSION_BOARD_ID, message.board_id
+      Session.set SESSION_BOARD_TITLE, Boards.findOne(message.board_id).title
+
     else
       this.navigate "list", trigger: true

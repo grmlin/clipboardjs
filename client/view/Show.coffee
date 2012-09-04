@@ -21,13 +21,6 @@ Template.show.board_name = ->
 Template.show.user_name = ->
   Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
 
-Template.show.are_messages_available = ->
-  Messages.find({board_id: Session.get(SESSION_BOARD_ID)}).count() > 0
-Template.show.messages = ->
-  Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
-    {sort:
-      {time: -1}
-    }).fetch().slice(0, 10)
 
 Template.show.events =
   "click .paste-text-board:not(:disabled)": (evt) ->
@@ -49,10 +42,6 @@ Template.show.events =
   'click .board-actions .delete': (evt) ->
     if confirm("Are you sure?\n The board and all messages will be deleted")
       boardsController.deleteBoard Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID)  
-    
-  'click .messages-list ul li a': (evt) ->
-    evt.preventDefault()
-    boardsRouter.navigate evt.currentTarget.getAttribute("href"), trigger: true
     
   'dragenter .file-drop': (evt) ->
     $(evt.currentTarget).addClass('over')

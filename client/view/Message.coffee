@@ -1,3 +1,20 @@
+Template.messages_list.are_messages_available = ->
+  Messages.find({board_id: Session.get(SESSION_BOARD_ID)}).count() > 0
+  
+Template.messages_list.messages = ->
+  Messages.find({board_id: Session.get(SESSION_BOARD_ID)},
+    {sort:
+      {time: -1}
+    }).fetch().slice(0, 10)
+
+Template.messages_list.board = ->
+  board_name: Session.get SESSION_BOARD_TITLE
+  board_id: Session.get SESSION_BOARD_ID
+  is_active: Session.get(SESSION_MESSAGE_ID) is ""
+  
+Template.message_abstr.is_active = (id)->
+  id is Session.get SESSION_MESSAGE_ID
+  
 Template.message_view.is_authorized = ->
   messagesController.canViewMessage(Session.get(SESSION_USER), Session.get(SESSION_MESSAGE_ID))
 

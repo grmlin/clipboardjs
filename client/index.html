@@ -3,52 +3,81 @@
 </head>
 <body>
 <div class="app">
-    <div class="container">
-        <div class="page-header">
-            <a id="logo" href="/"><h1>ClipboardJS</h1></a>
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <a id="logo" class="brand" href="/">ClipboardJS</a>
             {{> user}}
         </div>
-        {{> list}}
     </div>
+    <div class="container-fluid">
 
-    <div class="container">
-        {{> show}}
-        {{> message_view}}
+        <div class="row-fluid">
+            <div class="span3">
+                <div class="sidebar">
+                    {{> list}}
+                </div>
+            </div>
+            <div class="span9">
+                <div class="content">
+                    {{> create}}
+                    {{> show}}
+                    {{> message_view}}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {{> blocker}}
 </body>
 
 <template name="user">
-    <div class="row">
-        <div class="user clearfix">
-            {{#with user}}
-            <p>
-                Howdy
-                <span {{#if is_registered}} {{else}}class="name" contenteditable="true"{{/if}}>{{user_name}}</span>!
+    <ul class="user nav pull-right clearfix">
+        {{#with user}}
+        <li>
+            <p class="navbar-text">Howdy
+                <span class="label">{{user_name}}</span>
             </p>
+        </li>
 
-            <p class="pull-right">
-                {{#if is_registered}}
-                <button class="logout btn btn-small">logout</button>
-                {{else}}
-                <button class="create btn btn-small"><i class="icon-user"></i> register</button>
-                <button class="login btn btn-small"><i class="icon-lock"></i> login</button>
-                {{/if}}
-            </p>
-            {{/with}}
-        </div>
-    </div>
+        <li class="divider-vertical"></li>
+
+        {{#if is_registered}}
+        <li>
+            <a href="#" class="logout">logout</a>
+        </li>
+        {{else}}
+        <li class="login"><a href="#"><i class="icon-lock"></i> login</a></li>
+        <li class="create"><a href="#" class="create"><i class="icon-user"></i> register</a></li>
+        {{/if}}
+        {{/with}}
+    </ul>
 </template>
-
+<template name="breadcrumb">
+    <ul class="breadcrumb">
+        {{#each items}}
+        <li>
+            {{#if href}}
+            <a href="{{href}}" class="internal-link">{{title}}</a><span class="divider">/</span>
+            {{else}}
+            {{title}}
+            {{/if}}
+        </li>
+        {{/each}}
+    </ul>
+</template>
 <template name="list">
-    {{#if show }}
-    {{> create}}
+    <ul class="nav nav-list">
+        <li
+        {{#if is_active}}class="active"{{/if}}><a href="/list" class="internal-link">
+        <i class="icon-plus-sign"></i>Create Board</a></li>
+    </ul>
+    {{#if show_boards }}
     {{> board_list}}
     {{/if}}
 </template>
 
 <template name="create">
+    {{#if show}}
     <div class="create">
         <div class="row">
             <div class="span12">
@@ -60,52 +89,92 @@
             </div>
         </div>
     </div>
+    {{/if}}
 </template>
 
 <template name="board_list">
-    <div class="board-list">
-        <div class="row">
-            <div class="span12">
-                <h2>Or open an existing board</h2>
-            </div>
-        </div>
-        <div class="row">
-            {{#if are_boards_available}}
-            <div class="available-boards span8 offset2">
-                <ul class="unstyled">
-                    {{#each available_boards}}
-                    {{> board}}
-                    {{/each}}
-                </ul>
-            </div>
-            {{else}}
-            <div class="centered">
-                <div class="span12"><span
-                        class="label label-info">Sorry! No boards available yet.</span></div>
-            </div>
-            {{/if}}
-        </div>
-    </div>
+    <ul class="nav nav-list board-list">
+        <li class="divider"></li>
+        <li class="nav-header">Available Boards</li>
+        {{#if are_boards_available}}
+        {{#each available_boards}}
+        {{> board}}
+        {{/each}}
+        <li class="divider"></li>
+        {{else}}
+        <li>
+            <span class="label label-info">Sorry! No boards available yet.</span>
+        </li>
+        {{/if}}
+    </ul>
+</template>
+<template name="messages_list">
+
+    <ul class="nav nav-list messages-list">
+        <li class="nav-header">Board actions</li>
+        {{#with board}}
+        <li
+        {{#if is_active}}class="active"{{/if}}>
+        <a href="/board/{{board_id}}" class="internal-link"><i class="icon-pencil"></i> Paste</a>
+        </li>
+        {{/with}}
+        <li class="nav-header">Available Messages</li>
+        {{#if are_messages_available}}
+        {{#each messages}}
+        {{> message_abstr}}
+        {{/each}}
+        {{else}}
+        <li class="span12"><span class="label label-info">Sorry! No messages available yet.</span></li>
+        {{/if}}
+    </ul>
 </template>
 
 <template name="board">
-    <li class="{{#if is_private}} private{{/if}}{{#if is_locked _id}} locked{{/if}}">
+    <li class="{{#if is_active _id}}active{{/if}}{{#if is_private}} private{{/if}}{{#if is_locked _id}} locked{{/if}}">
         <a href="/board/{{_id}}">
             <span class="user-name">
+                {{#if is_editable _id}}<i class="icon-pencil"></i>{{/if}}
                 <i class="icon-lock"></i>
-                <span class="label label-inverse">{{user_name}}</span> 
+                <i class="icon-user" title="{{user_name}}"></i>
             </span>
-
-            <p><strong>{{title}}</strong></p>
+            <span class="board-title">{{title}}</span>
         </a>
+        {{#if is_active _id}}
+        <ul class="nav nav-list">
+            <li class="nav-header">Messages</li>
+            {{#if are_messages_available}}
+            {{#each messages}}
+            {{> message_abstr}}
+            {{/each}}
+            {{else}}
+            <li><span class="label label-info">Sorry! No messages available yet.</span></li>
+            {{/if}}
+            <li class="divider"></li>
+        </ul>
+        {{/if}}
+    </li>
+</template>
+<template name="message_abstr">
+    <li
+    {{#if is_active _id}}class="active"{{/if}}>
+    <a href="/message/{{_id}}" class="internal-link">
+        <!--span class="user-name">
+            <code>{{language}}</code> | 
+            <span class="label label-inverse">{{user_name}}</span> 
+        </span-->
+
+        <span class="message-abstr">{{abstract}}</span>
+    </a>
     </li>
 </template>
 
 <template name="show">
     {{#if show}}
     {{#if is_authorized}}
-    <div class="show well">
-        <div class="board-name">
+    <div class="show">
+        <h2>{{board_name}}</h2>
+
+        <div class="board-name well well-small">
             <ul class="unstyled">
                 <li>
                     Title: <span{{#if is_editable}} class="editable-board-title"
@@ -127,15 +196,8 @@
         </div>
         <hr>
         <div>
-            <h4>1. Add new snippets</h4>
-
-            <div class="alert alert-info">
-                Paste your text snippets into the textarea below. <br>
-                Alternatively feel free to drag and drop an image or text file into the textbox.
-            </div>
-            <hr>
-            <div class="row">
-                <div class="span3 text-type-wrapper">
+            <div class="row-fluid">
+                <div class="span4">
                     <h5>1. Choose the text type
                         <br>
                         <small>for syntax highlighting</small>
@@ -156,32 +218,14 @@
 
                     <div class="file-drop"><textarea class="text-board" id="text-content"></textarea></div>
                 </div>
-                <hr>
-                <div class="offset3 span8">
+            </div>
+            <div class="row-fluid">
+                <div class="offset4 span8">
                     <button class=" btn btn-large btn-block btn-primary paste-text-board">paste</button>
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="messages-list">
-            <h4>2. View the latest snippets</h4>
-
-            <div class="">
-                {{#if are_messages_available}}
-                <ul class="unstyled">
-                    {{#each messages}}
-                    {{> message_abstr}}
-                    {{/each}}
-                </ul>
-                {{else}}
-                <div class="centered">
-                    <div class="span12"><span
-                            class="label label-info">Sorry! No pasted messages available yet.</span></div>
-                </div>
-                {{/if}}
-            </div>
-
-        </div>
+    </div>
     </div>
 
     {{else}}
@@ -194,25 +238,10 @@
     {{/if}}
 </template>
 
-<template name="message_abstr">
-    <li>
-        <a href="/message/{{_id}}">
-            <span class="user-name">
-                <code>{{language}}</code> | 
-                <span class="label label-inverse">{{user_name}}</span> 
-            </span>
-
-            <p>{{abstract}}</p>
-        </a>
-    </li>
-</template>
-
 <template name="message_view">
     {{#if show}}
     {{#if is_authorized}}
     {{#with message}}
-    <h2><a href="/board/{{board_id}}">{{board_name board_id}}</a></h2>
-
     <p class="pull-right">
         <button class="raw btn btn-mini">raw</button>
     </p>

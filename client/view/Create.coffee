@@ -1,3 +1,7 @@
+Template.create.show = ->
+  state = appState.getState()
+  (state is appState.LIST) and (Session.get(SESSION_BOARD_ID) is "")
+  
 Template.create.events = 
   
   "click button" : (event) ->

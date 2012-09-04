@@ -18,6 +18,7 @@ BoardsController = do () ->
 
     resetBoardSession: ->
       Session.set SESSION_BOARD_ID, ""
+      Session.set SESSION_BOARD_TITLE, ""
 
     createBoard: (title, isPrivate = false) ->
       userid = Session.get(SESSION_USER)

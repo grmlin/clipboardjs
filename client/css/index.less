@@ -167,28 +167,17 @@ body {
     top: 0;
 }
 
-.container > .page-header {
-    position: relative;
+.sidebar {
+    margin-left: -20px;
 }
 
-.user {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-.user .change,
-.user .create {
-    display: none;
-}
-
-.user.changed .change,
-.user.changed .create {
-    display: inline-block;
+.content {
+    
 }
 
 .user .name {
     text-decoration: underline;
-    padding: 4px 6px;
+    padding: 2px 6px;
     display: inline-block;
     font-weight: bold;
 }
@@ -213,84 +202,49 @@ body {
     margin-top: 50px;
 }
 
-.board-list .available-boards ul,
-.messages-list ul {
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
-}
-
-.board-list .available-boards ul li,
-.messages-list ul li {
-    padding: 5px 10px;
-    background: #fff;
-    -webkit-transition: background 250ms ease-in;
-    -moz-transition: background 250ms ease-in;
-    -ms-transition: background 250ms ease-in;
-    -o-transition: background 250ms ease-in;
-    transition: background 250ms ease-in;
-    position: relative;
-}
-.board-list .available-boards ul li.locked {
+.board-list  li.locked {
     opacity: 0.5;
 }
-.board-list .available-boards ul li:hover,
-.messages-list ul li:hover{
-    background: #f5f5f5;
-}
-.board-list .available-boards ul li.locked:hover {
-    background: #fff;
-}
-.board-list .available-boards ul li + li,
-.messages-list ul li + li {
-    border-top: 2px solid rgba(0, 0, 0, 0.2);
-}
 
-.board-list .available-boards ul li a,
-.messages-list ul li a {
-    color: #333;
-    display: block;
-    overflow: hidden;
-}
-
-.board-list .available-boards ul li a:hover,
-.messages-list ul li a:hover {
-    color: #333;
-    text-decoration: none;
-}
-
-.board-list .available-boards ul li.locked a:hover {
+.board-list li.locked a:hover {
     cursor: not-allowed;
 }
-.board-list .available-boards ul li a i {
+.board-list li a i.icon-lock {
     display: none;    
 }
 
-.board-list .available-boards ul li.private a i {
+.board-list  li.private a i.icon-lock {
     display: inline-block;    
 }
 
-.board-list .available-boards ul li a .user-name,
-.messages-list ul li a .user-name {
+.board-list li a .user-name,
+.messages-list li a .user-name {
     float: right;
     position: relative;
     right: 5px;
+    margin-left: 15px;
 }
-.board-list .available-boards ul li a .user-name + p,
-.messages-list ul li a .user-name + p {
+.board-list li a .user-name + .board-title,
+.board-list li a .message-abstr {
+    display:block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     padding-right: 10px;
 }
-.board-list .available-boards ul li a p,
-.messages-list ul li a p {
+
+.board-list li a p,
+.messages-list li a p {
     margin: 0;
 }
 
 .show {
-    background: #f5f5f5;
     position: relative;
 }
 
+.show > h2 {
+    text-align: center;    
+}
 .show .editable-board-title {
     font-size: 16px;
     font-weight: bold;

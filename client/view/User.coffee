@@ -13,7 +13,7 @@ do ->
       usersController.logout()
       
   # TODO add a modal class
-    "click .login": (evt) ->
+    "click .login a": (evt) ->
       modal = new Modal(Template.user_create_modal, new LoginValidator())
       modal.submit = (formData) ->
         usersController.login(formData.username, formData.pwd)
@@ -21,8 +21,8 @@ do ->
         
       modal.show {title:"Login",user_name: "", submit_text:"Login"}
 
-    "click .create": (evt) ->
-      userName = $(evt.currentTarget).parent().prev().find('.name').text()
+    "click .create a": (evt) ->
+      userName = $(evt.currentTarget).parents(".user").find('.name').text()
       
       modal = new Modal(Template.user_create_modal, new RegistrationValidator())
       modal.submit = (formData) ->
