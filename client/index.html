@@ -49,9 +49,9 @@
 
     {{#if show}}
     <ul class="nav nav-list">
-        <li class="nav-header">Your messages</li>
-        <li{{#if is_pasting}} class="active"{{/if}}><a href="/list" class="internal-link" title="Paste something"><i
+        <li class="nav-link-icon{{#if is_pasting}} active{{/if}}"><a href="/list" class="internal-link" title="Paste something"><i
             class="icon-plus-sign"></i> Paste something</a></li>
+        <li class="nav-header">Your messages</li>
     </ul>
     <ul class="nav nav-list messages-list">
         {{#if are_messages_available}}
@@ -80,7 +80,7 @@
        data-trigger="hover"
        data-trigger="trigger" 
        data-title="<i class='icon-user'></i> {{user_name}}"
-       data-content="<pre>{{abstract}}</pre>">
+       data-content="<pre><code class='{{language}}'>{{abstract}}</code></pre>">
         <span class="message-abstr">{{abstract}}</span>
     </a>
     </li>

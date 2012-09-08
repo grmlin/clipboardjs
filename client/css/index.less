@@ -209,7 +209,7 @@ body {
     line-height: 40px;
     font-weight: normal;
     padding: 5px 15px 5px;
-    margin: 0 0 10px;
+    margin: 0 0 0;
     border-bottom: 1px solid @lightgrey;
     .box-shadow(0 1px 0 rgba(0,0,0,0.2));
 }
@@ -278,17 +278,35 @@ line-height: 18px;*/
 
 }
 
-.messages-list li a,
-.nav-list li a.internal-link {
+.nav-list li.nav-link-icon a {
+    color: lighten(#000,60%);
+    background: #fff;
+    padding: 6px 15px;
+    border-bottom: 1px solid @lightgrey;
+}
+
+.nav-list li.nav-link-icon a:hover {
+    color: @dark;
+    background: @lightgrey; 
+}
+.nav-list li.nav-link-icon.active a {
+    color: @light;
+    background: @dark; 
+}
+
+.messages-list li a  {
     color: @dark;
 }
-.messages-list li.active a,
-.nav-list li.active a.internal-link {
+.messages-list li a:hover  {
+    background: @lightgrey;
+}
+
+.messages-list li.active a  {
     color: @light;
     background: @dark
 }
-.nav-list + .messages-list {
-    margin-top: 6px;
+.messages-list li.active a:hover {
+    background: @dark;
 }
 .messages-list .message-link {
     font-size: 11px;
@@ -313,10 +331,15 @@ line-height: 18px;*/
     min-width: 236px;
     max-width: 450px;
     width: auto;
-    position: fixed;
 }
-.popover pre {
-    font-size: 11px;
+.popover.message-abstract .popover-content {
+    padding: 0;
+}
+.popover.message-abstract pre {
+    background: transparent;
+    font-size: 10px;
+    border: none;
+    margin: 0;
 }
 .show > h2 {
     text-align: center;
