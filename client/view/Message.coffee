@@ -1,4 +1,5 @@
 do ->
+  shareModal = new Modal(Template.share_message_modal)
   
   Template.message_view.show = ->
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
@@ -15,7 +16,9 @@ do ->
     Messages.find({_id: messageId, bookmarked_by: userId}).count() > 0
     
   Template.message_view.rendered = ->
+    
     view = this.find '.message-view'
+    $(this.findAll('.message-actions .btn')).tooltip()
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
   
     if view
@@ -30,9 +33,7 @@ do ->
   Template.message_view.events =
     'click .share' : (evt) ->
       url = window.location
-      modal = new Modal(Template.share_message_modal)
-  
-      modal.show {url:url}
+      shareModal.show {url:url}
       
     "click .raw": (evt) ->
       messagesController.getRawMessage(Session.get(SESSION_SHORT_MESSAGE_ID), (message) ->

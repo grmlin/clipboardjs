@@ -1,6 +1,6 @@
 class AbstractValidator
-  validate: (name, data) ->
+  validate: (name, data, callback = ->) ->
     if typeof @[name] is "function"
-      return @[name] data
+      return @[name] data, callback
     else
       return null

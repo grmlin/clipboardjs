@@ -29,9 +29,9 @@
     {{#if show}}
     {{#with user}}
     <div class="user pull-right btn-group">
-        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}}" href="#"><i class="icon-user icon-white"></i> {{user_name}}</a>
-        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}} dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-        <ul class="dropdown-menu">
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}}" href="user-actions"><i class="icon-user icon-white"></i> {{user_name}}</a>
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}} dropdown-toggle" data-toggle="dropdown" href="user-actions"><span class="caret"></span></a>
+        <ul id="user-actions" class="dropdown-menu">
             {{#if is_registered}}
             <li><a href="#" class="logout" title="Logout"><i class="icon-off"></i> Logout</a></li>
             {{else}}
@@ -53,11 +53,11 @@
         <li{{#if is_pasting}} class="active"{{/if}}><a href="/list" class="internal-link" title="Paste something"><i
             class="icon-plus-sign"></i> Paste something</a></li>
         {{#if are_messages_available}}
+        <li class="divider"></li>
         {{#each messages}}
         {{> message_abstr}}
         {{/each}}
         {{else}}
-        <li><span class="label label-info">Sorry! No messages available yet.</span></li>
         {{/if}}
         <li class="nav-header">Bookmarked messages</li>
         {{#if are_bookmarked_messages_available}}
@@ -130,14 +130,14 @@
     {{#if show}}
     {{#with message}}
     <div class="clearfix">
-        <p class="pull-left btn-group">
-            <button class="share btn btn-small collapsing-btn" title="share message"><i class="icon-share"></i></button>
+        <p class="message-actions pull-left btn-group">
             {{#if is_bookmarked _id}}
-            <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
+            <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
             {{else}}
-            <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark"><i class="icon-bookmark"></i></button>
+            <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
             {{/if}}
-            <button class="raw btn btn-small collapsing-btn" title="show raw message"><i class="icon-align-justify"></i></button>
+            <button class="share btn btn-small collapsing-btn" title="share message" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
+            <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
         </p>
     </div>
     {{/with}}
@@ -179,7 +179,6 @@
 
 
 <template name="share_message_modal">
-    <div class="modal-backdrop fade in"></div>
     <div class="modal share-message hide fade">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -191,7 +190,6 @@
     </div>
 </template>
 <template name="user_create_modal">
-    <div class="modal-backdrop fade in"></div>
     <div class="modal hide fade">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -220,41 +218,6 @@
         <div class="modal-footer">
             <button class="btn cancel">Close</button>
             <button class="btn btn-primary save">{{submit_text}}</button>
-        </div>
-    </div>
-</template>
-<template name="board_create_modal">
-    <div class="modal-backdrop fade in"></div>
-    <div class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Create a new Clipboard</h3>
-        </div>
-        <form class="form-horizontal">
-            <div class="modal-body">
-                <div class="control-group">
-                    <label class="control-label" for="board-title">Board Title</label>
-
-                    <div class="controls">
-                        <input type="text" id="board-title" name="boardtitle" placeholder="New Board">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <label class="checkbox">
-                            <input type="checkbox" name="boardprivate"> private clipboard
-                        </label>
-
-                        <span class="help-block">
-                            Don't paste important data into the clipboard, it's currently not <strong>that</strong> secure
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div class="modal-footer">
-            <a href="#" class="btn cancel">Close</a>
-            <button class="btn btn-primary save">Save changes</button>
         </div>
     </div>
 </template>

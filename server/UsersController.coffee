@@ -40,3 +40,6 @@ do() ->
       existing = Users.findOne(id)
       throw new Meteor.Error(404, "User not there") if typeof existing is "undefined"
       return existing
+
+    doesUserExist: (username) ->
+      Users.find(user_name:username).count() > 0

@@ -1,11 +1,6 @@
 Template.list.show = ->
   Session.get SESSION_USER
 
-Template.list.rendered = ->
-  #if Session.get SESSION_USER
-    #Meteor.call "getUserMessages", Session.get(SESSION_USER), (err, data) =>
-    #  this.find(".messages-list")?.innerHTML = Template.messages_list(data) unless typeof err isnt "undefined"
-  
 Template.list.is_pasting = ->
   appState.getState() is appState.LIST
   
@@ -33,7 +28,3 @@ Template.message_abstr.is_active = (id)->
   
 Template.message_bookmarked_abstr.is_active = (id)->
   id is Session.get SESSION_SHORT_MESSAGE_ID
-  
-Template.list.show_messages = ->
-  state = appState.getState()
-  (state is appState.SHOW or state is appState.MESSAGE) and (Session.get(SESSION_BOARD_ID) isnt "")

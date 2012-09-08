@@ -6,12 +6,10 @@ do ->
   
   Template.user.user = ->
     Users.findOne(Session.get(SESSION_USER))
-    
+   
+  Template.user.rendered = ->
+    $(this.findAll('.user-drop')).dropdown()
   Template.user.events =
-    "click .user-drop": (evt) ->
-      $(evt.currentTarget).nextAll('.dropdown-menu').toggleClass("show")
-    "keyup .user .name": (evt) ->
-      $(evt.currentTarget).parents('.user:first').addClass("changed")
   
     "click .logout": (evt) ->
       usersController.logout()
@@ -30,8 +28,12 @@ do ->
       
       modal = new Modal(Template.user_create_modal, new RegistrationValidator())
       modal.submit = (formData) ->
-        usersController.register(Session.get(SESSION_USER),formData.username, formData.pwd)
-        modal.close()
+        usersController.register(Session.get(SESSION_USER),formData.username, formData.pwd, (err, id) =>
+          if typeof err is "undefined"
+            modal.close()
+          else 
+            
+        )
 
       modal.show {title:"Register",user_name: userName, submit_text:"Register"}
       

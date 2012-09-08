@@ -7,13 +7,17 @@ class Modal
 
   _validate: (event) =>
     if @validator isnt null
-      isValid = @validator.validate event.target.name, event.target.value
+      isValid = @validator.validate event.target.name, event.target.value, (isValid) =>
+        @_setValidationState isValid, event.target
   
-      state = if isValid then Modal.SUCCESS else Modal.ERROR
-      state = "" if isValid is null
+      @_setValidationState isValid, event.target
   
-      $(event.target).parents('.control-group:first').removeClass("#{Modal.ERROR} #{Modal.SUCCESS}").addClass(state)
-      @_updateButtonState()
+  _setValidationState: (isValid, target) ->
+    state = if isValid then Modal.SUCCESS else Modal.ERROR
+    state = "" if isValid is null
+
+    $(target).parents('.control-group:first').removeClass("#{Modal.ERROR} #{Modal.SUCCESS}").addClass(state)
+    @_updateButtonState()
     
   _updateButtonState: ->
     if @_modal?.find(".error").length > 0
@@ -36,7 +40,7 @@ class Modal
       @_modal = $ @template(templateData)
       @_modal.appendTo 'body' 
     else 
-      @_modal.html(@template(templateData))
+      @_modal.replaceWith(@template(templateData))
       
     @_modal.modal "show"
     

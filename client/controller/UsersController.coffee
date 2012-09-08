@@ -28,17 +28,19 @@ UsersController = do() ->
         else
           @createUser()
       
-    register: (id, name, pwd) ->
+    register: (id, name, pwd, callback) ->
       userValidator = new RegistrationValidator()
 
       if userValidator.validate("pwd", pwd) and userValidator.validate("username", name)
         Meteor.call "registerUser", id, name, pwd, (err, id) =>
           if typeof err is "undefined"
             saveUser id
-            @_changeName id, name  
-          else 
+            @_changeName id, name 
+          else
             console?.error err
-            alert "Registration failed..."
+            alert "Registration failed... #{err.reason}"
+            
+          callback.call this, err, id
 
     login: (name, pwd) ->
       userId = Meteor.call "getUserId", name, pwd, (err, id) =>
