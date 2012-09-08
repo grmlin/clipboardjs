@@ -29,8 +29,8 @@
     {{#if show}}
     {{#with user}}
     <div class="user pull-right btn-group">
-        <a class="user-drop btn btn-small btn-primary" href="#"><i class="icon-user icon-white"></i> {{user_name}}</a>
-        <a class="user-drop btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}}" href="#"><i class="icon-user icon-white"></i> {{user_name}}</a>
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}} dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
         <ul class="dropdown-menu">
             {{#if is_registered}}
             <li><a href="#" class="logout" title="Logout"><i class="icon-off"></i> Logout</a></li>
@@ -73,14 +73,14 @@
 
 <template name="message_abstr">
     <li {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}" class="internal-link">
+    <a href="/message/{{short_id}}" class="message-link internal-link">
         <span class="message-abstr">{{abstract}}</span>
     </a>
     </li>
 </template>
 <template name="message_bookmarked_abstr">
     <li {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}" class="internal-link">
+    <a href="/message/{{short_id}}" class="message-link internal-link">
         <span class="message-abstr">{{abstract}}</span>
     </a>
     </li>
