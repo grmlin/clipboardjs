@@ -29,12 +29,17 @@ class Modal
     @submit data
 
   _closeModal: () =>
-    @_modal?.remove()
+    @_modal?.modal "hide"
 
   show: (templateData = {}) ->
-    @_modal = $ @template(templateData)
-    @_modal.appendTo 'body'
-
+    if @_modal is null
+      @_modal = $ @template(templateData)
+      @_modal.appendTo 'body' 
+    else 
+      @_modal.html(@template(templateData))
+      
+    @_modal.modal "show"
+    
     @_modal.on "click", "button.save:not(:disabled)", @_submitHandler
     @_modal.on "click", ".cancel, .close", @_closeModal
     @_modal.on "keyup", "input", @_validate
