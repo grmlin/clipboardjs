@@ -49,9 +49,9 @@
 
     {{#if show}}
     <ul class="nav nav-list messages-list">
-        <li{{#if is_pasting}} class="active"{{/if}}><a href="/list" class="internal-link" title="Paste something"><i
-                class="icon-plus-sign"></i> Paste something</a></li>
         <li class="nav-header">Your messages</li>
+        <li{{#if is_pasting}} class="active"{{/if}}><a href="/list" class="internal-link" title="Paste something"><i
+            class="icon-plus-sign"></i> Paste something</a></li>
         {{#if are_messages_available}}
         {{#each messages}}
         {{> message_abstr}}

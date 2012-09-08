@@ -24,9 +24,8 @@ open `.meteor/local/build/static/packages/stream/client.js` and add websockets t
 ## TODO
 
 * message delete
-* message editing
+* message editing (?)
 * all messages views
 * message search
 * message privacy / password protection
-* message short url sharing
 
