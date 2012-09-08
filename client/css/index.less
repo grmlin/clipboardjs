@@ -278,6 +278,18 @@ line-height: 18px;*/
 
 }
 
+.messages-list li a,
+.nav-list li a.internal-link {
+    color: @dark;
+}
+.messages-list li.active a,
+.nav-list li.active a.internal-link {
+    color: @light;
+    background: @dark
+}
+.nav-list + .messages-list {
+    margin-top: 6px;
+}
 .messages-list .message-link {
     font-size: 11px;
     white-space: nowrap;
@@ -288,7 +300,24 @@ line-height: 18px;*/
 .messages-list li a p {
     margin: 0;
 }
+.messages-list.nav-list {
+    border-top: 1px solid @lightgrey;
+    .box-shadow(0 1px 0 rgba(255,255,255,0.7));
+}
+.messages-list.nav-list > li > a {
+    border-bottom: 1px solid @lightgrey;
+    .box-shadow(0 1px 0 rgba(255,255,255,0.7));
+}
 
+.popover.message-abstract {
+    min-width: 236px;
+    max-width: 450px;
+    width: auto;
+    position: fixed;
+}
+.popover pre {
+    font-size: 11px;
+}
 .show > h2 {
     text-align: center;
 }

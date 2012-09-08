@@ -1,5 +1,5 @@
 do() ->
-  ABSTRACT_LENGTH = 100
+  ABSTRACT_LENGTH = 160
 
   highlight = meteorNpm.require "highlight.js"
   shortid = meteorNpm.require "shortid"

@@ -18,6 +18,7 @@ do ->
   Template.message_view.rendered = ->
     
     view = this.find '.message-view'
+    $('.tooltip').remove()
     $(this.findAll('.message-actions .btn')).tooltip()
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
   

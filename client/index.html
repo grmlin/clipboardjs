@@ -48,12 +48,13 @@
     <h1 id="logo">ClipboardJS</h1>
 
     {{#if show}}
-    <ul class="nav nav-list messages-list">
+    <ul class="nav nav-list">
         <li class="nav-header">Your messages</li>
         <li{{#if is_pasting}} class="active"{{/if}}><a href="/list" class="internal-link" title="Paste something"><i
             class="icon-plus-sign"></i> Paste something</a></li>
+    </ul>
+    <ul class="nav nav-list messages-list">
         {{#if are_messages_available}}
-        <li class="divider"></li>
         {{#each messages}}
         {{> message_abstr}}
         {{/each}}
@@ -73,14 +74,26 @@
 
 <template name="message_abstr">
     <li {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}" class="message-link internal-link">
+    <a href="/message/{{short_id}}" 
+       class="message-link internal-link" 
+       data-placement="right" 
+       data-trigger="hover"
+       data-trigger="trigger" 
+       data-title="<i class='icon-user'></i> {{user_name}}"
+       data-content="<pre>{{abstract}}</pre>">
         <span class="message-abstr">{{abstract}}</span>
     </a>
     </li>
 </template>
 <template name="message_bookmarked_abstr">
     <li {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}" class="message-link internal-link">
+    <a href="/message/{{short_id}}"
+       class="message-link internal-link"
+       data-placement="right"
+       data-trigger="hover"
+       data-trigger="trigger"
+       data-title="<i class='icon-user'></i> {{user_name}}"
+       data-content="<pre>{{abstract}}</pre>">
         <span class="message-abstr">{{abstract}}</span>
     </a>
     </li>
