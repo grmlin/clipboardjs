@@ -136,18 +136,49 @@
 }
 
 
-html {
-    background: #fff url(/img/skin_side_up.png) repeat center 0;
-}
-
-body {
-    background: transparent;
-}
-
 .box-sizing(@sizing : border-box) {
     -moz-box-sizing: @sizing;
     -webkit-box-sizing: @sizing;
     box-sizing: @sizing;
+}
+
+
+/** COLORS **/
+
+@dark : rgb(64,62,63);
+@light: rgb(242,242,242);
+@lightgrey: rgb(217,217,217);
+@blue: rgb(157,170,187);
+@grey: rgb(140,140,140);
+
+
+html {
+    background: #fff url(/img/skin_side_up.png) repeat center 0;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: transparent;
+    overflow-y: scroll;
+}
+
+.navbar-static-top .navbar-inner {
+}
+.navbar .nav > li.active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus {
+}
+
+.app .nav a i {
+    opacity: 0.5;
+}
+
+.app .nav a:hover i,
+.app .nav .active a i {
+    opacity: 1;
 }
 .centered {
     text-align: center;
@@ -166,15 +197,54 @@ body {
     margin-top: -4px;
     top: 0;
 }
-
-.sidebar {
-    margin-left: -20px;
+#logo {
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: bold;
+    margin: 6px 15px 7px;
+}
+#sidebar {
+    margin-left: 0;
+    background: @light;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding-top: 3px;
+    .box-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
+    width: 270px;
 }
 
+#sidebar .navbar-search {
+}
+
+#sidebar .navbar-search input {
+}
+#content {
+    margin-left: 270px;
+    padding-top: 15px;
+    min-width: 530px;
+}
 .content {
     
 }
 
+
+.user .username {
+    /*color: @blue;
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 4px;
+    padding: 5px 3px 3px;
+    line-height: 18px;*/
+}
+.collapsing-btn {}
+.collapsing-btn i + span {
+    //display: none;
+}
+.collapsing-btn:hover i + span {
+    //display: inline-block;
+}
 .user .name {
     text-decoration: underline;
     padding: 2px 6px;
@@ -193,13 +263,8 @@ body {
 
 }
 
-.create,
 .board-list h2 {
     text-align: center;
-}
-
-.create + .board-list {
-    margin-top: 50px;
 }
 
 .board-list  li.locked {
@@ -209,23 +274,29 @@ body {
 .board-list li.locked a:hover {
     cursor: not-allowed;
 }
-.board-list li a i.icon-lock {
+.board-list li i.icon-lock {
     display: none;    
 }
 
-.board-list  li.private a i.icon-lock {
+.board-list  li.private i.icon-lock {
     display: inline-block;    
 }
 
-.board-list li a .user-name,
+.board-list li .user-name,
 .messages-list li a .user-name {
     float: right;
     position: relative;
     right: 5px;
     margin-left: 15px;
 }
-.board-list li a .user-name + .board-title,
-.board-list li a .message-abstr {
+
+.board-list li.active .board-title {
+    padding: 3px 15px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.board-list li .board-title,
+.board-list li .message-abstr {
     display:block;
     overflow: hidden;
     white-space: nowrap;
@@ -238,9 +309,6 @@ body {
     margin: 0;
 }
 
-.show {
-    position: relative;
-}
 
 .show > h2 {
     text-align: center;    
@@ -332,14 +400,54 @@ body {
     font-family: monospace;
     .box-sizing();
 }
+
+.message-view {
+    position: relative;
+}
+
+.message-view .author-detail {
+    color: @grey;
+    font-size: 11px;
+    background: #363731;
+    position: absolute;
+    top: 9.5px;
+    right: 9.5px;
+    padding: 0 5px 2px 5px;
+    .box-shadow(-3px 3px 3px 0px rgba(0, 0, 0, 0.5));
+    .border-radius(0,0,2px,0);
+}
+.message-view .message-detail {
+    color: @grey;
+    font-size: 11px;
+    background: #363731;
+    position: absolute;
+    top: 9.5px;
+    left: 9.5px;
+    padding: 0 5px 2px 5px;
+    .box-shadow(3px 3px 3px 0px rgba(0, 0, 0, 0.5));
+    .border-radius(0,2px,0,0);
+}
+
+.message-view .message-detail .lang {
+    color: #F92672;
+}
 .prettyprint {
     background: #363731;
 }
-.prettyprint.loading {
+
+.message-view.loading .prettyprint code {
     background: #363731 url(/img/load.gif) no-repeat center;
-    min-height: 40px;
+    min-height: 20px;
+}
+.prettyprint code {
+    .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5));
+    padding-top: 30px;
 }
 
-.prettyprint code {
-    .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5))
+.share-message input {
+    font-size: 20px;
+    line-height: 40px;
+    height: auto;
+    width: 100%;
+    .box-sizing();
 }

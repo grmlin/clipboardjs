@@ -1,41 +1,38 @@
 boardsRouter = new BoardsRouter()
-boardsController = new BoardsController()
-messagesController = new MessagesController()
 usersController = new UsersController()
+messagesController = new MessagesController()
 
 Meteor.startup ->
-  areUsersLoaded = false
-  boardsController.resetBoardSession()
+  Session.set SESSION_BOARD_ID, null
+  Session.set SESSION_USER, null
 
-  modelsNeeded = 2
-  checkDataAvailability = ->
-    modelsNeeded--
-    if modelsNeeded is 0
-      if Session.get(SESSION_STATE) is appState.LOADING
-        appState.setState(appState.LOADED)
-        Backbone.history.start({pushState: true})
+  initializeApp = ->
+    if Session.get(SESSION_STATE) is appState.LOADING
+      appState.setState(appState.LOADED)
+      Backbone.history.start({pushState: true})
 
-        if Backbone.history.fragment is ""
-          boardsRouter.navigate "list", trigger: true
+      if Backbone.history.fragment is ""
+        boardsRouter.navigate "list", trigger: true
 
-  $('#logo').click (evt) ->
-    evt.preventDefault()
-    boardsRouter.navigate "/list", trigger: true
+  userid = localStorage[SESSION_USER]
+  if typeof userid is "undefined"
+    usersController.createUser()
+  else
+    usersController.loadUser(userid)
 
-  Meteor.autosubscribe ->
-    Meteor.subscribe 'users', ->
-      unless areUsersLoaded
-        areUsersLoaded = true
-        # Get the current user or create a new one
-        userid = localStorage[SESSION_USER]
-        if typeof userid is "undefined"
-          usersController.createUser()
-        else
-          usersController.loadUser(userid)
-
-    Meteor.subscribe 'boards', ->
-      checkDataAvailability()
-
-    Meteor.subscribe 'messages', ->
-      checkDataAvailability()
+  watchUser = () ->
+    update = ->
+      ctx = new Meteor.deps.Context()
+      ctx.on_invalidate(update)
+      ctx.run ->
+          userId = Session.get SESSION_USER
+          unless userId is null
+            console.log("The current user is now", userId);
+            initializeApp()
+            Meteor.autosubscribe ->
+              Meteor.subscribe 'messages', userId
+              Meteor.subscribe 'users', userId
       
+    update()
+  
+  watchUser()

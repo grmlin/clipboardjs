@@ -1,40 +1,42 @@
 MessagesController = do () ->
-  remove = Messages.remove
-  insert = Messages.insert
-  update = Messages.update
-  doUpdate = ->
-    update.call Messages, arguments
-  
   Messages.remove = ->
   Messages.insert = ->
   Messages.update = ->
   
   class MessagesController
     resetMessageSession: ->
-      Session.set SESSION_MESSAGE_ID, ""
+      Session.set SESSION_SHORT_MESSAGE_ID, ""
       
     canViewMessage: (user_id, message_id) ->
       message = Messages.findOne(message_id)
-      boardsController.canViewBoard user_id, message.board_id
+      user_id is message.user_id
   
-    createMessage: (boardId, message, type) ->
+    createMessage: (message, type, callback) ->
       userId = Session.get(SESSION_USER)
-      Meteor.call("createMessage", userId, boardId, message, type, (err, res) ->
-        console.log res
+      Meteor.call("createMessage", userId, message, type, (err, res) ->
+        callback.call(this, res) unless typeof err isnt "undefined"
       )
   
     deleteMessage: (user_id, message_id) ->
-      
-    updateUserName: (id, name) ->
-      doUpdate(
-        {user_id: id},
-        {$set:
-          {user_name: name}
-        }, multi: true
+
+    addBookmark: (messageId) ->
+      userId = Session.get(SESSION_USER)
+      Meteor.call("addMessageBookmark", userId, messageId, (err, res) ->
+        console?.error err if typeof err isnt "undefined"
       )
+
+    deleteBookmark: (messageId) ->
+      userId = Session.get(SESSION_USER)
+      Meteor.call("deleteMessageBookmark", userId, messageId, (err, res) ->
+        console?.error err if typeof err isnt "undefined"
+      )
+
+    updateUserName: (userId, userName) ->
+      Meteor.call "updateMessageOwner", userId, userName, (err, res) ->
+        console?.log err, res
       
-    getHighlightedMessage: (messageId, callback) ->
-      Meteor.call("getHighlightedMessage", Session.get(SESSION_USER), messageId, (err, message) ->
+    getHighlightedMessage: (messageShortId, callback) ->
+      Meteor.call("getHighlightedMessage", Session.get(SESSION_USER), messageShortId, (err, message) ->
         callback.call this, message
       )
 

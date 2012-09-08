@@ -1,25 +1,42 @@
 do() ->
   ABSTRACT_LENGTH = 100
-  
+
   highlight = meteorNpm.require "highlight.js"
-  
+  shortid = meteorNpm.require "shortid"
+
   Meteor.methods
-    getHighlightedMessage: (userId, messageId) ->
+    getUserMessages: (userId) ->
+      messages = Messages.find user_id: userId
+      return messages.fetch()
+
+    getMessage: (shortId, userId) ->
+      console.log "loading message #{shortId}"
+      message = Messages.findOne short_id: shortId
+      throw new Meteor.Error(404, "Message not found") unless message
+
+      throw new Meteor.Error(403, "Access Denied") if message.is_private and userId isnt message.user_id
+      
+      return message
+
+
+
+    getHighlightedMessage: (userId, shortId) ->
       #TODO validation "canView..." for server and client
-      message = Messages.findOne messageId
+      console.log "loading message #{shortId}"
+      message = Messages.findOne short_id: shortId
       if typeof message isnt "undefined"
         return "<code class=#{message.language}>#{message.highlighted}</code>"
       else
         throw new Meteor.Error(404, "Message not found")
 
-    getRawMessage: (userId, messageId) ->
-      message = Messages.findOne messageId
+    getRawMessage: (userId, shortId) ->
+      message = Messages.findOne short_id: shortId
       if typeof message isnt "undefined"
         return message.raw
       else
         throw new Meteor.Error(404, "Message not found")
 
-    createMessage: (userId, boardId, content, type) ->
+    createMessage: (userId, content, type) ->
       message_raw = content
       message_abstract = content.slice 0, ABSTRACT_LENGTH
       message_highlighted = ""
@@ -47,13 +64,30 @@ do() ->
 
 
       newid = Messages.insert
+        abstract: message_abstract
+        bookmarked_by: []
+        highlighted: message_highlighted
+        is_private: false
+        language: lang
+        raw: message_raw
+        short_id: shortid.generate()
+        time: (new Date()).getTime()
         user_id: userId
         user_name: Users.findOne(userId)?.user_name
-        time: (new Date()).getTime()
-        board_id: boardId
-        abstract: message_abstract
-        raw: message_raw
-        highlighted: message_highlighted
-        language: lang
 
       return newid
+
+    addMessageBookmark: (userId, shortId) ->
+      Messages.update {short_id: shortId}, {$addToSet:{bookmarked_by:userId}}
+
+    deleteMessageBookmark: (userId, shortId) ->
+      Messages.update {short_id: shortId}, {$pull:{bookmarked_by:userId}}
+      
+    updateMessageOwner: (userId, userName) ->
+      Messages.update(
+        {user_id: userId},
+        {$set:
+          {user_name: userName}
+        }, multi: true
+      )
+      return "messages updated"

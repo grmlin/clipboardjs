@@ -1,11 +1,15 @@
 # TODO clean up this mess 
 # TODO Validation class
 do ->
+  Template.user.show = ->
+    Session.get SESSION_USER
   
   Template.user.user = ->
     Users.findOne(Session.get(SESSION_USER))
-  
+    
   Template.user.events =
+    "click .user-drop": (evt) ->
+      $(evt.currentTarget).nextAll('.dropdown-menu').toggleClass("show")
     "keyup .user .name": (evt) ->
       $(evt.currentTarget).parents('.user:first').addClass("changed")
   
@@ -13,7 +17,7 @@ do ->
       usersController.logout()
       
   # TODO add a modal class
-    "click .login a": (evt) ->
+    "click .login": (evt) ->
       modal = new Modal(Template.user_create_modal, new LoginValidator())
       modal.submit = (formData) ->
         usersController.login(formData.username, formData.pwd)
@@ -21,7 +25,7 @@ do ->
         
       modal.show {title:"Login",user_name: "", submit_text:"Login"}
 
-    "click .create a": (evt) ->
+    "click .create": (evt) ->
       userName = $(evt.currentTarget).parents(".user").find('.name').text()
       
       modal = new Modal(Template.user_create_modal, new RegistrationValidator())
