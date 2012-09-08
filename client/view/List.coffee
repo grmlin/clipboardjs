@@ -31,10 +31,10 @@ do ->
       }).fetch().slice(0, 10)
   
   Template.message_abstr.rendered = ->
-    createPopover($(this.find('a')))
+    #createPopover($(this.find('a')))
 
   Template.message_bookmarked_abstr.rendered = ->
-    createPopover($(this.find('a')))
+    #createPopover($(this.find('a')))
     
   Template.message_abstr.is_active = (id)->
     id is Session.get(SESSION_SHORT_MESSAGE_ID) 
