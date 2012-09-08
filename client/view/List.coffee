@@ -37,7 +37,11 @@ do ->
     createPopover($(this.find('a')))
     
   Template.message_abstr.is_active = (id)->
-    id is Session.get(SESSION_SHORT_MESSAGE_ID) and Messages.find({user_id: Session.get(SESSION_USER),bookmarked_by:Session.get(SESSION_USER)}).count() is 0
+    id is Session.get(SESSION_SHORT_MESSAGE_ID) 
+    ### and Messages.find(
+      {short_id:id},
+      {$and:{user_id: Session.get(SESSION_USER),bookmarked_by:Session.get(SESSION_USER)}}
+    ).count() is 0                                 ###
     
   Template.message_bookmarked_abstr.is_active = (id)->
     id is Session.get SESSION_SHORT_MESSAGE_ID
