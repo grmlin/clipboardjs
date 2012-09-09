@@ -1,4 +1,7 @@
 do ->
+  monthNames = [ "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ]
+  
   createPopover = (link) ->
     $('.popover').remove()
     link.popover({delay: { show: 0, hide: 0 }})
@@ -36,6 +39,13 @@ do ->
   Template.message_bookmarked_abstr.rendered = ->
     #createPopover($(this.find('a')))
     
+  Template.message_abstr.get_date = (time)->
+    date = new Date(time)
+    day = date.getDay()
+    month = monthNames[date.getMonth()]
+    year = date.getYear()
+    month.toString() + " " + day.toString() + ", " + year.toString()
+  
   Template.message_abstr.is_active = (id)->
     id is Session.get(SESSION_SHORT_MESSAGE_ID) 
     ### and Messages.find(
