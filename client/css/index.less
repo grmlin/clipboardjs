@@ -420,32 +420,16 @@ line-height: 18px;*/
     text-align: center;
 }
 
-.show .editable-board-title {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 2px 6px;
-    text-decoration: underline;
-    font-weight: bold;
+.show .text-type {
+  margin-right: 15px;
+}
+.show .hide-preview,
+.previewed .show-preview{
+  display: none;
 }
 
-.show .editable-board-title:active,
-.show .editable-board-title:focus,
-.show .editable-board-title:hover {
-    background: #fff;
-    color: #333;
-    outline-color: #717F8B;
-    outline-style: auto;
-    outline-width: 5px;
-    text-decoration: none;
-}
-
-.show .board-name .change {
-    display: none;
-    margin: 0 15px;
-}
-
-.show .board-name .changed .change {
-    display: inline-block;
+.previewed .hide-preview {
+  display: inline-block;
 }
 
 .show .board-actions {
@@ -473,10 +457,7 @@ line-height: 18px;*/
 }
 
 .show textarea.text-board {
-    width: 100%;
-    height: 150px;
-    background: #fff;
-    .box-sizing();
+    
 }
 
 .show .over textarea.text-board {
@@ -525,6 +506,7 @@ line-height: 18px;*/
     padding: 0 5px 2px 5px;
     .box-shadow(-3px 3px 3px 0px rgba(0, 0, 0, 0.5));
     .border-radius(0,0,2px,0);
+  z-index: 3;
 }
 
 .message-view .message-detail {
@@ -535,8 +517,9 @@ line-height: 18px;*/
     top: 9.5px;
     left: 9.5px;
     padding: 0 5px 2px 5px;
-    .box-shadow(3px 3px 3px 0px rgba(0, 0, 0, 0.5));
+    .box-shadow(1px 1px 2px 0px rgba(0, 0, 0, 0.8));
     .border-radius(0,2px,0,0);
+  z-index: 3;
 }
 
 .message-view .message-detail .lang {
@@ -545,6 +528,7 @@ line-height: 18px;*/
 
 .prettyprint {
     background: #363731;
+    position: relative;
 }
 
 .message-view.loading .prettyprint code {
@@ -557,10 +541,43 @@ line-height: 18px;*/
     padding-top: 30px;
 }
 
+.prettyprint .text-board {
+  .box-sizing();
+  .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5));
+  border: none;
+  background: #363731;
+  margin: 0;
+  padding: 30px 0.5em 0.5em;
+  color: @light;
+  position: relative;
+  z-index: 1;      
+  white-space: pre;
+}
+.prettyprint .text-board:focus {
+  outline: none;
+}
+.previewed .prettyprint .text-board {
+  opacity: 0;
+}
+.prettyprint .text-board  + code {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  margin: 9.5px;
+}
+
+.previewed .prettyprint .text-board + code {
+  display: block;
+} 
+
 .share-message input {
-    font-size: 20px;
-    line-height: 40px;
-    height: auto;
-    width: 100%;
-    .box-sizing();
+  font-size: 20px;
+  line-height: 40px;
+  height: auto;
+  width: 100%;
+  .box-sizing();
 }

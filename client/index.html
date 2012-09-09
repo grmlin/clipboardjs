@@ -7,7 +7,7 @@
         <div class="row-fluid">
             <div id="content" class="content">
                 {{> user}}
-                {{> show}}
+                {{> create}}
                 {{> message_view}}
             </div>
             <div id="sidebar" class="sidebar">
@@ -104,38 +104,44 @@
     </div>
 </template>
 
-<template name="show">
+<template name="create">
     {{#if show}}
     <div class="show">
+        <input type="hidden" name="current-lang-notepad" value="plain">
+        <div class="clearfix">
+            <div class="text-type pull-left btn-group">
+                    <button class="current-lang btn btn-small btn-info" data-toggle="dropdown"><i class="icon-font icon-white"></i> Plain Text</button>
+                    <button class="btn btn-small btn-info dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                <ul class="dropdown-menu">
+                    <li class="active" data-val="plain"><a href="#">Plain text</a></li>
+                    <li><a href="#" data-val="auto">Auto Detection</a></li>
+                    <li><a href="#" data-val="html">HTML</a></li>
+                    <li><a href="#" data-val="javascript">Javascript</a></li>
+                    <li><a href="#" data-val="coffeescript">Coffeescript</a></li>
+                </ul>
+            </div>
+            <p class="pull-left">
+                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
+                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
+            </p>
+        </div>
+        <p></p>
         <div>
             <div class="row-fluid">
-                <div class="span12">
-                    <h5>1. Choose the text type
-                        <br>
-                        <small>for syntax highlighting</small>
-                    </h5>
-                    <select name="text-type" id="text-type">
-                        <option value="auto">auto detect</option>
-                        <option value="html">HTML</option>
-                        <option value="javascript">Javascript</option>
-                        <option value="coffeescript">Coffeescript</option>
-                        <option value="plain" selected>plain text</option>
-                    </select>
-                </div>
-                </div>
-            <div class="row-fluid">
                 <div class="span9 text-board-wrapper">
-                    <h5>2. Add the text snippet
-                        <br>
-                        <small>Paste some text or drag and drop text files in here</small>
-                    </h5>
-
-                    <div class="file-drop"><textarea class="text-board" id="text-content"></textarea></div>
+                    <div class="message-view">
+                        <p class="message-detail">
+                            <span class="lang current-lang">Plain text</span>
+                        </p>
+                        <pre class="prettyprint"><p class="text-board" id="text-content" contenteditable="true"></p><code class="plain"></code></pre>
+                    </div>
                 </div>
             </div>
             <div class="row-fluid">
                 <div class="span9">
-                    <button class=" btn btn-large btn-block btn-primary paste-text-board">paste</button>
+                    <button class=" btn btn-large btn-block paste-text-board"><strong>Save Snippet</strong></button>
                 </div>
             </div>
         </div>

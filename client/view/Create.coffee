@@ -1,57 +1,81 @@
-Template.show.show = ->
-  isRightState = appState.getState() is appState.LIST
-  isRightState and Session.get SESSION_USER
-
-Template.show.is_editable = ->
-  boardsController.isOwner(Session.get(SESSION_USER),Session.get(SESSION_BOARD_ID))
+do ->
+  snippet = null
+  hightlighted = null
+  langNotepad = null 
   
-Template.show.board_name = ->
-  board = Boards.findOne(Session.get(SESSION_BOARD_ID))
-  return if board then board.title else "UNKNOWN"
+  Template.create.rendered = ->
+    snippet = this.find ".text-board"
+    hightlighted = this.find ".prettyprint code"
+    langNotepad = this.find '[name="current-lang-notepad"]'
 
-Template.show.user_name = ->
-  Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
-
-
-Template.show.events =
-  "click .paste-text-board:not(:disabled)": (evt) ->
-    $button = $(evt.currentTarget)
-    txt = $button.parents('.show').find("textarea").val()
-    type = $button.parents('.show').find("select[name=text-type]").val()
-
-    if txt isnt ""
-      $button.attr("disabled","disabled")
-      messagesController.createMessage txt, type, ->
-        $button.removeAttr("disabled")
-        $button.parents('.show').find("textarea").val("")
-
-  "keyup .board-name .editable-board-title": (evt) ->
-    $(evt.currentTarget).parents('li:first').addClass("changed")
-
-  "click .board-name .change": (evt) ->
-    text = $(evt.currentTarget).prev('.editable-board-title').text()
-    boardsController.setBoardName(Session.get(SESSION_BOARD_ID), text) unless text is ""
-
-  'click .board-actions .delete': (evt) ->
-    if confirm("Are you sure?\n The board and all messages will be deleted")
-      boardsController.deleteBoard Session.get(SESSION_USER), Session.get(SESSION_BOARD_ID)  
+    $('.tooltip').remove()
+    $(this.findAll('.preview')).tooltip()
     
-  'dragenter .file-drop': (evt) ->
-    $(evt.currentTarget).addClass('over')
+  Template.create.show = ->
+    isRightState = appState.getState() is appState.LIST
+    isRightState and Session.get SESSION_USER
+  
+  Template.create.user_name = ->
+    Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
+  
+  
+  Template.create.events =
+    'click .text-type .dropdown-menu li:not(.active) a': (evt) ->
+      $lang = $(evt.currentTarget)
+      lang = evt.currentTarget.getAttribute "data-val"
+      langDesc = evt.currentTarget.innerHTML
+      
+      $lang.parents('ul:first').children('.active').removeClass('active')
+      $lang.parent().addClass "active"
+      
+      $lang.parents('.show:first').find('.current-lang').html(langDesc)
 
-  'dragleave .file-drop': (evt) ->
-    $(evt.currentTarget).removeClass('over')
-
-  'drop .file-drop': (evt) ->
-    evt.preventDefault()
-    target = evt.currentTarget
-    text = $(evt.currentTarget).removeClass('over').find('textarea')
-
-    files = evt.dataTransfer.files
-    for file in files
-      do (file) ->
-        reader = new FileReader()
-        reader.onload = (readerEvent) ->
-          text.val readerEvent.target.result
+      langNotepad.value = lang
     
-        reader.readAsText(file)  
+    'click .preview': (evt) ->
+      $button = $ evt.currentTarget
+      $view = $button.parents '.show:first'
+      $view.toggleClass "previewed"
+      isPreviewed = $view.hasClass "previewed"
+      
+      if isPreviewed and $(snippet).text() isnt ""
+        switch langNotepad.value
+          when "auto"
+            preview = hljs.highlightAuto $(snippet).text()
+          when "plain"
+            preview = $(snippet).text()
+          else
+            preview = hljs.highlight langNotepad.value, $(snippet).text()
+        
+        hightlighted.innerHTML = preview.value
+      
+    "click .paste-text-board:not(:disabled)": (evt) ->
+      $button = $(evt.currentTarget)
+      txt = $(snippet).text()
+      type = langNotepad.value
+  
+      if txt isnt ""
+        $button.attr("disabled","disabled")
+        messagesController.createMessage txt, type, ->
+          $button.removeAttr("disabled")
+          $button.parents('.show').find("textarea").val("")
+  
+    'dragenter .file-drop': (evt) ->
+      $(evt.currentTarget).addClass('over')
+  
+    'dragleave .file-drop': (evt) ->
+      $(evt.currentTarget).removeClass('over')
+  
+    'drop .file-drop': (evt) ->
+      evt.preventDefault()
+      target = evt.currentTarget
+      text = $(evt.currentTarget).removeClass('over').find('textarea')
+  
+      files = evt.dataTransfer.files
+      for file in files
+        do (file) ->
+          reader = new FileReader()
+          reader.onload = (readerEvent) ->
+            text.val readerEvent.target.result
+      
+          reader.readAsText(file)  

@@ -39,34 +39,30 @@ do() ->
     createMessage: (userId, content, type) ->
       message_raw = content
       message_abstract = content.slice 0, ABSTRACT_LENGTH
-      message_highlighted = ""
+      
+      message_highlighted = message_raw
+      message_highlighted_abstract = message_abstract
+      
       highlightResult = null
-      lang = null
+      highlightAbstractResult = null
+      
+      lang = "plain"
 
-      switch type
-        when "auto"
-          highlightResult = highlight.highlightAuto message_raw
-          message_abstract = highlight.highlightAuto message_abstract
-        when "html"
-          highlightResult = highlight.highlight "xml", message_raw
-          message_abstract = highlight.highlight "xml", message_abstract
-        when "javascript"
-          highlightResult = highlight.highlight "javascript", message_raw
-          message_abstract = highlight.highlight "javascript", message_abstract
-        when "coffeescript"
-          highlightResult = highlight.highlight "coffeescript", message_raw
-          message_abstract = highlight.highlight "coffeescript", message_abstract
-        when "plain"
-          message_highlighted = message_raw
-          lang = "plain"
-        else
-          message_highlighted = message_raw
-          lang = "plain"
+      try
+        switch type
+          when "auto"
+            highlightResult = highlight.highlightAuto message_raw
+            highlightAbstractResult = highlight.highlightAuto message_abstract
+          else
+            highlightResult = highlight.highlight type, message_raw
+            highlightAbstractResult = highlight.highlight type, message_abstract
 
-      message_highlighted = highlightResult.value if highlightResult isnt null
-      message_abstract = message_abstract.value if message_abstract isnt null
-      lang = highlightResult.language if lang is null
-
+        message_highlighted = highlightResult.value if highlightResult isnt null
+        message_abstract = highlightAbstractResult.value if highlightAbstractResult isnt null
+        lang = highlightResult.language if highlightResult isnt null
+        
+      catch error
+        console.log error
 
       newid = Messages.insert
         abstract: message_abstract
