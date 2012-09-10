@@ -59,6 +59,7 @@
         {{> message_abstr}}
         {{/each}}
         {{else}}
+        <li><div class="alert">No messages pasted yet!</div></li>
         {{/if}}
         <li class="nav-header">Bookmarked messages</li>
     </ul>
@@ -68,7 +69,7 @@
         {{> message_bookmarked_abstr}}
         {{/each}}
         {{else}}
-        <li><span class="label label-info">Sorry! No bookmarks available yet.</span></li>
+        <li><div class="alert">Nothing bookmarked yet!</div></li>
         {{/if}}
     </ul>
     {{/if}}
