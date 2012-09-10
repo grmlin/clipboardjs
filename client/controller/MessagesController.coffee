@@ -6,6 +6,9 @@ MessagesController = do () ->
   class MessagesController
     resetMessageSession: ->
       Session.set SESSION_SHORT_MESSAGE_ID, ""
+
+    resetStreamSession: ->
+      Session.set SESSION_SHORT_STREAM_ID, ""
       
     canViewMessage: (user_id, message_id) ->
       message = Messages.findOne(message_id)
@@ -17,6 +20,12 @@ MessagesController = do () ->
         callback.call(this, res) unless typeof err isnt "undefined"
       )
   
+    createStream: (callback) ->
+      userId = Session.get(SESSION_USER)
+      Meteor.call("createStream", userId, (err, res) ->
+        callback.call(this, res) unless typeof err isnt "undefined"
+      )
+
     deleteMessage: (user_id, message_id) ->
 
     addBookmark: (messageId) ->

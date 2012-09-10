@@ -6,7 +6,11 @@ Meteor.startup ->
 
     console.log "Publishing user #{userId}"
     return user
-
+    
+  Meteor.publish "streams", (userId) ->
+    streams = Streams.find users: userId
+    return streams
+    
   Meteor.publish "messages", (userId) ->
     messages = Messages.find({
     $or: [

@@ -4,6 +4,7 @@ do() ->
   highlight = meteorNpm.require "highlight.js"
   shortid = meteorNpm.require "shortid"
 
+  # TODO check user ids on existence?
   Meteor.methods
     getUserMessages: (userId) ->
       messages = Messages.find user_id: userId
@@ -78,6 +79,13 @@ do() ->
 
       return newid
 
+    createStream: (userId) ->
+      newid = Streams.insert
+        messages: []
+        short_id: shortid.generate()
+        time: (new Date()).getTime()
+        users: [userId]
+      
     addMessageBookmark: (userId, shortId) ->
       Messages.update {short_id: shortId}, {$addToSet:{bookmarked_by:userId}}
 

@@ -32,6 +32,7 @@ Meteor.startup ->
             Meteor.autosubscribe ->
               Meteor.subscribe 'messages', userId
               Meteor.subscribe 'users', userId
+              Meteor.subscribe 'streams', userId
       
     update()
   

@@ -5,6 +5,7 @@ appState = do() ->
     LIST : "list"
     SHOW : "show"
     MESSAGE: "message"
+    STREAM: "stream"
     
     setState: (state) ->
       Session.set(SESSION_STATE, state)
