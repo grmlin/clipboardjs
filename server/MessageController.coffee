@@ -37,7 +37,7 @@ do() ->
       else
         throw new Meteor.Error(404, "Message not found")
 
-    createMessage: (userId, content, type) ->
+    createMessage: (userId, content, type, streamId = null) ->
       message_raw = content
       message_abstract = content.slice 0, ABSTRACT_LENGTH
       
@@ -73,6 +73,7 @@ do() ->
         language: lang
         raw: message_raw
         short_id: shortid.generate()
+        stream_id: streamId
         time: (new Date()).getTime()
         user_id: userId
         user_name: Users.findOne(userId)?.user_name
@@ -81,10 +82,20 @@ do() ->
 
     createStream: (userId) ->
       newid = Streams.insert
-        messages: []
         short_id: shortid.generate()
         time: (new Date()).getTime()
         users: [userId]
+
+    joinStream: (streamShortId, userId) ->
+      throw new Meteor.Error(404, "Stream not found") if Streams.find(short_id:streamShortId).count() is 0
+      Streams.update {short_id: streamShortId}, {$addToSet: {users:userId}}
+
+    leaveStream: (streamShortId, userId) ->
+      throw new Meteor.Error(404, "Stream not found") if Streams.find(short_id:streamShortId).count() is 0
+      Streams.update {short_id: streamShortId}, {$pull: {users:userId}}
+    
+    isSubscribed: (streamShortId, userId) ->
+      Streams.find({short_id:streamShortId,users:userId}).count() > 0
       
     addMessageBookmark: (userId, shortId) ->
       Messages.update {short_id: shortId}, {$addToSet:{bookmarked_by:userId}}

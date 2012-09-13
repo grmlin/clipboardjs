@@ -15,17 +15,38 @@ MessagesController = do () ->
       user_id is message.user_id
   
     createMessage: (message, type, callback) ->
+      @createStreamMessage message, type, null, callback
+  
+    createStreamMessage: (message, type, streamId, callback) ->
       userId = Session.get(SESSION_USER)
-      Meteor.call("createMessage", userId, message, type, (err, res) ->
+      Meteor.call("createMessage", userId, message, type, streamId, (err, res) ->
         callback.call(this, res) unless typeof err isnt "undefined"
       )
-  
+      
     createStream: (callback) ->
       userId = Session.get(SESSION_USER)
       Meteor.call("createStream", userId, (err, res) ->
         callback.call(this, res) unless typeof err isnt "undefined"
       )
 
+    joinStream: (streamShortId) ->
+      userId = Session.get(SESSION_USER)
+      Meteor.call("joinStream", streamShortId, userId, (err,res) ->
+        if typeof err isnt "undefined"
+          alert err.reason
+        else 
+          boardsRouter.navigate "/stream/#{streamShortId}", trigger:true
+      )
+
+    leaveStream: (streamShortId) ->
+      userId = Session.get SESSION_USER
+      Meteor.call("leaveStream", streamShortId, userId, (err,res) ->
+        if typeof err isnt "undefined"
+          alert err.reason
+          
+        boardsRouter.navigate "/list", trigger: true
+      )
+      
     deleteMessage: (user_id, message_id) ->
 
     addBookmark: (messageId) ->

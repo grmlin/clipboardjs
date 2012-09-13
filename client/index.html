@@ -6,11 +6,14 @@
                 {{> user}}
                 {{> create}}
                 {{> message_view}}
+                {{> stream}}
+                {{> stream_list}}
+                {{> join_stream}}
             </div>
             <div id="sidebar" class="sidebar">
                 <div class="lists">{{> list}}</div>
-                <footer>ClipboardJS is powered by <a href="http://meteor.com">meteor</a> and on <a
-                        href="https://github.com/grmlin/clipboardjs">Github</a></footer>
+                <footer>ClipboardJS, powered by <a href="http://meteor.com">meteor</a>, sources on <a
+                        href="https://github.com/grmlin/clipboardjs">github</a></footer>
             </div>
         </div>
     </div>
@@ -48,41 +51,29 @@
 
     {{#if show}}
     <ul class="nav nav-list">
-        <li class="nav-header">Your messages <a href="/list" class="internal-link btn btn-mini pull-right" title="Paste something"><i
-                class="icon-plus-sign"></i></a></li>
+        <li class="nav-header">Pastes <span class="label">{{message_count}}</span> <a href="/list" class="internal-link btn btn-mini pull-right" title="Paste something"><i
+                class="icon-plus"></i></a></li>
     </ul>
     <ul class="nav nav-list messages-list">
-        {{#if are_messages_available}}
         {{#each messages}}
         {{> message_abstr}}
         {{/each}}
-        {{else}}
-        <li><div class="alert">No messages pasted yet!</div></li>
-        {{/if}}
     </ul>
     <ul class="nav nav-list">
-        <li class="nav-header">Message Streams <a href="#" class="new-stream btn btn-mini pull-right" title="Create a stream"><i
-                class="icon-plus-sign"></i></a></li>
+        <li class="nav-header">Paste Streams <span class="label">{{stream_count}}</span> <a href="#" class="new-stream btn btn-mini pull-right" title="Create a stream"><i
+                class="icon-plus"></i></a></li>
     </ul>
     
     <ul class="nav nav-list messages-list">
-        {{#if are_streams_available}}
         {{#each streams}}
         {{> stream_abstr}}
         {{/each}}
-        {{else}}
-        <li><div class="alert">No streams available!</div></li>
-        {{/if}}
-        <li class="nav-header">Bookmarked messages</li>
+        <li class="nav-header">Bookmarks <span class="label">{{bookmark_count}}</span></li>
     </ul>
     <ul class="nav nav-list messages-list">
-        {{#if are_bookmarked_messages_available}}
         {{#each bookmarked_messages}}
         {{> message_bookmarked_abstr}}
         {{/each}}
-        {{else}}
-        <li><div class="alert">Nothing bookmarked yet!</div></li>
-        {{/if}}
     </ul>
     {{/if}}
 </template>
@@ -132,17 +123,7 @@
         <input type="hidden" name="current-lang-notepad" value="plain">
         <div class="clearfix">
             <div class="text-type pull-left btn-group">
-                    <button class="current-lang btn btn-small btn-info" data-toggle="dropdown"><i class="icon-font icon-white"></i> Plain Text</button>
-                    <button class="btn btn-small btn-info dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                <ul class="dropdown-menu">
-                    <li class="active" data-val="plain"><a href="#">Plain text</a></li>
-                    <li><a href="#" data-val="auto">Auto Detection</a></li>
-                    <li><a href="#" data-val="html">HTML</a></li>
-                    <li><a href="#" data-val="javascript">Javascript</a></li>
-                    <li><a href="#" data-val="coffeescript">Coffeescript</a></li>
-                </ul>
+                {{> language_btn_group}}
             </div>
             <p class="pull-left">
                 <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
@@ -184,9 +165,11 @@
         </p>
     </div>
     {{/with}}
+    {{#constant}}
     <div class="message-view loading">
         <pre class="prettyprint"><code></code></pre>
     </div>
+    {{/constant}}
     {{/if}}
 </template>
 <template name="message_detail">
@@ -212,6 +195,46 @@
         <textarea>{{message}}</textarea>
     </div>
 </template>
+<template name="stream">
+    {{#if show}}
+    <div id="stream">
+        <div class="clearfix">
+            <p class="stream-actions pull-left btn-group">
+                <button class="share btn btn-small collapsing-btn" title="share this stream" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
+                <button class="remove btn btn-small btn-warning collapsing-btn" title="remove this stream" data-placement="bottom" data-original-title="leave stream"><i class="icon-remove-sign"></i></button>
+            </p>
+        </div>
+        {{#constant}}
+        <div class="stream-editor">
+            <div class="editor-actions pull-right">
+                <p class="btn-group dropup">
+                    {{> language_btn_group}}
+                </p>
+                <p><button class="paste btn btn-small btn-block">Paste</button></p>
+            </div>
+            <div class="paste-area"><textarea name="stream-message" id="stream-message"></textarea></div>            
+        </div>
+        {{/constant}}
+    </div>
+    {{/if}}
+</template>
+<template name="stream_list">
+    {{#if show}}
+    <div id="stream-list-wrapper">
+        <ul id="stream-list"></ul>
+    </div>    
+    {{/if}}
+</template>
+        
+<template name="join_stream">
+    {{#if show}}
+    <div class="join-stream">
+        <p><strong>You're currently not subscribed to this paste stream.</strong></p>
+        <p><button class="btn btn-large">Join Stream</button></p>
+    </div>
+    {{/if}}
+</template>
+        
 <template name="blocker">
     {{#if block}}
     <div class="blocker">
@@ -263,4 +286,18 @@
             <button class="btn btn-primary save">{{submit_text}}</button>
         </div>
     </div>
+</template>     
+        
+<template name="language_btn_group">
+    <button class="current-lang btn btn-small btn-info" data-toggle="dropdown">Plain Text</button>
+    <button class="language-toggle btn btn-small btn-info dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li class="active"><a href="#" data-val="plain">Plain text</a></li>
+        <li><a href="#" data-val="auto">Auto Detection</a></li>
+        <li><a href="#" data-val="html">HTML</a></li>
+        <li><a href="#" data-val="javascript">Javascript</a></li>
+        <li><a href="#" data-val="coffeescript">Coffeescript</a></li>
+    </ul>
 </template>

@@ -29,11 +29,15 @@ Meteor.startup ->
           unless userId is null
             console.log("The current user is now", userId);
             initializeApp()
-            Meteor.autosubscribe ->
-              Meteor.subscribe 'messages', userId
-              Meteor.subscribe 'users', userId
-              Meteor.subscribe 'streams', userId
-      
+            
     update()
-  
+
+  Meteor.autosubscribe ->
+    userId = Session.get SESSION_USER
+    streamId = Session.get(SESSION_SHORT_STREAM_ID)
+    console.log("user: #{userId} | stream: #{streamId}")
+    Meteor.subscribe 'messages', userId, streamId
+    Meteor.subscribe 'users', userId
+    Meteor.subscribe 'streams', userId
+    
   watchUser()

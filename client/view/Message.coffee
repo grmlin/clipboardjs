@@ -1,4 +1,6 @@
 do ->
+  lastMessage = ""
+  
   shareModal = new Modal(Template.share_message_modal)
   
   Template.message_view.show = ->
@@ -22,7 +24,9 @@ do ->
     $(this.findAll('.message-actions .btn')).tooltip()
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
   
-    if view
+    if (view and lastMessage isnt messageId) or $(view).hasClass("loading")
+      lastMessage = messageId
+      
       Meteor.call "getMessage", messageId, Session.get(SESSION_USER), (err, message) =>
         view.className = "message-view"
         if typeof err is "undefined"

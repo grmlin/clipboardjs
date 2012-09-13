@@ -11,6 +11,10 @@ do ->
     $('.tooltip').remove()
     $(this.findAll('.preview')).tooltip()
 
+    #dropDown = new LangDropdown($(this.find('.language-toggle')))
+    #dropDown.onLangChanged = (languageDesc) =>
+      
+
   Template.create.show = ->
     isRightState = appState.getState() is appState.LIST
     isRightState and Session.get SESSION_USER

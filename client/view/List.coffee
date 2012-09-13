@@ -16,7 +16,7 @@ do ->
     appState.getState() is appState.LIST
 
   Template.list.are_messages_available = ->
-    Messages.find({user_id: Session.get(SESSION_USER)}).count() > 0
+    Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count() > 0
 
   Template.list.are_bookmarked_messages_available = ->
     Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count() > 0
@@ -25,7 +25,11 @@ do ->
     Streams.find({users: Session.get(SESSION_USER)}).count() > 0
 
   Template.list.messages = ->
-    Messages.find({user_id: Session.get(SESSION_USER)},
+    Messages.find(
+      {
+      user_id: Session.get(SESSION_USER),
+      stream_id: null
+      },
       {sort:
         {time: -1}
       }).fetch().slice(0, 10)
@@ -42,6 +46,15 @@ do ->
         {time: -1}
       }).fetch().slice(0, 10)
 
+  Template.list.message_count = ->
+    Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count()
+    
+  Template.list.stream_count = ->
+    Streams.find({users: Session.get(SESSION_USER)}).count()
+  
+  Template.list.bookmark_count = ->
+    Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
+    
   Template.message_abstr.rendered = ->
     #createPopover($(this.find('a')))
 

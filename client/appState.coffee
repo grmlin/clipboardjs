@@ -6,6 +6,7 @@ appState = do() ->
     SHOW : "show"
     MESSAGE: "message"
     STREAM: "stream"
+    STREAM_JOIN: "joinStream"
     
     setState: (state) ->
       Session.set(SESSION_STATE, state)
