@@ -1,0 +1,32 @@
+<template name="create">
+    {{#if show}}
+    <div class="show">
+        <input type="hidden" name="current-lang-notepad" value="plain">
+        <div class="clearfix">
+            <div class="text-type pull-left btn-group">
+                {{> language_btn_group}}
+            </div>
+            <p class="pull-left">
+                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
+                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
+            </p>
+        </div>
+        <p></p>
+        <div>
+            <div class="text-board-wrapper">
+                <div class="message-view">
+                    <p class="message-detail">
+                        <span class="lang current-lang">Plain text</span>
+                        <span class="lang current-computed-lang"></span>
+                    </p>
+                    <pre class="prettyprint"><p class="text-board" id="text-content" contenteditable="true"></p><code class="plain"></code></pre>
+                </div>
+            </div>
+            <p>
+                <button class=" btn btn-large btn-block paste-text-board"><strong>Save Snippet</strong></button>
+            </p>
+        </div>
+    </div>
+    </div>
+    {{/if}}
+</template>

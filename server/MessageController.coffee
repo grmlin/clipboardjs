@@ -16,7 +16,7 @@ do() ->
       throw new Meteor.Error(404, "Message not found") unless message
 
       throw new Meteor.Error(403, "Access Denied") if message.is_private and userId isnt message.user_id
-      
+
       return message
 
 
@@ -40,13 +40,13 @@ do() ->
     createMessage: (userId, content, type, streamId = null) ->
       message_raw = content
       message_abstract = content.slice 0, ABSTRACT_LENGTH
-      
+
       message_highlighted = message_raw
       message_highlighted_abstract = message_abstract
-      
+
       highlightResult = null
       highlightAbstractResult = null
-      
+
       lang = "plain"
 
       try
@@ -61,7 +61,7 @@ do() ->
         message_highlighted = highlightResult.value if highlightResult isnt null
         message_abstract = highlightAbstractResult.value if highlightAbstractResult isnt null
         lang = highlightResult.language if highlightResult isnt null
-        
+
       catch error
         console.log error
 
@@ -69,6 +69,7 @@ do() ->
         abstract: message_abstract
         bookmarked_by: []
         highlighted: message_highlighted
+        highlighted_stream: if streamId then message_highlighted else null
         is_private: false
         language: lang
         raw: message_raw
@@ -80,29 +81,14 @@ do() ->
 
       return newid
 
-    createStream: (userId) ->
-      newid = Streams.insert
-        short_id: shortid.generate()
-        time: (new Date()).getTime()
-        users: [userId]
-
-    joinStream: (streamShortId, userId) ->
-      throw new Meteor.Error(404, "Stream not found") if Streams.find(short_id:streamShortId).count() is 0
-      Streams.update {short_id: streamShortId}, {$addToSet: {users:userId}}
-
-    leaveStream: (streamShortId, userId) ->
-      throw new Meteor.Error(404, "Stream not found") if Streams.find(short_id:streamShortId).count() is 0
-      Streams.update {short_id: streamShortId}, {$pull: {users:userId}}
-    
-    isSubscribed: (streamShortId, userId) ->
-      Streams.find({short_id:streamShortId,users:userId}).count() > 0
-      
     addMessageBookmark: (userId, shortId) ->
-      Messages.update {short_id: shortId}, {$addToSet:{bookmarked_by:userId}}
+      Messages.update {short_id: shortId}, {$addToSet:
+        {bookmarked_by: userId}}
 
     deleteMessageBookmark: (userId, shortId) ->
-      Messages.update {short_id: shortId}, {$pull:{bookmarked_by:userId}}
-      
+      Messages.update {short_id: shortId}, {$pull:
+        {bookmarked_by: userId}}
+
     updateMessageOwner: (userId, userName) ->
       Messages.update(
         {user_id: userId},

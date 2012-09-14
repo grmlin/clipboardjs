@@ -1,0 +1,45 @@
+<template name="message_view">
+    {{#if show}}
+    {{#with message}}
+    <div class="clearfix">
+        <p class="message-actions pull-left btn-group">
+            {{#if is_bookmarked _id}}
+            <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
+            {{else}}
+            <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
+            {{/if}}
+            <button class="share btn btn-small collapsing-btn" title="share message" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
+            <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
+        </p>
+    </div>
+    {{/with}}
+    {{#constant}}
+    <div class="message-view loading">
+        <pre class="prettyprint"><code></code></pre>
+    </div>
+    {{/constant}}
+    {{/if}}
+</template>
+<template name="message_detail">
+    <p class="message-detail">
+        <span class="lang">{{language}}</span></span>
+    </p>
+    <p class="author-detail">
+        <span class="lang"><span class="">{{user_name}}</span>
+    </p>
+    <pre class="prettyprint"><code class={{language}}>{{{highlighted}}}</code></pre>
+</template>
+<template name="message_detail_unavailable">
+    <div class="alert alert-block">
+        <h4>:(</h4>
+
+        <p>The message you requested is unavailable</p>
+    </div>
+</template>
+
+<template name="message_raw">
+    <div class="raw-file">
+        <button class="close">&times;</button>
+        <textarea>{{message}}</textarea>
+    </div>
+</template>

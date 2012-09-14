@@ -14,6 +14,9 @@ appState = do() ->
     getState: ->
       Session.get(SESSION_STATE)
 
+    isState: (state) ->
+      @getState() is state
+      
   
 
   appState.setState(appState.LOADING)

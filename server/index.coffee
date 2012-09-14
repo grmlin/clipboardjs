@@ -18,10 +18,9 @@ Meteor.startup ->
     console.log "streams found for #{userId}/#{streamId}:", streams
     
     # Get the corrosponding messages
-    #console.log "messages with these streams:", Messages.find({stream_id:{$in:streams}}).fetch()
     messages = Messages.find({
     $or: [
-      {user_id: userId},
+      {$and : [{user_id: userId},{stream_id:null}]},
       {bookmarked_by: userId},
       {stream_id:{$in:streams}}
     ]
@@ -32,6 +31,7 @@ Meteor.startup ->
       highlighted: false
       }
     })
+    
     console.log "publishing #{messages.count()} messages for user #{userId}"
     return messages
 

@@ -1,3 +1,3 @@
-Template.blocker.block = ->
-  state = appState.getState()
-  state is appState.LOADING or state is appState.LOADED
+Template.blocker.helpers
+  block : ->
+    appState.isState(appState.LOADING) or appState.isState(appState.LOADED)

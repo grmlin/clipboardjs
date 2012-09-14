@@ -3,8 +3,8 @@ BoardsRouter = do ->
     userId = Session.get SESSION_USER
     return Streams.find({short_id: streamShortId, users: userId}).count() > 0
 
-  streamToJoin = null  
-    
+  streamToJoin = null
+
   BoardsRouter = Backbone.Router.extend
     routes:
       "list": "list"
@@ -49,8 +49,13 @@ BoardsRouter = do ->
       )
 
     joinStream: (stream_id) ->
-      appState.setState appState.STREAM_JOIN
-      
-      Session.set SESSION_SHORT_STREAM_ID_JOINING, stream_id
-      messagesController.resetMessageSession()
-      messagesController.resetStreamSession()
+      streamController.isStream stream_id, (isStream) =>
+        if isStream
+          appState.setState appState.STREAM_JOIN
+
+          Session.set SESSION_SHORT_STREAM_ID_JOINING, stream_id
+          messagesController.resetMessageSession()
+          messagesController.resetStreamSession()
+        else
+          alert "This stream does not exist"
+          @navigate "/list", trigger: true

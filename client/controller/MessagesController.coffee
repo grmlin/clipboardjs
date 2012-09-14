@@ -17,16 +17,18 @@ MessagesController = do () ->
     createMessage: (message, type, callback) ->
       @createStreamMessage message, type, null, callback
   
-    createStreamMessage: (message, type, streamId, callback) ->
+    createStreamMessage: (message, type, streamId, callback = ->) ->
       userId = Session.get(SESSION_USER)
       Meteor.call("createMessage", userId, message, type, streamId, (err, res) ->
+        console?.error(err) if err
         callback.call(this, res) unless typeof err isnt "undefined"
       )
       
     createStream: (callback) ->
       userId = Session.get(SESSION_USER)
       Meteor.call("createStream", userId, (err, res) ->
-        callback.call(this, res) unless typeof err isnt "undefined"
+        console?.error err if err
+        callback.call(this, res)
       )
 
     joinStream: (streamShortId) ->
@@ -41,10 +43,15 @@ MessagesController = do () ->
     leaveStream: (streamShortId) ->
       userId = Session.get SESSION_USER
       Meteor.call("leaveStream", streamShortId, userId, (err,res) ->
-        if typeof err isnt "undefined"
-          alert err.reason
-          
+        alert err.reason if err
         boardsRouter.navigate "/list", trigger: true
+      )
+      
+    deleteStream: (streamShortId) ->
+      userId = Session.get SESSION_USER
+      Meteor.call("deleteStream", streamShortId, userId, (err,res) ->
+        alert err.reason if err
+        boardsRouter.navigate "/list", trigger:true
       )
       
     deleteMessage: (user_id, message_id) ->

@@ -21,12 +21,6 @@
 {{> blocker}}
 </body>
 
-<template name="navigation">
-    <ul class="nav">
-        <li{{#if is_active}} class="active"{{/if}}><a href="/list" class="internal-link"><i class="icon-edit icon-white"></i>
-        Paste</a></li>
-    </ul>
-</template>
 <template name="user">
     {{#if show}}
     {{#with user}}
@@ -117,124 +111,7 @@
     </li>
 </template>
 
-<template name="create">
-    {{#if show}}
-    <div class="show">
-        <input type="hidden" name="current-lang-notepad" value="plain">
-        <div class="clearfix">
-            <div class="text-type pull-left btn-group">
-                {{> language_btn_group}}
-            </div>
-            <p class="pull-left">
-                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
-                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
-            </p>
-        </div>
-        <p></p>
-        <div>
-                <div class="text-board-wrapper">
-                    <div class="message-view">
-                        <p class="message-detail">
-                            <span class="lang current-lang">Plain text</span>
-                            <span class="lang current-computed-lang"></span>
-                        </p>
-                        <pre class="prettyprint"><p class="text-board" id="text-content" contenteditable="true"></p><code class="plain"></code></pre>
-                    </div>
-                </div>
-                <p>
-                    <button class=" btn btn-large btn-block paste-text-board"><strong>Save Snippet</strong></button>
-                </p>
-        </div>
-    </div>
-    </div>
-    {{/if}}
-</template>
 
-<template name="message_view">
-    {{#if show}}
-    {{#with message}}
-    <div class="clearfix">
-        <p class="message-actions pull-left btn-group">
-            {{#if is_bookmarked _id}}
-            <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
-            {{else}}
-            <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
-            {{/if}}
-            <button class="share btn btn-small collapsing-btn" title="share message" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
-            <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
-        </p>
-    </div>
-    {{/with}}
-    {{#constant}}
-    <div class="message-view loading">
-        <pre class="prettyprint"><code></code></pre>
-    </div>
-    {{/constant}}
-    {{/if}}
-</template>
-<template name="message_detail">
-    <p class="message-detail">
-        <span class="lang">{{language}}</span></span>
-    </p>
-    <p class="author-detail">
-        <span class="lang"><span class="">{{user_name}}</span>
-    </p>
-    <pre class="prettyprint"><code class={{language}}>{{{highlighted}}}</code></pre>
-</template>
-<template name="message_detail_unavailable">
-    <div class="alert alert-block">
-        <h4>:(</h4>
-
-        <p>The message you requested is unavailable</p>
-    </div>
-</template>
-    
-<template name="message_raw">
-    <div class="raw-file">
-        <button class="close">&times;</button>
-        <textarea>{{message}}</textarea>
-    </div>
-</template>
-<template name="stream">
-    {{#if show}}
-    <div id="stream">
-        <div class="clearfix">
-            <p class="stream-actions pull-left btn-group">
-                <button class="share btn btn-small collapsing-btn" title="share this stream" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
-                <button class="remove btn btn-small btn-warning collapsing-btn" title="remove this stream" data-placement="bottom" data-original-title="leave stream"><i class="icon-remove-sign"></i></button>
-            </p>
-        </div>
-        {{#constant}}
-        <div class="stream-editor">
-            <div class="editor-actions pull-right">
-                <p class="btn-group dropup">
-                    {{> language_btn_group}}
-                </p>
-                <p><button class="paste btn btn-small btn-block">Paste</button></p>
-            </div>
-            <div class="paste-area"><textarea name="stream-message" id="stream-message"></textarea></div>            
-        </div>
-        {{/constant}}
-    </div>
-    {{/if}}
-</template>
-<template name="stream_list">
-    {{#if show}}
-    <div id="stream-list-wrapper">
-        <ul id="stream-list"></ul>
-    </div>    
-    {{/if}}
-</template>
-        
-<template name="join_stream">
-    {{#if show}}
-    <div class="join-stream">
-        <p><strong>You're currently not subscribed to this paste stream.</strong></p>
-        <p><button class="btn btn-large">Join Stream</button></p>
-    </div>
-    {{/if}}
-</template>
-        
 <template name="blocker">
     {{#if block}}
     <div class="blocker">

@@ -3,6 +3,13 @@ do ->
   hightlighted = null
   langNotepad = null
 
+  Template.create.helpers
+    show : ->
+      appState.isState appState.LIST
+  
+    user_name : ->
+      Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
+
   Template.create.rendered = ->
     snippet = this.find ".text-board"
     hightlighted = this.find ".prettyprint code"
@@ -10,19 +17,7 @@ do ->
 
     $('.tooltip').remove()
     $(this.findAll('.preview')).tooltip()
-
-    #dropDown = new LangDropdown($(this.find('.language-toggle')))
-    #dropDown.onLangChanged = (languageDesc) =>
-      
-
-  Template.create.show = ->
-    isRightState = appState.getState() is appState.LIST
-    isRightState and Session.get SESSION_USER
-
-  Template.create.user_name = ->
-    Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
-
-
+    
   Template.create.events =
     'click .text-type .dropdown-menu li:not(.active) a': (evt) ->
       $lang = $(evt.currentTarget)

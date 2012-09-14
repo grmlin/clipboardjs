@@ -1,86 +1,51 @@
 do ->
-  monthNames = [ "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December" ]
+  Template.list.helpers
+    show: ->
+      Session.get SESSION_USER
 
-  createPopover = (link) ->
-    $('.popover').remove()
-    link.popover({delay:
-      { show: 0, hide: 0 }})
-    template = link.data().popover?.options.template.replace 'class="popover"', 'class="popover message-abstract"'
-    link.data().popover?.options.template = template
+    is_pasting: ->
+      appState.getState() is appState.LIST
 
-  Template.list.show = ->
-    Session.get SESSION_USER
+    are_messages_available: ->
+      Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count() > 0
 
-  Template.list.is_pasting = ->
-    appState.getState() is appState.LIST
+    are_bookmarked_messages_available: ->
+      Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count() > 0
 
-  Template.list.are_messages_available = ->
-    Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count() > 0
+    are_streams_available: ->
+      Streams.find({users: Session.get(SESSION_USER)}).count() > 0
 
-  Template.list.are_bookmarked_messages_available = ->
-    Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count() > 0
+    messages: ->
+      Messages.find(
+        {
+        user_id: Session.get(SESSION_USER),
+        stream_id: null
+        },
+        {sort:
+          {time: -1}
+        }).fetch().slice(0, 10)
 
-  Template.list.are_streams_available = ->
-    Streams.find({users: Session.get(SESSION_USER)}).count() > 0
+    bookmarked_messages: ->
+      Messages.find({bookmarked_by: Session.get(SESSION_USER)},
+        {sort:
+          {time: -1}
+        }).fetch().slice(0, 10)
 
-  Template.list.messages = ->
-    Messages.find(
-      {
-      user_id: Session.get(SESSION_USER),
-      stream_id: null
-      },
-      {sort:
-        {time: -1}
-      }).fetch().slice(0, 10)
+    streams: ->
+      Streams.find({users: Session.get(SESSION_USER)},
+        {sort:
+          {time: -1}
+        }).fetch().slice(0, 10)
 
-  Template.list.bookmarked_messages = ->
-    Messages.find({bookmarked_by: Session.get(SESSION_USER)},
-      {sort:
-        {time: -1}
-      }).fetch().slice(0, 10)
+    message_count: ->
+      Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count()
 
-  Template.list.streams = ->
-    Streams.find({users: Session.get(SESSION_USER)},
-      {sort:
-        {time: -1}
-      }).fetch().slice(0, 10)
+    stream_count: ->
+      Streams.find({users: Session.get(SESSION_USER)}).count()
 
-  Template.list.message_count = ->
-    Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count()
-    
-  Template.list.stream_count = ->
-    Streams.find({users: Session.get(SESSION_USER)}).count()
-  
-  Template.list.bookmark_count = ->
-    Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
-    
-  Template.message_abstr.rendered = ->
-    #createPopover($(this.find('a')))
+    bookmark_count = ->
+      Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
 
-  Template.message_bookmarked_abstr.rendered = ->
-    #createPopover($(this.find('a')))
-
-  Template.message_abstr.get_date = (time)->
-    date = new Date(time)
-    day = date.getDay()
-    month = monthNames[date.getMonth()]
-    year = date.getYear()
-    month.toString() + " " + day.toString() + ", " + year.toString()
-
-  Template.message_abstr.is_active = (id)->
-    id is Session.get(SESSION_SHORT_MESSAGE_ID)
-  ### and Messages.find(
-{short_id:id},
-{$and:{user_id: Session.get(SESSION_USER),bookmarked_by:Session.get(SESSION_USER)}}
-).count() is 0                                 ###
-
-  Template.message_bookmarked_abstr.is_active = (id)->
-    id is Session.get SESSION_SHORT_MESSAGE_ID
-
-  Template.stream_abstr.is_active = (id) ->
-    id is Session.get SESSION_SHORT_STREAM_ID
-    
   Template.list.events =
     'click .new-stream': (evt) ->
       evt.preventDefault()

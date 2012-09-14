@@ -1,6 +1,7 @@
 boardsRouter = new BoardsRouter()
 usersController = new UsersController()
 messagesController = new MessagesController()
+streamController = new StreamController()
 
 Meteor.startup ->
   Session.set SESSION_BOARD_ID, null
