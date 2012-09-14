@@ -16,6 +16,13 @@ do ->
       return Template.stream_list_empty()
     )
 
+  addMessage = () ->
+    text = document.getElementById("stream-message")
+      
+    if text.value.replace(" ","").replace(/(\r\n|\n|\r)/gm,"") isnt ""
+      messagesController.createStreamMessage(text.value, dropDown?.getLang(), Session.get(SESSION_SHORT_STREAM_ID))
+      text.value = ""
+      
   Template.stream.helpers
     show: ->
       streamId = Session.get(SESSION_SHORT_STREAM_ID)
@@ -39,16 +46,12 @@ do ->
 
   Template.stream.events =
     'click .paste': (evt) ->
-      text = document.getElementById("stream-message").value
-      if text isnt ""
-        messagesController.createStreamMessage(text, dropDown?.getLang(), Session.get(SESSION_SHORT_STREAM_ID))
+      addMessage()
 
     "keypress #stream-message": (evt) ->
       keycode = if event.which then event.which else event.keyCode
       if keycode is 10 or (keycode is 13 and evt.ctrlKey)
-        text = document.getElementById("stream-message").value
-        if text isnt ""
-          messagesController.createStreamMessage(text, dropDown?.getLang(), Session.get(SESSION_SHORT_STREAM_ID))
+        addMessage()
 
     'click .remove': (evt) ->
       messagesController.leaveStream(Session.get(SESSION_SHORT_STREAM_ID))

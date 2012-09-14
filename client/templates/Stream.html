@@ -27,13 +27,13 @@
 <template name="stream_list">
     {{#if show}}
     <div id="stream-list-wrapper">
-        <ul id="stream-list"></ul>
+        <ul id="stream-list" class="unstyled"></ul>
     </div>
     {{/if}}
 </template>
 
 <template name="stream_list_item">
-    <li>{{user_name}}: {{highlighted_stream}}</li>
+    <li><p>{{user_name}}, {{language}}</p> <pre><code lang="{{language}}">{{{highlighted_stream}}}</code></pre></li>
 </template>
 <template name="stream_list_empty">
     <li><div class="alert">Empty Stream</div></li>
