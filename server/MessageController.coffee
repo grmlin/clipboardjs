@@ -1,7 +1,7 @@
 do() ->
   ABSTRACT_LENGTH = 160
+  ABSTRACT_PUFFER = 10
 
-  highlight = meteorNpm.require "highlight.js"
   shortid = meteorNpm.require "shortid"
 
   # TODO check user ids on existence?
@@ -38,40 +38,24 @@ do() ->
         throw new Meteor.Error(404, "Message not found")
 
     createMessage: (userId, content, type, streamId = null) ->
+      highlighter = new Highlighter()
+
       message_raw = content
-      message_abstract = content.slice 0, ABSTRACT_LENGTH
+      messageHighlighted = highlighter.highlight message_raw, type
 
-      message_highlighted = message_raw
-      message_highlighted_abstract = message_abstract
+      if content.length > ABSTRACT_LENGTH + ABSTRACT_PUFFER
+        messageAbstract = highlighter.highlight(content.slice(0, ABSTRACT_LENGTH), type).value + "\n <strong>...</strong> \n" + highlighter.highlight(content.slice(-ABSTRACT_LENGTH), type).value
+      else
+        messageAbstract = messageHighlighted.value
 
-      highlightResult = null
-      highlightAbstractResult = null
-
-      lang = "plain"
-
-      try
-        switch type
-          when "auto"
-            highlightResult = highlight.highlightAuto message_raw
-            highlightAbstractResult = highlight.highlightAuto message_abstract
-          else
-            highlightResult = highlight.highlight type, message_raw
-            highlightAbstractResult = highlight.highlight type, message_abstract
-
-        message_highlighted = highlightResult.value if highlightResult isnt null
-        message_abstract = highlightAbstractResult.value if highlightAbstractResult isnt null
-        lang = highlightResult.language if highlightResult isnt null
-
-      catch error
-        console.log error
 
       newid = Messages.insert
-        abstract: message_abstract
+        abstract: messageAbstract
         bookmarked_by: []
-        highlighted: message_highlighted
-        highlighted_stream: if streamId then message_highlighted else null
+        highlighted: messageHighlighted.value
+        highlighted_stream: if streamId then messageHighlighted.value else null
         is_private: false
-        language: lang
+        language: messageHighlighted.language
         raw: message_raw
         short_id: shortid.generate()
         stream_id: streamId

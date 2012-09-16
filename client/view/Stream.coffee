@@ -11,6 +11,7 @@ do ->
     Meteor.renderList(
       Messages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)})
     , (message) ->
+      Meteor.defer(-> document.body.scrollIntoView(false))
       return Template.stream_list_item message
     , ->
       return Template.stream_list_empty()
@@ -59,7 +60,3 @@ do ->
     'click .delete': (evt) ->
       messagesController.deleteStream(Session.get(SESSION_SHORT_STREAM_ID))
 
-    "blur #stream-message": (evt) ->
-      Mousetrap.unbind "ctrl+return"
-    
-      

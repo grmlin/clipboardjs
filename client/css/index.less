@@ -240,6 +240,7 @@ body {
     padding-bottom: 14px;
     .box-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
     width: @sidebarWidth;
+  z-index: 4;
 }
 
 #sidebar .navbar-search {
@@ -643,9 +644,11 @@ line-height: 18px;*/
 }
 #stream-list-wrapper {
   padding-bottom: 100px;
+  z-index: 1;
 }
 #stream .stream-editor {
   .box-sizing();
+  .box-shadow(0 -1px 15px rgba(0,0,0,0.6)) ;
   border-top: 1px solid @lightgrey;
   background: @light;
   position: fixed;
@@ -653,6 +656,7 @@ line-height: 18px;*/
   right: 0;
   left: @sidebarWidth;
   height: 100px;
+  z-index: 2;
 }
 
 #stream .stream-editor .paste-area {
@@ -686,3 +690,35 @@ line-height: 18px;*/
   text-align: center;
   padding-top: 120px;
 }
+
+#stream-list li {
+    -webkit-animation: myanim 300ms 1;
+  -moz-animation: myanim 300ms 1;
+  -o-animation: myanim 300ms 1;
+  animation: myanim 300ms 1;
+}
+
+#stream-list li .prettyprint code {
+  padding: 0.5em;
+}
+@-webkit-keyframes myanim {
+0%   { opacity: 0.0; }
+50%  { opacity: 0.5; }
+100% { opacity: 1.0; }
+  }
+@-moz-keyframes myanim {
+0%   { opacity: 0.0; }
+50%  { opacity: 0.5; }
+100% { opacity: 1.0; }
+  }
+@-o-keyframes myanim {
+0%   { opacity: 0.0; }
+50%  { opacity: 0.5; }
+100% { opacity: 1.0; }
+  }
+@keyframes myanim {
+0%   { opacity: 0.0; }
+50%  { opacity: 0.5; }
+100% { opacity: 1.0; }
+
+  }
