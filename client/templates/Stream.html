@@ -27,13 +27,21 @@
 <template name="stream_list">
     {{#if show}}
     <div id="stream-list-wrapper">
-        <ul id="stream-list" class="unstyled"></ul>
+        <ul id="stream-list" class="unstyled">
+            
+        </ul>
     </div>
     {{/if}}
 </template>
 
 <template name="stream_list_item">
-    <li><p>{{user_name}}, {{language}}</p> <pre class="prettyprint"><code lang="{{language}}">{{{abstract}}}</code></pre></li>
+    <li>
+        <p>
+            {{user_name}} <br>
+            <code>{{language}}</code>
+        </p> 
+        <pre class="prettyprint"><code lang="{{language}}" data-message-id="{{short_id}}" data-is-abstract="yes" title="click to show/hide full paste">{{{abstract}}}</code></pre>
+    </li>
 </template>
 <template name="stream_list_empty">
     <li><div class="alert">Empty Stream</div></li>

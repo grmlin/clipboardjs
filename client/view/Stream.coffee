@@ -11,7 +11,13 @@ do ->
     Meteor.renderList(
       Messages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)})
     , (message) ->
-      Meteor.defer(-> document.body.scrollIntoView(false))
+      Meteor.defer(-> 
+        $('html,body').stop(true, true).animate(
+          {
+          scrollTop: $('#stream-list').height()
+          }, 400
+        )
+      )
       return Template.stream_list_item message
     , ->
       return Template.stream_list_empty()
@@ -42,7 +48,7 @@ do ->
   Template.stream.rendered = ->
     if isSubscribed()
       list = this.find(".stream-list ul")
-      document.getElementById("stream-list")?.appendChild reactiveList()
+      document.getElementById("stream-list").appendChild reactiveList()
       dropDown = new LangDropdown($(this.find('.language-toggle')))
 
   Template.stream.events =

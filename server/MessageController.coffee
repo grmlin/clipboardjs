@@ -1,7 +1,9 @@
 do() ->
   ABSTRACT_LENGTH = 160
   ABSTRACT_PUFFER = 10
-
+  ABSTRACT_LINES = 20
+  ABSTRACT_LINE_PUFFER = 5
+  
   shortid = meteorNpm.require "shortid"
 
   # TODO check user ids on existence?
@@ -39,16 +41,12 @@ do() ->
 
     createMessage: (userId, content, type, streamId = null) ->
       highlighter = new Highlighter()
-
+      abstractor = new MessageAbstractor()
+      
       message_raw = content
       messageHighlighted = highlighter.highlight message_raw, type
-
-      if content.length > ABSTRACT_LENGTH + ABSTRACT_PUFFER
-        messageAbstract = highlighter.highlight(content.slice(0, ABSTRACT_LENGTH), type).value + "\n <strong>...</strong> \n" + highlighter.highlight(content.slice(-ABSTRACT_LENGTH), type).value
-      else
-        messageAbstract = messageHighlighted.value
-
-
+      messageAbstract = abstractor.getAbstract content, messageHighlighted.language
+      
       newid = Messages.insert
         abstract: messageAbstract
         bookmarked_by: []

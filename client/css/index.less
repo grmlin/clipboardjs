@@ -690,16 +690,52 @@ line-height: 18px;*/
   text-align: center;
   padding-top: 120px;
 }
-
+#stream-list {
+  width: 100%;
+}
 #stream-list li {
     -webkit-animation: myanim 300ms 1;
   -moz-animation: myanim 300ms 1;
   -o-animation: myanim 300ms 1;
   animation: myanim 300ms 1;
 }
-
-#stream-list li .prettyprint code {
+#stream-list li p {
+  vertical-align: top;
+  width: 10%;       
+  float: left;
+}
+#stream-list li p,
+#stream-list li p code {
+  font-size: 10px;
+}
+#stream-list li p + pre {
+  overflow: hidden;
+}
+#stream-list .prettyprint {
+  cursor: pointer;
+}
+#stream-list .prettyprint code {
   padding: 0.5em;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.prettyprint code .divider {
+  display: block;
+  cursor: pointer;
+  color: transparent;
+}
+.prettyprint code .divider:after {
+  content: "···";
+  display: block;
+  text-align: center;
+  background: #363731;
+  color: @light;
+  margin: 0 -6px;
+  font-size: 18px;
+  font-weight: bold;
+  vertical-align: middle;
+  line-height: 24px;
 }
 @-webkit-keyframes myanim {
 0%   { opacity: 0.0; }
