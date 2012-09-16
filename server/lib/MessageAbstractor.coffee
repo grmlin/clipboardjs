@@ -18,7 +18,7 @@ class MessageAbstractor
 
       messageAbstract = highlighter.highlight(part1, language).value + "\n <span class='divider'>...</span> \n" + highlighter.highlight(part2, language).value
     else
-      part = lines.joing('\n')
+      part = lines.join('\n')
       messageAbstract = highlighter.highlight(part, language).value
 
     return messageAbstract

@@ -47,11 +47,11 @@ do() ->
       messageHighlighted = highlighter.highlight message_raw, type
       messageAbstract = abstractor.getAbstract content, messageHighlighted.language
       
-      newid = Messages.insert
+      collection = if streamId is null then Messages else StreamMessages
+      newid = collection.insert
         abstract: messageAbstract
         bookmarked_by: []
         highlighted: messageHighlighted.value
-        highlighted_stream: if streamId then messageHighlighted.value else null
         is_private: false
         language: messageHighlighted.language
         raw: message_raw
@@ -72,10 +72,11 @@ do() ->
         {bookmarked_by: userId}}
 
     updateMessageOwner: (userId, userName) ->
-      Messages.update(
-        {user_id: userId},
-        {$set:
-          {user_name: userName}
-        }, multi: true
-      )
+      [Messages, StreamMessages].forEach (collection) ->
+        collection.update(
+          {user_id: userId},
+          {$set:
+            {user_name: userName}
+          }, multi: true
+        )
       return "messages updated"

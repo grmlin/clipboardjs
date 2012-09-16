@@ -694,10 +694,20 @@ line-height: 18px;*/
   width: 100%;
 }
 #stream-list li {
+  margin-bottom: 15px;
+  padding: 8px 6px;
     -webkit-animation: myanim 300ms 1;
   -moz-animation: myanim 300ms 1;
   -o-animation: myanim 300ms 1;
   animation: myanim 300ms 1;
+  .border-radius(3px, 3px, 3px, 3px);
+}
+#stream-list li.myself {
+  background: #DFF0D8;
+  
+}
+#stream-list li.myself .username {
+  font-weight: bold;
 }
 #stream-list li p {
   vertical-align: top;
@@ -713,6 +723,7 @@ line-height: 18px;*/
 }
 #stream-list .prettyprint {
   cursor: pointer;
+  margin-bottom: 0;
 }
 #stream-list .prettyprint code {
   padding: 0.5em;

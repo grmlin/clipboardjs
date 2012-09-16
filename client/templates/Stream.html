@@ -35,12 +35,12 @@
 </template>
 
 <template name="stream_list_item">
-    <li>
+    <li{{#if is_user}} class="myself"{{/if}}>
         <p>
-            {{user_name}} <br>
-            <code>{{language}}</code>
+            <span class="username">{{#if is_user}}myself{{else}}{{message.user_name}}{{/if}}</span> <br>
+            <code>{{message.language}}</code>
         </p> 
-        <pre class="prettyprint"><code lang="{{language}}" data-message-id="{{short_id}}" data-is-abstract="yes" title="click to show/hide full paste">{{{abstract}}}</code></pre>
+        <pre class="prettyprint"><code lang="{{message.language}}" data-message-id="{{message.short_id}}" data-is-abstract="yes" title="click to show/hide full paste">{{{message.abstract}}}</code></pre>
     </li>
 </template>
 <template name="stream_list_empty">

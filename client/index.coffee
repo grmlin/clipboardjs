@@ -38,6 +38,7 @@ Meteor.startup ->
     streamId = Session.get(SESSION_SHORT_STREAM_ID)
     console.log("user: #{userId} | stream: #{streamId}")
     Meteor.subscribe 'messages', userId, streamId
+    Meteor.subscribe 'streamMessages', streamId
     Meteor.subscribe 'users', userId
     Meteor.subscribe 'streams', userId
     

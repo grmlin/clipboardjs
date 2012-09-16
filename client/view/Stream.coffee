@@ -9,16 +9,15 @@ do ->
 
   reactiveList = () ->
     Meteor.renderList(
-      Messages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)})
+      StreamMessages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)},{sort:{time: 1}})
     , (message) ->
       Meteor.defer(-> 
         $('html,body').stop(true, true).animate(
           {
           scrollTop: $('#stream-list').height()
-          }, 400
-        )
+          }, 400)
       )
-      return Template.stream_list_item message
+      return Template.stream_list_item({message:message,is_user:message.user_id is Session.get(SESSION_USER)})
     , ->
       return Template.stream_list_empty()
     )
@@ -40,7 +39,7 @@ do ->
     is_owner: ->
       streamId = Session.get(SESSION_SHORT_STREAM_ID)
       userId = Session.get(SESSION_USER)
-      Streams.findOne({short_id: streamId}).owner is userId
+      Streams.findOne({short_id: streamId})?.owner is userId
 
     is_subscribed: ->
       isSubscribed()
