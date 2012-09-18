@@ -100,7 +100,7 @@ pre .apache .tag,
 pre .tex .special,
 pre .request,
 pre .status {
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 pre .coffeescript .javascript,

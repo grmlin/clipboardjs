@@ -170,6 +170,7 @@
 /** SIZES **/
 
 @sidebarWidth: 270px;
+@toolbarHeight: 31px;
 html {
     background: #fff url(/img/skin_side_up.png) repeat center 0;
 }
@@ -218,29 +219,54 @@ body {
     margin-top: -4px;
     top: 0;
 }
+.action-bar {
+  height: 31px;
+  .box-sizing();
+  position: fixed;
+  left: 0;
+  right: 0;
+  top:0;
+  padding: 2px 20px 0 15px;
+  background: @light;
+  border-bottom: 1px solid @lightgrey;
+  .box-shadow(0 1px 0 rgba(0,0,0,0.2));
+  z-index: 10;
+}
 
+.view-toolbar {
+  height: @toolbarHeight;
+  .box-sizing();
+  position: fixed;
+  left: @sidebarWidth;
+  top:0;
+  padding: 2px 20px 0;
+  z-index: 11;
+}
 #logo {
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: normal;
-    padding: 5px 15px 5px;
-    margin: 0 0 0;
-    border-bottom: 1px solid @lightgrey;
-    .box-shadow(0 1px 0 rgba(0,0,0,0.2));
+  font-size: 16px;
+  line-height: 27px;
+  font-weight: normal;
+  float: left;
+  margin: 0;
+  width: @sidebarWidth - 15;
+  border-right: 1px solid @lightgrey;
+  .box-sizing();
 }
 
 #sidebar {
     margin-left: 0;
     background: @light;
     position: fixed;
-    top: 0;
+    top: @toolbarHeight;
     left: 0;
     bottom: 0;
-    padding-top: 3px;
+    padding-top: 0;
     padding-bottom: 14px;
-    .box-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
-    width: @sidebarWidth;
+    //.box-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
+  border-right: 1px solid @lightgrey;
+  width: @sidebarWidth;
   z-index: 4;
+  .box-sizing();
 }
 
 #sidebar .navbar-search {
@@ -251,7 +277,7 @@ body {
 
 #content {
     margin-left: @sidebarWidth;
-    padding-top: 15px;
+    padding-top: @toolbarHeight + 15;
     min-width: 530px;
 }
 
@@ -329,12 +355,10 @@ line-height: 18px;*/
   background: @light;
   bottom: 0;
   left: 0;
-  width: @sidebarWidth;
+  width: @sidebarWidth - 1;
   font-size: 10px;
   padding-right: 15px;
   .box-sizing();
-  border-top: 1px solid darken(@light, 10%);
-  .box-shadow(0 -1px 0 lighten(@light, 40%));
   text-align: center;
 }
 
@@ -603,6 +627,7 @@ line-height: 18px;*/
   .box-sizing();
   .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5));
   border: none;
+  font-size: 12px;
   background: #363731;
   margin: 0;
   padding: 30px 0.5em 0.5em;
@@ -648,8 +673,8 @@ line-height: 18px;*/
 }
 #stream .stream-editor {
   .box-sizing();
-  .box-shadow(0 -1px 15px rgba(0,0,0,0.6)) ;
   border-top: 1px solid @lightgrey;
+  .box-shadow(0 -1px 0 rgba(0,0,0,0.2));
   background: @light;
   position: fixed;
   bottom: 0;

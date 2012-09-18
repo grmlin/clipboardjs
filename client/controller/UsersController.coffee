@@ -4,7 +4,11 @@ UsersController = do() ->
   saveUser = (id) ->
     localStorage[SESSION_USER] = id
     Session.set SESSION_USER, id  
-  
+    ###Meteor.setInterval(=>
+        Meteor.call("heartbeat",id)
+    , 3*1000)
+    ###
+
   class UsersController
     constructor: ->
 

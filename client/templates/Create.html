@@ -2,16 +2,19 @@
     {{#if show}}
     <div class="show">
         <input type="hidden" name="current-lang-notepad" value="plain">
-        <div class="clearfix">
+        <div class="view-toolbar clearfix">
+            <p class="pull-left">
+                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
+                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
+                |&nbsp;
+            </p>
             <div class="text-type pull-left btn-group">
                 {{> language_btn_group}}
             </div>
             <p class="pull-left">
-                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
-                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
+                <button class="btn btn-small btn-info paste-text-board"><i class="icon-file icon-white"></i> Save Snippet</button>
             </p>
         </div>
-        <p></p>
         <div>
             <div class="text-board-wrapper">
                 <div class="message-view">
@@ -23,7 +26,7 @@
                 </div>
             </div>
             <p>
-                <button class=" btn btn-large btn-block paste-text-board"><strong>Save Snippet</strong></button>
+                <button class=" btn btn-large btn-info btn-block paste-text-board"><strong>Save Snippet</strong></button>
             </p>
         </div>
     </div>

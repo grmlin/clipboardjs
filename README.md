@@ -31,7 +31,16 @@ open `.meteor/local/build/static/packages/stream/client.js` and add websockets t
 * all messages views
 * message privacy / password protection
 * message annotation
+* message embedding
 
 ### Message streams
 * Streams of messages
 * drag n drop messages into streams
+* invite other users
+* participating users list
+
+### Friend-List
+* have a list of friends
+
+### MISC
+* keep alive 

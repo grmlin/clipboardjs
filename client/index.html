@@ -3,7 +3,11 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div id="content" class="content">
-                {{> user}}
+                <div class="action-bar">
+                    <h1 id="logo">ClipboardJS</h1>
+                    {{> user}}
+                </div>
+
                 {{> create}}
                 {{> message_view}}
                 {{> stream}}
@@ -41,8 +45,6 @@
     {{/if}}
 </template>
 <template name="list">
-    <h1 id="logo">ClipboardJS</h1>
-
     {{#if show}}
     <ul class="nav nav-list">
         <li class="nav-header">Pastes <span class="label">{{message_count}}</span> <a href="/list" class="internal-link btn btn-mini pull-right" title="Paste something"><i
@@ -166,8 +168,8 @@
 </template>     
         
 <template name="language_btn_group">
-    <button class="current-lang btn btn-small btn-info" data-toggle="dropdown">Plain Text</button>
-    <button class="language-toggle btn btn-small btn-info dropdown-toggle" data-toggle="dropdown">
+    <button class="current-lang btn btn-small" data-toggle="dropdown">Plain Text</button>
+    <button class="language-toggle btn btn-small dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
