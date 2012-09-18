@@ -170,7 +170,7 @@
 /** SIZES **/
 
 @sidebarWidth: 270px;
-@toolbarHeight: 31px;
+@toolbarHeight: 35px;
 html {
     background: #fff url(/img/skin_side_up.png) repeat center 0;
 }
@@ -220,13 +220,13 @@ body {
     top: 0;
 }
 .action-bar {
-  height: 31px;
+  height: @toolbarHeight;
   .box-sizing();
   position: fixed;
   left: 0;
   right: 0;
   top:0;
-  padding: 2px 20px 0 15px;
+  padding: 4px 20px 0 15px;
   background: @light;
   border-bottom: 1px solid @lightgrey;
   .box-shadow(0 1px 0 rgba(0,0,0,0.2));
@@ -239,7 +239,7 @@ body {
   position: fixed;
   left: @sidebarWidth;
   top:0;
-  padding: 2px 20px 0;
+  padding: 4px 20px 0;
   z-index: 11;
 }
 #logo {
