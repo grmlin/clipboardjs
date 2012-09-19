@@ -41,5 +41,6 @@ Meteor.startup ->
     Meteor.subscribe 'streamMessages', streamId
     Meteor.subscribe 'users', userId
     Meteor.subscribe 'streams', userId
+    Meteor.subscribe 'invitations', userId
     
   watchUser()

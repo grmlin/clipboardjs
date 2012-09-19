@@ -1,0 +1,19 @@
+<template name="user">
+    {{#if show}}
+    {{#with user}}
+    <div class="user pull-right btn-group">
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}}" href="user-actions"><i class="icon-user icon-white"></i> {{user_name}}</a>
+        <a class="user-drop btn btn-small {{#if is_registered}}btn-success{{else}}btn-warning{{/if}} dropdown-toggle" data-toggle="dropdown" href="user-actions"><span class="caret"></span></a>
+        <ul id="user-actions" class="dropdown-menu">
+            {{#if is_registered}}
+            <li><a href="#" class="logout" title="Logout"><i class="icon-off"></i> Logout</a></li>
+            {{else}}
+            <li><a href="#" class="login" title="Login"><i class="icon-lock"></i> Login</a></li>
+            <li class="divider"></li>
+            <li><a href="#" class="create" title="Register"><i class="icon-user"></i> Register</a></li>
+            {{/if}}
+        </ul>
+    </div>
+    {{/with}}
+    {{/if}}
+</template>

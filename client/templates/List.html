@@ -1,0 +1,94 @@
+<template name="list">
+    {{#if show}}
+    <ul class="nav nav-list">
+        <li class="nav-header">Pastes <span class="label">{{message_count}}</span>
+            <a href="/list"
+               class="internal-link btn btn-mini pull-right"
+               title="Paste something"><i
+                    class="icon-plus"></i></a></li>
+    </ul>
+    <ul class="nav nav-list messages-list">
+        {{#each messages}}
+        {{> message_abstr}}
+        {{/each}}
+    </ul>
+    <ul class="nav nav-list">
+        <li class="nav-header">Paste Streams <span class="label">{{stream_count}}</span>
+            <a href="#"
+               class="new-stream btn btn-mini pull-right"
+               title="Create a stream"><i
+                    class="icon-plus"></i></a></li>
+    </ul>
+
+    <ul class="nav nav-list messages-list">
+        {{#each streams}}
+        {{> stream_abstr}}
+        {{/each}}
+        <li class="nav-header">Bookmarks <span class="label">{{bookmark_count}}</span></li>
+    </ul>
+    <ul class="nav nav-list messages-list">
+        {{#each bookmarked_messages}}
+        {{> message_bookmarked_abstr}}
+        {{/each}}
+    </ul>
+    {{/if}}
+</template>
+
+<template name="message_abstr">
+    <li
+    {{#if is_active short_id}} class="active"{{/if}}>
+    <a href="/message/{{short_id}}"
+       class="message-link internal-link">
+        <span class="message-abstr">{{{abstract}}}</span>
+    </a>
+
+    <div class="abstract-wrapper">
+        <div>
+            <div class="popover message-abstract bottom">
+                <h6 class="popover-title"><i class='icon-user'></i> {{user_name}}<span class="pull-right">{{get_date time}}</span>
+
+                    <div class="arrow"></div>
+
+                </h6>
+
+                <div class="popover-content">
+                    <pre><code class='{{language}}'>{{{abstract}}}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    </li>
+</template>
+<template name="message_bookmarked_abstr">
+    <li
+    {{#if is_active short_id}} class="active"{{/if}}>
+    <a href="/message/{{short_id}}"
+       class="message-link internal-link">
+        <span class="message-abstr">{{{abstract}}}</span>
+    </a>
+
+    <div class="abstract-wrapper">
+        <div>
+            <div class="popover message-abstract bottom">
+                <h6 class="popover-title"><i class='icon-user'></i> {{user_name}}<span class="pull-right">{{get_date time}}</span>
+
+                    <div class="arrow"></div>
+
+                </h6>
+                <div class="popover-content">
+                    <pre><code class='{{language}}'>{{{abstract}}}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    </li>
+</template>
+<template name="stream_abstr">
+    <li
+    {{#if is_active short_id}} class="active"{{/if}}>
+    <a href="/stream/{{short_id}}"
+       class="internal-link">
+        <span class="message-abstr">Stream</span>
+    </a>
+    </li>
+</template>

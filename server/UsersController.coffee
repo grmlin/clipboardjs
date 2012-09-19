@@ -3,10 +3,9 @@ do() ->
     interval = Meteor.setInterval(=>
       now = (new Date()).getTime()
       user = Users.findOne userId
-      if now - user.last_beat > 30 * 1000 
+      if now - user.last_beat > 30 * 1000
         Users.update(userId,
-        $set:
-          connected = false)
+          $set: connected = false)
     , 6 * 1000)
 
   Meteor.methods
@@ -61,3 +60,13 @@ do() ->
 
     doesUserExist: (username) ->
       Users.find(user_name: username).count() > 0
+
+    invite: (userName, byUserId, fragment) ->
+      invitee = Users.findOne({user_name: userName})
+      inviter = Users.findOne(byUserId)
+      throw new Meteor.error(404, "Invite failed") unless invitee and inviter
+      
+      Invitations.insert
+        invitee: invitee._id
+        inviter: inviter.user_name
+        fragment: fragment

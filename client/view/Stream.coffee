@@ -1,6 +1,7 @@
 do ->
   dropDown = null
-
+  inviteModal = new InviteModal()
+  
   isSubscribed = ->
     userId = Session.get SESSION_USER
     streamShortId = Session.get SESSION_SHORT_STREAM_ID
@@ -54,6 +55,10 @@ do ->
     'click .paste': (evt) ->
       addMessage()
 
+    'click .invite': (evt) ->
+      evt.preventDefault()
+      inviteModal.show()
+      
     "keypress #stream-message": (evt) ->
       keycode = if event.which then event.which else event.keyCode
       if keycode is 10 or (keycode is 13 and evt.ctrlKey)

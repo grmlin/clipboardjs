@@ -36,3 +36,6 @@ Meteor.startup ->
     messages = StreamMessages.find stream_id: streamId
     console.log "publishing #{messages.count()} stream-messages for stream #{streamId}"
     return messages
+
+  Meteor.publish "invitations", (userId) ->
+    Invitations.find invitee: userId

@@ -54,7 +54,8 @@ class Modal
 
   close: ->
     @_closeModal()
+    
   submit: (data) ->
-    console.log "submitted #{data}"
+    console.log "submitted: ", data
     
     
