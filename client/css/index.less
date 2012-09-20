@@ -236,33 +236,35 @@ body {
   background: rgba(0, 0, 0, 0.8) url(/img/load.gif) no-repeat center;
 }
 
-.modal {
+.modal,
+.modal.fade.in {
   overflow: hidden;
   margin-top: -4px;
   top: 0;
 }
 
 #notifications {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  text-align: center;
-}
-
-#notifications ul {
-  display: inline-block;
-  background: #fff;
-  padding: 2px 5px;
-  .box-shadow(0 2px 10px rgba(0,0,0,0.3));
-}
-
-#notifications ul li {
   
 }
 
+#notifications ul {
+  display: table;
+}
 
+#notifications ul li {
+  display: table-row;
+}
+
+#notifications ul li + li div {
+  padding-top: 10px;
+}
+#notifications ul li > * {
+  display: table-cell;
+}
+
+#notifications ul li div + div {
+  margin-left: 15px;
+}
 .action-bar {
   height: @toolbarHeight;
   .box-sizing();

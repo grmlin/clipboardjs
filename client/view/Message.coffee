@@ -1,7 +1,7 @@
 do ->
   lastMessage = ""
 
-  shareModal = new Modal(Template.share_message_modal)
+  inviteModal = new InviteModal()
 
   Template.message_view.helpers
     show: ->
@@ -37,8 +37,10 @@ do ->
 
   Template.message_view.events =
     'click .share': (evt) ->
+      evt.preventDefault()
       url = window.location
-      shareModal.show {url: url}
+      inviteModal.show
+        url: url
 
     "click .raw": (evt) ->
       messagesController.getRawMessage(Session.get(SESSION_SHORT_MESSAGE_ID), (message) ->

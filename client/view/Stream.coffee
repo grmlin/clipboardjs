@@ -57,7 +57,9 @@ do ->
 
     'click .invite': (evt) ->
       evt.preventDefault()
-      inviteModal.show()
+      url = window.location
+      inviteModal.show 
+        url: url
       
     "keypress #stream-message": (evt) ->
       keycode = if event.which then event.which else event.keyCode

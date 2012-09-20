@@ -3,7 +3,7 @@
     {{#with count this}}
     {{#if this}}
     <div class="pull-right">
-        <button class="btn btn-info btn-small"><i class="icon-envelope icon-white"></i> {{this}}</button>
+        <button class="btn btn-info btn-small show-notifications"><i class="icon-envelope icon-white"></i> {{this}}</button>
     </div>
     {{else}}
     <div class="pull-right">
@@ -15,5 +15,8 @@
 </template>
 
 <template name="notification_item">
-    <li>{{inviter}}: {{fragment}}</li>
+    <li>
+        <div><span class="label label-info"><i class="icon-user icon-white"></i> {{inviter}}</span></div>
+        <div>shared <a href="/{{fragment}}">{{description}}</a> with you</div>
+    </li>
 </template>

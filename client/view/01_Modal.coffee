@@ -49,7 +49,7 @@ class Modal
     @_modal.on "keyup", "input", @_validate
 
     @_modal.find('input').trigger "keyup"
-    @_modal.removeClass "hide fade"
+    #@_modal.removeClass "hide fade"
     @_modal.find('input:first').trigger "focus"
 
   close: ->
