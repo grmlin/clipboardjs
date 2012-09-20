@@ -39,3 +39,6 @@ Meteor.startup ->
 
   Meteor.publish "invitations", (userId) ->
     Invitations.find invitee: userId
+  
+    
+  console.log Invitations.find()

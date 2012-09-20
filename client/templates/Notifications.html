@@ -1,0 +1,19 @@
+<template name="notifications">
+    {{#with items}}
+    {{#with count this}}
+    {{#if this}}
+    <div class="pull-right">
+        <button class="btn btn-info btn-small"><i class="icon-envelope icon-white"></i> {{this}}</button>
+    </div>
+    {{else}}
+    <div class="pull-right">
+        <button class="btn btn-small" disabled="disabled"><i class="icon-envelope icon-white"></i> 0</button>
+    </div>
+    {{/if}}
+    {{/with}}
+    {{/with}}
+</template>
+
+<template name="notification_item">
+    <li>{{inviter}}: {{fragment}}</li>
+</template>
