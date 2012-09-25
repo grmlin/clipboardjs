@@ -66,8 +66,8 @@ do() ->
       inviter = Users.findOne(byUserId)
       throw new Meteor.error(404, "Invite failed") unless invitee and inviter
       
-      desc = "a stream" if fragment.indexOf("stream") isnt -1
-      desc = "a message" if fragment.indexOf("message") isnt -1
+      desc = "stream" if fragment.indexOf("stream") isnt -1
+      desc = "message" if fragment.indexOf("message") isnt -1
       desc = "something" if typeof desc is "undefined"
       
       Invitations.insert
@@ -75,3 +75,9 @@ do() ->
         inviter: inviter.user_name
         fragment: fragment
         description: desc
+
+    removeInvitation: (id, userId) ->
+      Invitations.remove({
+        _id: id,
+        invitee: userId
+      })

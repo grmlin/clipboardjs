@@ -48,9 +48,11 @@ class Modal
     @_modal.on "click", ".cancel, .close", @_closeModal
     @_modal.on "keyup", "input", @_validate
 
-    @_modal.find('input').trigger "keyup"
+    #@_modal.find('input').trigger "keyup"
     #@_modal.removeClass "hide fade"
     @_modal.find('input:first').trigger "focus"
+    @_modal.find(".save").attr("disabled", "disabled")
+
 
   close: ->
     @_closeModal()

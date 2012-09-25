@@ -199,7 +199,7 @@ body {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0px;
   border-radius: 0px;
-  background: @lightgrey;
+  background: @grey;
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
@@ -249,6 +249,7 @@ body {
 
 #notifications ul {
   display: table;
+  width: 100%;
 }
 
 #notifications ul li {
@@ -264,6 +265,10 @@ body {
 
 #notifications ul li div + div {
   margin-left: 15px;
+}
+
+#notifications ul li div.notification-actions {
+  text-align: right;
 }
 .action-bar {
   height: @toolbarHeight;

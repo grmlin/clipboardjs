@@ -6,6 +6,16 @@
         </div>
         <div class="modal-body">
             <ul class="unstyled">
+                {{#each items}}
+                <li>
+                    <div><span class="label label-info"><i class="icon-user icon-white"></i> {{inviter}}</span></div>
+                    <div>shared a {{description}} with you</div>
+                    <div class="notification-actions">
+                        <a href="/{{fragment}}" title="Open {{description}}" class="open internal-link"><i class="icon-share-alt"></i></a>
+                        <button title="Remove notification" class="remove btn btn-link" value="{{_id}}"><i class="icon-trash"></i></button>
+                    </div>
+                </li>
+                {{/each}}
             </ul>
         </div>
     </div>
@@ -33,7 +43,8 @@
             <h4>Grab the url</h4>
             <input type="text" value="{{url}}">
             <hr>
-            <h4>Invite another user</h4>
+            <h4>Share this with another user</h4>
+
             <div class="control-group username">
                 <input type="text" name="username" placeholder="Username">
             </div>
