@@ -36,10 +36,12 @@
 </template>
 
 <template name="stream_list_item">
-    <li{{#if is_user}} class="myself"{{/if}}>
+    <li class="clearfix{{#if is_user}} myself{{/if}}">
         <p>
             <span class="username">{{#if is_user}}myself{{else}}{{message.user_name}}{{/if}}</span> <br>
-            <code>{{message.language}}</code>
+            <code>{{message.language}}</code>    <br>
+            <a class="internal-link" href="/message/{{message.short_id}}"><i class="icon-edit"></i> open paste</a>
+            
         </p> 
         <pre class="prettyprint"><code lang="{{message.language}}" data-message-id="{{message.short_id}}" data-is-abstract="yes" title="click to show/hide full paste">{{{message.abstract}}}</code></pre>
     </li>

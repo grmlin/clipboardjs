@@ -15,6 +15,9 @@ do() ->
     getMessage: (shortId, userId) ->
       console.log "loading message #{shortId}"
       message = Messages.findOne short_id: shortId
+      unless message
+        message = StreamMessages.findOne short_id: shortId
+        
       throw new Meteor.Error(404, "Message not found") unless message
 
       throw new Meteor.Error(403, "Access Denied") if message.is_private and userId isnt message.user_id
@@ -80,3 +83,15 @@ do() ->
           }, multi: true
         )
       return "messages updated"
+      
+    addAnnotation: (shortMessageId, userId, start, end) ->
+      id = MessageAnnotations.insert
+        message_id: shortMessageId
+        start: start
+        end: end
+        user_id: userId
+        author: Users.find(userId)?.user_name
+        
+      console.log "New annotation added: #{id}"
+      
+      return id

@@ -37,5 +37,16 @@ Meteor.startup ->
     console.log "publishing #{messages.count()} stream-messages for stream #{streamId}"
     return messages
 
+  Meteor.publish "messageAnnotations", (messageId) ->
+    annotations = MessageAnnotations.find({
+    message_id: messageId
+    },
+      {
+      fields:
+        {
+        user_id: false
+        }
+      })
+
   Meteor.publish "invitations", (userId) ->
     Invitations.find invitee: userId

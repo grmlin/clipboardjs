@@ -35,10 +35,12 @@ Meteor.startup ->
 
   Meteor.autosubscribe ->
     userId = Session.get SESSION_USER
-    streamId = Session.get(SESSION_SHORT_STREAM_ID)
+    streamId = Session.get SESSION_SHORT_STREAM_ID
+    messageId = Session.get SESSION_SHORT_MESSAGE_ID
     console.log("user: #{userId} | stream: #{streamId}")
     Meteor.subscribe 'messages', userId, streamId
     Meteor.subscribe 'streamMessages', streamId
+    Meteor.subscribe 'messageAnnotations', messageId
     Meteor.subscribe 'users', userId
     Meteor.subscribe 'streams', userId
     Meteor.subscribe 'invitations', userId

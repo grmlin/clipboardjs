@@ -656,6 +656,16 @@ line-height: 18px;*/
   .box-sizing();
 }
 
+.message-editor {
+  display: none;
+  margin-bottom: 10px;
+}
+
+.message-editor > .pull-left + .pull-left {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 4px solid @light;
+}
 .message-view {
   position: relative;
 }
@@ -709,15 +719,47 @@ line-height: 18px;*/
 }
 
 .message-view.loading .prettyprint code {
-  background: #363731 url(/img/load.gif) no-repeat center;
+  //background: #363731 url(/img/load.gif) no-repeat center;
   min-height: 20px;
 }
 
 .prettyprint code {
+  background: transparent;
   .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5));
   padding-top: 30px;
+  position: relative;
+  z-index: 2;
 }
 
+.prettyprint code.code-annotated,
+.prettyprint code.code-raw {
+  position: absolute;
+  background: none;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  color: transparent;
+  .box-shadow(none);
+  z-index: 3;
+}
+.prettyprint code.code-raw {
+  z-index: 1;
+}
+
+.editing .prettyprint code.code-raw {
+  z-index: 4;  
+}
+.prettyprint code.code-annotated span {
+  position: relative;
+  background: rgba(255,255,0,0.2);
+}
+.prettyprint code.code-annotated span span {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border-bottom: 2px dashed #ffff00;
+}
 .prettyprint .text-board {
   .box-sizing();
   .box-shadow( inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5));

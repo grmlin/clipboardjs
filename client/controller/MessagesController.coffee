@@ -82,4 +82,3 @@ MessagesController = do () ->
         callback.call this, message
       )
       
-    
