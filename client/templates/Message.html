@@ -2,27 +2,32 @@
     {{#if show}}
     {{#with message}}
     <div class="clearfix view-toolbar">
-        <p class="message-actions pull-left btn-group">
-            {{#if is_bookmarked _id}}
-            <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
-            {{else}}
-            <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
-            {{/if}}
-            <button class="share btn btn-small collapsing-btn" title="share message" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
-            <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
-            <button class="edit btn btn-small collapsing-btn" title="edit message" data-placement="bottom" data-original-title="edit message"><i class="icon-pencil"></i></button>
-        </p>
-        <div class="message-editor pull-left">
-            <h5 class="pull-left">Edit paste: </h5>
+        <div class="btn-toolbar pull-left">
+            <p class="message-actions btn-group">
+                {{#if is_bookmarked _id}}
+                <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
+                {{else}}
+                <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
+                {{/if}}
+                <button class="share btn btn-small collapsing-btn" title="share message" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
+                <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
+            </p>
+            <p class="message-actions btn-group">
+                <button class="edit btn btn-small collapsing-btn" title="edit message" data-placement="bottom" data-original-title="edit message"><i class="icon-pencil"></i></button>
+            </p>
+        </div>
+        
+        <div class="message-editor btn-toolbar pull-left">
             <p class="btn-group pull-left" title="Change paste language" data-placement="bottom">{{> language_btn_group}}</p>
-            <p class="btn-group pull-left" title="Add annotation (select text first)" data-placement="bottom">
-                <button class="add-annotation btn btn-small"><i class="icon-comment"></i> add annotation</button>
+            <p class="btn-group pull-left" title="1. Select text below <br>2. add the annotation" data-placement="bottom">
+                <button class="add-annotation btn btn-small"><i class="icon-comment"></i></button>
             </p>
         </div>
     </div>
     {{/with}}
     
     {{#constant}}
+    <div class="message-annotations"></div>
     <div class="message-view loading">
         <pre class="prettyprint"><code></code></pre>
     </div>
@@ -46,6 +51,13 @@
     </div>
 </template>
 
+<template name="message_annotations">
+    <ul>
+        {{#each this}}
+            <li><span class="label">{{author}}</span></li>
+        {{/each}}
+    </ul>
+</template>
 <template name="message_raw">
     <div class="raw-file">
         <button class="close">&times;</button>

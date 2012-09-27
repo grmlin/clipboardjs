@@ -287,16 +287,6 @@ code {
   z-index: 10;
 }
 
-.view-toolbar {
-  height: @toolbarHeight;
-  .box-sizing();
-  position: fixed;
-  left: @sidebarWidth;
-  top: 0;
-  padding: 4px 20px 0;
-  z-index: 11;
-}
-
 #logo {
   font-size: 16px;
   line-height: 27px;
@@ -659,15 +649,46 @@ line-height: 18px;*/
   .box-sizing();
 }
 
-.message-editor {
-  display: none;
-  margin-left: 15px;
+.view-toolbar {
+  height: @toolbarHeight - 1;
+  .box-sizing();
+  position: fixed;
+  left: @sidebarWidth;
+  top: 0;
+  padding: 0 20px 0;
+  z-index: 11;
 }
 
-.message-editor > .pull-left + .pull-left {
-  margin-left: 10px;
+.view-toolbar .btn-toolbar {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.view-toolbar .btn-toolbar .btn-group {
+  background: @light;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 0;
+  .transition(all,150ms);
+}
+.view-toolbar .btn-toolbar .btn-group.editing {
+  background: rgba(91,183,91,0.3);
   padding-left: 10px;
-  border-left: 4px solid @light;
+}
+
+.message-editor {     
+  height: @toolbarHeight - 1;
+  opacity: 0;
+  margin-left: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: rgba(91,183,91,0.3);
+  .transition(opacity,150ms);
+}
+.message-editor.editing {
+  opacity: 1;
+}
+.view-toolbar .btn-toolbar.message-editor .btn-group {
+  background: transparent;
 }
 .message-view {
   position: relative;
@@ -748,20 +769,41 @@ line-height: 18px;*/
 .prettyprint .code-raw {
   z-index: 1;
 }
+.prettyprint .code-annotated {
+  opacity: 1;
+  .transition(opacity);
+}
 
+.prettyprint .code-raw::selection,
+.prettyprint .code-raw::-moz-selection {
+  background: #71E026; /* Safari */
+}
 .editing .prettyprint .code-raw {
-  z-index: 4;  
+  z-index: 4; 
+}
+.editing .prettyprint .code-annotated {
+  opacity: 0.5;
 }
 .prettyprint .code-annotated span {
   position: relative;
-  background: rgba(255,255,0,0.2);
+  background: rgba(113,224,38,0.2);
+  cursor: pointer;
+  .transition(background);
 }
 .prettyprint .code-annotated span span {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
-  border-bottom: 2px dashed #ffff00;
+  border-bottom: 2px solid rgba(113,224,38,0.3);
+  .transition(border-color);
+}
+
+.prettyprint .code-annotated span.active {
+  background: rgba(224,38,218,0.2);
+}
+.prettyprint .code-annotated span.active span {
+  border-color: rgba(224,38,218,1)
 }
 .prettyprint .text-board {
   .box-sizing();

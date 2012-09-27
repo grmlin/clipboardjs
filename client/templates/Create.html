@@ -3,17 +3,17 @@
     <div class="show">
         <input type="hidden" name="current-lang-notepad" value="plain">
         <div class="view-toolbar clearfix">
-            <p class="pull-left">
-                <button class="preview show-preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
-                <button class="preview hide-preview btn btn-small btn-success" title="Close Preview" data-placement="bottom"><i class="icon-screenshot icon-white"></i></button>
-                |&nbsp;
-            </p>
-            <div class="text-type pull-left btn-group">
-                {{> language_btn_group}}
+            <div class="btn-toolbar pull-left">
+                <p class="btn-group">
+                    <button class="preview btn btn-small" title="Show Preview" data-placement="bottom"><i class="icon-screenshot"></i></button>
+                </p>
+                <p class="text-type btn-group">
+                    {{> language_btn_group}}
+                </p>
+                <p class="btn-group">
+                    <button class="btn btn-small btn-info paste-text-board"><i class="icon-file icon-white"></i> Save Snippet</button>
+                </p>
             </div>
-            <p class="pull-left">
-                <button class="btn btn-small btn-info paste-text-board"><i class="icon-file icon-white"></i> Save Snippet</button>
-            </p>
         </div>
         <div>
             <div class="text-board-wrapper">

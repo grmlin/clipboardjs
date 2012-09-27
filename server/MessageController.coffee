@@ -91,7 +91,7 @@ do() ->
         start: start
         end: end
         user_id: userId
-        author: Users.find(userId)?.user_name
+        author: Users.findOne(userId)?.user_name
         
       console.log "New annotation added: #{id}"
       

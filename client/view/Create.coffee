@@ -18,6 +18,7 @@ do ->
     $('.tooltip').remove()
     $(this.findAll('.preview')).tooltip()
     
+  #TODO use LangDropdown class 
   Template.create.events =
     'click .text-type .dropdown-menu li:not(.active) a': (evt) ->
       $lang = $(evt.currentTarget)
@@ -38,7 +39,11 @@ do ->
     'click .preview': (evt) ->
       $button = $ evt.currentTarget
       $view = $button.parents '.show:first'
+      
+      $button.toggleClass "btn-success"
+      $button.children('i').toggleClass("icon-white")
       $view.toggleClass "previewed"
+      
       isPreviewed = $view.hasClass "previewed"
 
       if isPreviewed and $(snippet).text() isnt ""
@@ -61,7 +66,9 @@ do ->
         else
           hightlighted.innerHTML = txt
           $view.find('.current-computed-lang').text("plain")
-
+       else
+        hightlighted.innerHTML = ""
+        
     'paste .text-board': (evt) ->
       window.setTimeout =>
         s = new Sanitize()
@@ -82,23 +89,3 @@ do ->
         messagesController.createMessage txt, type, ->
           $button.removeAttr("disabled")
           $button.parents('.show').find(".text-board").html("")
-
-    'dragenter .file-drop': (evt) ->
-      $(evt.currentTarget).addClass('over')
-
-    'dragleave .file-drop': (evt) ->
-      $(evt.currentTarget).removeClass('over')
-
-    'drop .file-drop': (evt) ->
-      evt.preventDefault()
-      target = evt.currentTarget
-      text = $(evt.currentTarget).removeClass('over').find('textarea')
-
-      files = evt.dataTransfer.files
-      for file in files
-        do (file) ->
-          reader = new FileReader()
-          reader.onload = (readerEvent) ->
-            text.val readerEvent.target.result
-
-          reader.readAsText(file)  

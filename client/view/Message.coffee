@@ -36,6 +36,8 @@ do ->
       , 250)
       
     view = this.find '.message-view'
+    view?.className = view.className.replace "editing", ""
+
     $('.tooltip').remove()
     $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
@@ -72,14 +74,20 @@ do ->
       annotations.forEach((ann) ->
         annotated = letters.slice(ann.start, ann.end)
         letters.forEach((item, index) ->
-          toChange[index] = toChange[index] or (index >= ann.start and index < ann.end)
+          isAnnotated = index >= ann.start and index < ann.end
+          if typeof toChange[index] isnt "undefined" and isAnnotated
+            toChange[index].push(ann)
+          else if isAnnotated
+            toChange[index] = [ann]
         )
       )
 
       letters.forEach((item, index) ->
         letters[index] = HtmlEncoder.encode(letters[index])
-        if toChange[index]
-          letters[index] = "<span title='Annotated'>#{letters[index]}<span></span></span>"
+        if typeof toChange[index] isnt "undefined"
+          marker = ""
+          marker += "<span data-annotation='#{annotation._id}'></span>" for annotation in toChange[index]
+          letters[index] = "<span class='annotation'>#{letters[index]}#{marker}</span>"
       )
 
       return letters.join("")
@@ -113,16 +121,17 @@ do ->
 
     'click .edit': (evt) ->
       button = $(evt.currentTarget)
+      toolbar = button.parents('.view-toolbar')
+      
       button.toggleClass("btn-success")
+      button.parent().toggleClass("editing")
       button.children("i").toggleClass("icon-white")
-      button.parents('.view-toolbar').find('.message-editor').toggle()
-      button.parents('.view-toolbar').nextAll('.message-view').toggleClass("editing")
+      toolbar.find('.message-editor').toggleClass("editing")
+      toolbar.nextAll('.message-view').toggleClass("editing")
+      
       selection = window.getSelection();
       if (selection.rangeCount > 0)
         window.getSelection().removeAllRanges();
-
-    'onselect .code-raw': (evt) ->
-      alert("selected")
 
     'click .add-annotation': (evt) ->
       selection = window.getSelection();
@@ -137,7 +146,28 @@ do ->
             console?.error(err) if err
           )
           console.dir range
+      else
+        alert "Pleas select some text to annotate, first!"
+          
+    'click .annotation': (evt) ->
+      annotations = []
+      clicked = $(evt.currentTarget)
+      list = clicked.parents('.message-view:first').prevAll('.message-annotations:first')
+      code = clicked.parent()
+      
+      clicked.children('span').each(->
+        annotations.push(this.getAttribute("data-annotation"))
+      )
+      cursor = MessageAnnotations.find({_id:{$in:annotations}})
 
+      code.find('span.active').removeClass("active")
+      annotations.forEach((a)->
+        code.find("[data-annotation=#{a}]").parent().addClass("active")
+      )
+      list.html(Template.message_annotations(cursor))
+      
+      console.log cursor.fetch()
+      
     "click .message-view:not(.editing) .prettyprint code": (evt) ->
       ###if document.selection
         range = document.body.createTextRange()
