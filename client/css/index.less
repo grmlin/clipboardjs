@@ -690,6 +690,14 @@ line-height: 18px;*/
 .view-toolbar .btn-toolbar.message-editor .btn-group {
   background: transparent;
 }
+
+.message-annotations li p {
+  display: none;
+}
+.message-annotations li.active p {
+  display: block;
+}
+
 .message-view {
   position: relative;
 }
@@ -799,6 +807,12 @@ line-height: 18px;*/
   .transition(border-color);
 }
 
+.prettyprint .code-annotated span.hovered {
+  background: rgba(224,137,38,0.2);
+}
+.prettyprint .code-annotated span.hovered span {
+  border-color: rgba(224,137,38,1)
+}
 .prettyprint .code-annotated span.active {
   background: rgba(224,38,218,0.2);
 }

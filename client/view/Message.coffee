@@ -21,6 +21,17 @@ do ->
       Messages.find({_id: messageId, bookmarked_by: userId}).count() > 0
 
   Template.message_view.rendered = ->
+    messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
+    view = this.find '.message-view'
+    annotationList = this.find '.message-annotations'
+
+    updateAnnotations = ->
+      cursor = MessageAnnotations.find({message_id: messageId})
+      if cursor.count() > 0
+        annotationList.innerHTML = Template.message_annotations(cursor)
+      else 
+        annotationList.innerHTML = Template.message_annotations_none()
+
     refresh = ->
       Meteor.clearTimeout(refreshTimeout)
       refreshTimeout = Meteor.setTimeout(->
@@ -34,13 +45,12 @@ do ->
               console.log err
               view.innerHTML = Template.message_detail_unavailable()
       , 250)
-      
-    view = this.find '.message-view'
+
+    
     view?.className = view.className.replace "editing", ""
 
     $('.tooltip').remove()
     $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
-    messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
 
     messageQuery = Messages.find({short_id: messageId})
     annotationQuery = MessageAnnotations.find(message_id: messageId)
@@ -59,9 +69,11 @@ do ->
       annotationObserver = annotationQuery.observe(
         added: (message) ->
           refresh()
+          updateAnnotations()
         changed: () ->
           refresh()
-      ) 
+          updateAnnotations()
+      )
 
   Template.message_detail.helpers
     raw: (message) ->
@@ -87,7 +99,7 @@ do ->
         if typeof toChange[index] isnt "undefined"
           marker = ""
           marker += "<span data-annotation='#{annotation._id}'></span>" for annotation in toChange[index]
-          letters[index] = "<span class='annotation'>#{letters[index]}#{marker}</span>"
+          letters[index] = "<span class='annotation' title='#{toChange[index].length} annotation#{if toChange[index].length > 1 then "s" else ""}'>#{letters[index]}#{marker}</span>"
       )
 
       return letters.join("")
@@ -122,13 +134,13 @@ do ->
     'click .edit': (evt) ->
       button = $(evt.currentTarget)
       toolbar = button.parents('.view-toolbar')
-      
+
       button.toggleClass("btn-success")
       button.parent().toggleClass("editing")
       button.children("i").toggleClass("icon-white")
       toolbar.find('.message-editor').toggleClass("editing")
       toolbar.nextAll('.message-view').toggleClass("editing")
-      
+
       selection = window.getSelection();
       if (selection.rangeCount > 0)
         window.getSelection().removeAllRanges();
@@ -148,26 +160,70 @@ do ->
           console.dir range
       else
         alert "Pleas select some text to annotate, first!"
-          
+    'mouseenter .message-annotations ol li': (evt) ->
+      clicked = $(evt.currentTarget)
+      code = clicked.parents('.message-annotations:first').nextAll('.message-view').find('.code-annotated')
+
+      id = evt.currentTarget.id
+
+      code.find('span.hovered').removeClass("hovered")
+      code.find("[data-annotation=#{id}]").parent().addClass("hovered")
+        
+    'mouseleave .message-annotations ol li': (evt) ->
+      clicked = $(evt.currentTarget)
+      code = clicked.parents('.message-annotations:first').nextAll('.message-view').find('.code-annotated')
+      
+      code.find('span.hovered').removeClass("hovered")
+      
+    'click .message-annotations ol li': (evt) ->
+      clicked = $(evt.currentTarget)
+      code = clicked.parents('.message-annotations:first').nextAll('.message-view').find('.code-annotated')
+
+      id = evt.currentTarget.id
+
+      clicked.siblings('.active').removeClass("active")
+      clicked.toggleClass("active")
+      code.find('span.hovered').removeClass("hovered")
+      code.find('span.active').removeClass("active")
+      code.find("[data-annotation=#{id}]").parent().addClass("active") if clicked.hasClass('active')
+      
     'click .annotation': (evt) ->
       annotations = []
       clicked = $(evt.currentTarget)
       list = clicked.parents('.message-view:first').prevAll('.message-annotations:first')
       code = clicked.parent()
-      
+
       clicked.children('span').each(->
         annotations.push(this.getAttribute("data-annotation"))
       )
-      cursor = MessageAnnotations.find({_id:{$in:annotations}})
 
       code.find('span.active').removeClass("active")
+      list.find('li').removeClass("active")
       annotations.forEach((a)->
+        $("##{a}").addClass("active")
         code.find("[data-annotation=#{a}]").parent().addClass("active")
       )
-      list.html(Template.message_annotations(cursor))
+
+    'mouseenter .annotation': (evt) ->
+      annotations = []
+      clicked = $(evt.currentTarget)
+      code = clicked.parent()
+
+      clicked.children('span').each(->
+        annotations.push(this.getAttribute("data-annotation"))
+      )
+
+      code.find('span.hovered').removeClass("hovered")
+      annotations.forEach((a)->
+        code.find("[data-annotation=#{a}]").parent().addClass("hovered")
+      )
       
-      console.log cursor.fetch()
-      
+    'mouseleave .annotation': (evt) ->
+      clicked = $(evt.currentTarget)
+      code = clicked.parent()
+
+      code.find('span.hovered').removeClass("hovered")
+
     "click .message-view:not(.editing) .prettyprint code": (evt) ->
       ###if document.selection
         range = document.body.createTextRange()

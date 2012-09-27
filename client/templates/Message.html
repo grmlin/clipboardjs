@@ -52,11 +52,17 @@
 </template>
 
 <template name="message_annotations">
-    <ul>
+    <h4>Annotations</h4>
+    <ol>
         {{#each this}}
-            <li><span class="label">{{author}}</span></li>
+            <li id="{{_id}}">
+                <span class="label">{{author}}</span>
+                <p id="{{_id}}-target" class="hide">Lorem Ipsum dolor</p>
+            </li>
         {{/each}}
-    </ul>
+    </ol>
+</template>
+<template name="message_annotations_none">
 </template>
 <template name="message_raw">
     <div class="raw-file">
