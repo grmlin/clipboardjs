@@ -15,7 +15,7 @@ Highlighter = do ->
 
       catch error
         console.log error
-        contentHighlighted = content
+        contentHighlighted = HtmlEncoder.encode content
         contentLang = "plain"
 
       res =

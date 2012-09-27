@@ -26,6 +26,7 @@ Meteor.startup ->
       {
       raw: false
       highlighted: false
+      user_id: false
       }
     })
 

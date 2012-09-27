@@ -47,8 +47,9 @@ do() ->
       abstractor = new MessageAbstractor()
       
       message_raw = content
+        
       messageHighlighted = highlighter.highlight message_raw, type
-      messageAbstract = abstractor.getAbstract content, messageHighlighted.language
+      messageAbstract = abstractor.getAbstract message_raw, messageHighlighted.language
       
       collection = if streamId is null then Messages else StreamMessages
       newid = collection.insert

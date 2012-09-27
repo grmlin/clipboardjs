@@ -43,21 +43,23 @@ do ->
 
       if isPreviewed and $(snippet).text() isnt ""
         preview = null
+        txt = HtmlEncoder.encode($(snippet).text())
+        
         switch langNotepad.value
           when "auto"
             try
-              preview = hljs.highlightAuto $(snippet).text()
+              preview = hljs.highlightAuto txt
           when "plain"
             preview = null
           else
             try
-              preview = hljs.highlight langNotepad.value, $(snippet).text()
+              preview = hljs.highlight langNotepad.value, txt
 
         if preview
           hightlighted.innerHTML = preview.value
           $view.find('.current-computed-lang').text preview.language
         else
-          hightlighted.innerHTML = $(snippet).text()
+          hightlighted.innerHTML = txt
           $view.find('.current-computed-lang').text("plain")
 
     'paste .text-board': (evt) ->

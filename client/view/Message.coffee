@@ -1,7 +1,9 @@
 do ->
-  lastMessage = ""
-
   inviteModal = new InviteModal()
+
+  messageObserver = null
+  annotationObserver = null
+  refreshTimeout = null
 
   Template.message_view.helpers
     show: ->
@@ -19,25 +21,51 @@ do ->
       Messages.find({_id: messageId, bookmarked_by: userId}).count() > 0
 
   Template.message_view.rendered = ->
+    refresh = ->
+      Meteor.clearTimeout(refreshTimeout)
+      refreshTimeout = Meteor.setTimeout(->
+        console?.log "refreshing message view"
+        if view or $(view).hasClass("loading")
+          Meteor.call "getMessage", messageId, Session.get(SESSION_USER), (err, message) =>
+            view.className = view.className.replace "loading", ""
+            if typeof err is "undefined"
+              view.innerHTML = Template.message_detail(message)
+            else
+              console.log err
+              view.innerHTML = Template.message_detail_unavailable()
+      , 250)
+      
     view = this.find '.message-view'
     $('.tooltip').remove()
-    $(this.findAll('.message-actions .btn')).tooltip()
+    $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
 
-    if (view and lastMessage isnt messageId) or $(view).hasClass("loading")
-      lastMessage = messageId
+    messageQuery = Messages.find({short_id: messageId})
+    annotationQuery = MessageAnnotations.find(message_id: messageId)
 
-      Meteor.call "getMessage", messageId, Session.get(SESSION_USER), (err, message) =>
-        view.className = "message-view"
-        if typeof err is "undefined"
-          view.innerHTML = Template.message_detail(message)
-        else
-          console.log err
-          view.innerHTML = Template.message_detail_unavailable()
+    messageObserver.stop() unless messageObserver is null
+    annotationObserver.stop() unless annotationObserver is null
+
+    if messageQuery
+      messageObserver = messageQuery.observe(
+        added: (message) ->
+          refresh()
+        removed: ->
+          refresh()
+      )
+    if annotationQuery
+      annotationObserver = annotationQuery.observe(
+        added: (message) ->
+          refresh()
+        changed: () ->
+          refresh()
+      ) 
 
   Template.message_detail.helpers
+    raw: (message) ->
+      return HtmlEncoder.encode(message.raw)
+
     annotated: (message) ->
-      pattern = /(.)/gm
       toChange = {}
       letters = message.raw.split("")
       annotations = MessageAnnotations.find(message_id: Session.get(SESSION_SHORT_MESSAGE_ID))
@@ -48,11 +76,12 @@ do ->
         )
       )
 
-      letters.forEach((item,index) ->
+      letters.forEach((item, index) ->
+        letters[index] = HtmlEncoder.encode(letters[index])
         if toChange[index]
-          letters[index] = item.replace(pattern,"<span title='Annotated'>$1<span></span></span>")  
+          letters[index] = "<span title='Annotated'>#{letters[index]}<span></span></span>"
       )
-      
+
       return letters.join("")
 
   Template.message_view.events =
@@ -86,12 +115,14 @@ do ->
       button = $(evt.currentTarget)
       button.toggleClass("btn-success")
       button.children("i").toggleClass("icon-white")
-      button.parents('.view-toolbar').nextAll('.message-editor').toggle(100).nextAll('.message-view').toggleClass("editing")
+      button.parents('.view-toolbar').find('.message-editor').toggle()
+      button.parents('.view-toolbar').nextAll('.message-view').toggleClass("editing")
       selection = window.getSelection();
-      if (selection.rangeCount > 0) 
-        window.getSelection().deleteFromDocument();
+      if (selection.rangeCount > 0)
         window.getSelection().removeAllRanges();
-      
+
+    'onselect .code-raw': (evt) ->
+      alert("selected")
 
     'click .add-annotation': (evt) ->
       selection = window.getSelection();

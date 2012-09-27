@@ -7,7 +7,7 @@ do ->
       appState.getState() is appState.LIST
 
     are_messages_available: ->
-      Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count() > 0
+      Messages.find({stream_id: null}).count() > 0
 
     are_bookmarked_messages_available: ->
       Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count() > 0
@@ -18,7 +18,6 @@ do ->
     messages: ->
       Messages.find(
         {
-        user_id: Session.get(SESSION_USER),
         stream_id: null
         },
         {sort:
@@ -38,7 +37,7 @@ do ->
         }).fetch().slice(0, 10)
 
     message_count: ->
-      Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count()
+      Messages.find({stream_id: null}).count()
 
     stream_count: ->
       Streams.find({users: Session.get(SESSION_USER)}).count()

@@ -206,6 +206,9 @@ body {
   background: rgba(188, 188, 188, 0.4);
 }
 
+code {
+  font-family: 'Source Code Pro', Monaco, Menlo, Consolas, "Courier New", monospace;
+}
 .navbar-static-top .navbar-inner {
 }
 
@@ -462,7 +465,7 @@ line-height: 18px;*/
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-family: 'Source Code Pro', Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
 .messages-list li a p {
@@ -652,13 +655,13 @@ line-height: 18px;*/
   width: 100%;
   min-height: 100%;
   padding: 20px;
-  font-family: monospace;
+  font-family: 'Source Code Pro', Monaco, Menlo, Consolas, "Courier New", monospace;
   .box-sizing();
 }
 
 .message-editor {
   display: none;
-  margin-bottom: 10px;
+  margin-left: 15px;
 }
 
 .message-editor > .pull-left + .pull-left {
@@ -731,8 +734,8 @@ line-height: 18px;*/
   z-index: 2;
 }
 
-.prettyprint code.code-annotated,
-.prettyprint code.code-raw {
+.prettyprint .code-annotated,
+.prettyprint .code-raw {
   position: absolute;
   background: none;
   top: 10px;
@@ -742,18 +745,18 @@ line-height: 18px;*/
   .box-shadow(none);
   z-index: 3;
 }
-.prettyprint code.code-raw {
+.prettyprint .code-raw {
   z-index: 1;
 }
 
-.editing .prettyprint code.code-raw {
+.editing .prettyprint .code-raw {
   z-index: 4;  
 }
-.prettyprint code.code-annotated span {
+.prettyprint .code-annotated span {
   position: relative;
   background: rgba(255,255,0,0.2);
 }
-.prettyprint code.code-annotated span span {
+.prettyprint .code-annotated span span {
   position: absolute;
   top: 100%;
   left: 0;
@@ -837,7 +840,7 @@ line-height: 18px;*/
   width: 100%;
   .box-sizing();
   font-size: 11px;
-  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-family: 'Source Code Pro', Monaco, Menlo, Consolas, "Courier New", monospace;
 }
 
 #stream .stream-editor .editor-actions {
