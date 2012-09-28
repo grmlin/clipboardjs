@@ -12,10 +12,6 @@ UsersController = do() ->
   class UsersController
     constructor: ->
 
-    _changeName: (id, name) ->
-      messagesController.updateUserName(id, name)
-
-
     createUser: ->
       Meteor.call "createUser", (err, userId) =>
         if typeof err is "undefined"
@@ -39,7 +35,6 @@ UsersController = do() ->
         Meteor.call "registerUser", id, name, pwd, (err, id) =>
           if typeof err is "undefined"
             saveUser id
-            @_changeName id, name
           else
             console?.error err
             alert "Registration failed... #{err.reason}"

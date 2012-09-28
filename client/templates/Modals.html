@@ -39,23 +39,47 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3>Share this with someone</h3>
         </div>
-        <div class="modal-body">
-            <h4>Grab the url</h4>
-            <input type="text" value="{{url}}">
-            <hr>
-            <h4>With another user</h4>
-
-            <div class="control-group username">
-                <input type="text" name="username" placeholder="Username">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn cancel">Close</button>
-            <button class="btn btn-primary save">Invite</button>
-        </div>
+        <form>
+            <div class="modal-body">
+                    <h4>Grab the url</h4>
+                    <input type="text" value="{{url}}">
+                    <hr>
+                    <h4>With another user</h4>
+        
+                    <div class="control-group username">
+                        <input type="text" name="username" placeholder="Username">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn cancel" type="reset">Close</button>
+                    <button class="btn btn-primary save" type="submit">Invite</button>
+                </div>
+        </form>
     </div>
 </template>
+<template name="annotate_modal">
+    <div class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Add a comment to this paste</h3>
+        </div>
+        <form class="form-horizontal">
+            <div class="modal-body">
+                <div class="control-group comment">
+                    <label class="control-label" for="comment">Your comment</label>
 
+                    <div class="controls">
+                        <textarea name="comment" id="comment" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn cancel" type="reset">Close</button>
+                <button class="btn btn-primary save" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</template>
 <template name="user_create_modal">
     <div class="modal hide fade">
         <div class="modal-header">
@@ -81,10 +105,11 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button class="btn cancel" type="reset">Close</button>
+                <button class="btn btn-primary save" type="submit">{{submit_text}}</button>
+            </div>
         </form>
-        <div class="modal-footer">
-            <button class="btn cancel">Close</button>
-            <button class="btn btn-primary save">{{submit_text}}</button>
-        </div>
+
     </div>
 </template> 

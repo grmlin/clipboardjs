@@ -51,6 +51,9 @@ do() ->
 
       console.log "registered user #{user.user_name}"
 
+      Meteor.call "updateMessageOwner", id, name
+      Meteor.call "updateAnnotationOwner", id, name
+      
       return user._id
 
     getUser: (id) ->
@@ -80,4 +83,4 @@ do() ->
       Invitations.remove({
         _id: id,
         invitee: userId
-      })
+      })                

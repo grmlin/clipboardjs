@@ -13,7 +13,7 @@
                 <button class="raw btn btn-small collapsing-btn" title="show raw message" data-placement="bottom" data-original-title="show raw message"><i class="icon-align-justify"></i></button>
             </p>
             <p class="message-actions btn-group">
-                <button class="edit btn btn-small collapsing-btn" title="edit message" data-placement="bottom" data-original-title="edit message"><i class="icon-pencil"></i></button>
+                <button class="edit btn btn-small collapsing-btn" title="edit message" data-placement="bottom" data-original-title="edit message"><i class="icon-wrench"></i></button>
             </p>
         </div>
         
@@ -57,7 +57,7 @@
         {{#each this}}
             <li id="{{_id}}">
                 <span class="label">{{author}}</span>
-                <p id="{{_id}}-target" class="hide">Lorem Ipsum dolor</p>
+                <p id="{{_id}}-target" class="hide">{{comment}}</p>
             </li>
         {{/each}}
     </ol>

@@ -85,8 +85,9 @@ do() ->
         )
       return "messages updated"
       
-    addAnnotation: (shortMessageId, userId, start, end) ->
+    addAnnotation: (shortMessageId, userId, start, end, comment) ->
       id = MessageAnnotations.insert
+        comment: comment
         message_id: shortMessageId
         start: start
         end: end
@@ -96,3 +97,11 @@ do() ->
       console.log "New annotation added: #{id}"
       
       return id
+
+    updateAnnotationOwner: (userId, userName) ->
+      MessageAnnotations.update(
+        {user_id:userId},
+        {$set:
+          {user_name: userName}
+        }, multi: true
+      )

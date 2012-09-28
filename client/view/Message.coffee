@@ -139,6 +139,7 @@ do ->
       button.parent().toggleClass("editing")
       button.children("i").toggleClass("icon-white")
       toolbar.find('.message-editor').toggleClass("editing")
+      toolbar.nextAll('.message-annotations').toggle(150)
       toolbar.nextAll('.message-view').toggleClass("editing")
 
       selection = window.getSelection();
@@ -154,10 +155,14 @@ do ->
         if node.length > 0
           start = range.startOffset
           end = range.endOffset
-          Meteor.call("addAnnotation", Session.get(SESSION_SHORT_MESSAGE_ID), Session.get(SESSION_USER), start, end, (err, aId)->
-            console?.error(err) if err
-          )
-          console.dir range
+          modal = new Modal(Template.annotate_modal, new CommentValidator())
+          modal.submit = (formData) ->
+            Meteor.call("addAnnotation", Session.get(SESSION_SHORT_MESSAGE_ID), Session.get(SESSION_USER), start, end, formData.comment, (err, aId)->
+              console?.error(err) if err
+              modal.close()
+            )
+    
+          modal.show {title: "Login", user_name: "", submit_text: "Login"}
       else
         alert "Pleas select some text to annotate, first!"
     'mouseenter .message-annotations ol li': (evt) ->

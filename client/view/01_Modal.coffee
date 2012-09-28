@@ -11,7 +11,11 @@ class Modal
         @_setValidationState isValid, event.target
   
       @_setValidationState isValid, event.target
-  
+
+  _onFormSubmit: (event) =>
+    event.preventDefault()
+    #@_modal.find('button.save:not(:disabled)').click()
+    
   _setValidationState: (isValid, target) ->
     state = if isValid then Modal.SUCCESS else Modal.ERROR
     state = "" if isValid is null
@@ -27,7 +31,7 @@ class Modal
 
   _submitHandler: (event) =>
     data = {}
-    @_modal.find('input').each(->
+    @_modal.find('input,textarea').each(->
       data[this.name] = if this.type is "checkbox" then this.checked else this.value
     )
     @submit data
@@ -43,11 +47,14 @@ class Modal
       @_modal.replaceWith(@template(templateData))
       
     @_modal.modal "show"
-    
+    @_modal.unbind() 
     @_modal.on "click", "button.save:not(:disabled)", @_submitHandler
     @_modal.on "click", ".cancel, .close", @_closeModal
-    @_modal.on "keyup", "input", @_validate
-
+    @_modal.on "keyup", "input, textarea", @_validate
+    @_modal.on "change", "input, textarea", @_validate
+    
+    @_modal.on "submit", "form", @_onFormSubmit
+    
     #@_modal.find('input').trigger "keyup"
     #@_modal.removeClass "hide fade"
     @_modal.find('input:first').trigger "focus"
