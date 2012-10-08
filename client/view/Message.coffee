@@ -5,6 +5,8 @@ do ->
   annotationObserver = null
   refreshTimeout = null
 
+  commentPopover = null
+
   Template.message_view.helpers
     show: ->
       messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
@@ -16,6 +18,9 @@ do ->
     message: ->
       Messages.findOne({short_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
 
+    comments: ->
+      MessageAnnotations.find({message_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
+
     is_bookmarked: (messageId) ->
       userId = Session.get SESSION_USER
       Messages.find({_id: messageId, bookmarked_by: userId}).count() > 0
@@ -23,14 +28,7 @@ do ->
   Template.message_view.rendered = ->
     messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
     view = this.find '.message-view'
-    annotationList = this.find '.message-annotations'
-
-    updateAnnotations = ->
-      cursor = MessageAnnotations.find({message_id: messageId})
-      if cursor.count() > 0
-        annotationList.innerHTML = Template.message_annotations(cursor)
-      else 
-        annotationList.innerHTML = Template.message_annotations_none()
+    commentButton = new ToggleButton("comments", $(this.find('.comments-toggle')), $('#content'))
 
     refresh = ->
       Meteor.clearTimeout(refreshTimeout)
@@ -46,7 +44,7 @@ do ->
               view.innerHTML = Template.message_detail_unavailable()
       , 250)
 
-    
+
     view?.className = view.className.replace "editing", ""
 
     $('.tooltip').remove()
@@ -69,10 +67,8 @@ do ->
       annotationObserver = annotationQuery.observe(
         added: (message) ->
           refresh()
-          updateAnnotations()
         changed: () ->
           refresh()
-          updateAnnotations()
       )
 
   Template.message_detail.helpers
@@ -99,7 +95,7 @@ do ->
         if typeof toChange[index] isnt "undefined"
           marker = ""
           marker += "<span data-annotation='#{annotation._id}'></span>" for annotation in toChange[index]
-          letters[index] = "<span class='annotation' title='#{toChange[index].length} annotation#{if toChange[index].length > 1 then "s" else ""}'>#{letters[index]}#{marker}</span>"
+          letters[index] = "<span class='annotation' title='#{toChange[index].length} comment#{if toChange[index].length > 1 then "s" else ""}'>#{letters[index]}#{marker}</span>"
       )
 
       return letters.join("")
@@ -161,7 +157,7 @@ do ->
               console?.error(err) if err
               modal.close()
             )
-    
+
           modal.show {title: "Login", user_name: "", submit_text: "Login"}
       else
         alert "Pleas select some text to annotate, first!"
@@ -173,13 +169,13 @@ do ->
 
       code.find('span.hovered').removeClass("hovered")
       code.find("[data-annotation=#{id}]").parent().addClass("hovered")
-        
+
     'mouseleave .message-annotations ol li': (evt) ->
       clicked = $(evt.currentTarget)
       code = clicked.parents('.message-annotations:first').nextAll('.message-view').find('.code-annotated')
-      
+
       code.find('span.hovered').removeClass("hovered")
-      
+
     'click .message-annotations ol li': (evt) ->
       clicked = $(evt.currentTarget)
       code = clicked.parents('.message-annotations:first').nextAll('.message-view').find('.code-annotated')
@@ -191,22 +187,36 @@ do ->
       code.find('span.hovered').removeClass("hovered")
       code.find('span.active').removeClass("active")
       code.find("[data-annotation=#{id}]").parent().addClass("active") if clicked.hasClass('active')
-      
-    'click .annotation': (evt) ->
+
+    'click .annotation:not(.active)': (evt) ->
+      evt.stopPropagation()
+
       annotations = []
       clicked = $(evt.currentTarget)
-      list = clicked.parents('.message-view:first').prevAll('.message-annotations:first')
       code = clicked.parent()
 
-      clicked.children('span').each(->
-        annotations.push(this.getAttribute("data-annotation"))
-      )
+      commentPopover?.popover('hide')
+      commentPopover = clicked
+
+      clicked.children('span').each(->annotations.push(this.getAttribute("data-annotation")))
 
       code.find('span.active').removeClass("active")
-      list.find('li').removeClass("active")
       annotations.forEach((a)->
-        $("##{a}").addClass("active")
         code.find("[data-annotation=#{a}]").parent().addClass("active")
+      )                               
+
+      clicked
+        .popover({content: Template.comment_popover(MessageAnnotations.find(_id:
+          {$in: annotations})), placement: 'bottom'})
+        .popover('show')
+
+      $('html').off("click.comment_popover").on("click.comment_popover", (evt)->
+        outsider = $ evt.target
+        unless outsider.hasClass('.popover') or outsider.parents('.popover').length > 0
+          clicked.popover('hide')
+          code.find('span.active').removeClass("active")
+
+        isFirst = no
       )
 
     'mouseenter .annotation': (evt) ->
@@ -222,7 +232,7 @@ do ->
       annotations.forEach((a)->
         code.find("[data-annotation=#{a}]").parent().addClass("hovered")
       )
-      
+
     'mouseleave .annotation': (evt) ->
       clicked = $(evt.currentTarget)
       code = clicked.parent()

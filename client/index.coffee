@@ -3,7 +3,11 @@ usersController = new UsersController()
 messagesController = new MessagesController()
 streamController = new StreamController()
 
+loadingIndicator = new LoadingIndicator()
+
+
 Meteor.startup ->
+
   Session.set SESSION_BOARD_ID, null
   Session.set SESSION_USER, null
 
@@ -37,10 +41,18 @@ Meteor.startup ->
     userId = Session.get SESSION_USER
     streamId = Session.get SESSION_SHORT_STREAM_ID
     messageId = Session.get SESSION_SHORT_MESSAGE_ID
-    console.log("user: #{userId} | stream: #{streamId}")
-    Meteor.subscribe 'messages', userId, streamId
+
+    loadingIndicator.setState LoadingIndicator.types.MESSAGE_LIST, true
+    loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, true
+
+    
+    Meteor.subscribe 'messages', userId, streamId, ->
+      loadingIndicator.setState LoadingIndicator.types.MESSAGE_LIST, false
+      
     Meteor.subscribe 'streamMessages', streamId
-    Meteor.subscribe 'messageAnnotations', messageId
+    Meteor.subscribe 'messageAnnotations', messageId, ->
+      loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, false
+
     Meteor.subscribe 'users', userId
     Meteor.subscribe 'streams', userId
     Meteor.subscribe 'invitations', userId

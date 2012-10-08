@@ -13,4 +13,18 @@
     {{/with}}
     {{/with}}
 </template>
+        
+<template name="loading_notifications">
+    {{#with items}}
+        {{#if has_items this}}
+            <div class="loading-list">
+                <p>
+                {{#each this}}
+                    <span>{{hint this}}</span> <br>
+                {{/each}}
+                </p>
+            </div>
+        {{/if}}
+    {{/with}}
+</template>
 

@@ -246,6 +246,29 @@ code {
   top: 0;
 }
 
+.loading-list {
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index:11;
+  font-size: 12px;
+  opacity: 0;
+  .transition(opacity, 150ms);
+}
+
+.loading-list.visible {
+  opacity: 1;
+}
+.loading-list p {
+  display: inline-block; 
+  background: @grey;
+  color: #ffffff;
+  padding: 2px 4px;
+  .drop-shadow(0,0,4px,0.2);
+}
+
 #notifications {
   
 }
@@ -691,6 +714,19 @@ line-height: 18px;*/
   background: transparent;
 }
 
+.message-annotations {
+  visibility: hidden;
+  opacity: 0;
+  .transition(opacity,250ms);
+  position: fixed;
+  bottom: 200%;
+}
+
+.comments-toggled .message-annotations {
+  visibility: visible;
+  opacity: 1;
+  position: static;
+}
 .message-annotations li p {
   display: none;
 }

@@ -1,4 +1,4 @@
-##////////// Shared code (client and server) //////////
+## Collections used by server and client
 
 Messages = new Meteor.Collection 'messages'
 StreamMessages = new Meteor.Collection 'streamMessages'

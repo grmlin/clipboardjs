@@ -4,6 +4,9 @@
     <div class="clearfix view-toolbar">
         <div class="btn-toolbar pull-left">
             <p class="message-actions btn-group">
+                {{#with comments _id}}
+                <button class="btn btn-small collapsing-btn" title="comments" data-placement="bottom"><i class="icon-comment"></i> {{this.count}}</button>
+                {{/with}}
                 {{#if is_bookmarked _id}}
                 <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
                 {{else}}
@@ -24,10 +27,22 @@
             </p>
         </div>
     </div>
+
     {{/with}}
+
+    <div class="message-annotations">
+        <h4>Comments</h4>
+        <ol>
+            {{#each comments _id}}
+            <li id="{{_id}}">
+                <span class="label">{{author}}</span>
+                <p id="{{_id}}-target" class="hide">{{comment}}</p>
+            </li>
+            {{/each}}
+        </ol>
+    </div>
     
     {{#constant}}
-    <div class="message-annotations"></div>
     <div class="message-view loading">
         <pre class="prettyprint"><code></code></pre>
     </div>
@@ -50,17 +65,10 @@
         <p>The message you requested is unavailable</p>
     </div>
 </template>
-
-<template name="message_annotations">
-    <h4>Annotations</h4>
-    <ol>
-        {{#each this}}
-            <li id="{{_id}}">
-                <span class="label">{{author}}</span>
-                <p id="{{_id}}-target" class="hide">{{comment}}</p>
-            </li>
-        {{/each}}
-    </ol>
+<template name="comment_popover">
+    {{#each this}}
+    <span class="label label-info">{{author}}</span> {{comment}}  <br>
+    {{/each}}
 </template>
 <template name="message_annotations_none">
 </template>
