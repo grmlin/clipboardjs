@@ -1,17 +1,22 @@
 <template name="list">
     {{#if show}}
+    {{#with messages}}
     <ul class="nav nav-list">
-        <li class="nav-header">Pastes <span class="label">{{message_count}}</span>
+        <li class="nav-header">Pastes <span class="label">{{message_count this}}</span>
             <a href="/list"
                class="internal-link btn btn-mini pull-right"
                title="Paste something"><i
                     class="icon-plus"></i></a></li>
     </ul>
     <ul class="nav nav-list messages-list">
-        {{#each messages}}
+        {{#each this}}
         {{> message_abstr}}
         {{/each}}
+        {{#if has_more this}}
+        
+        {{/if}}
     </ul>
+    {{/with}}
     <ul class="nav nav-list">
         <li class="nav-header">Paste Streams <span class="label">{{stream_count}}</span>
             <a href="#"

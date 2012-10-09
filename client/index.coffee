@@ -49,8 +49,11 @@ Meteor.startup ->
     Meteor.subscribe 'messages', userId, streamId, ->
       loadingIndicator.setState LoadingIndicator.types.MESSAGE_LIST, false
       
-    Meteor.subscribe 'streamMessages', streamId
+    Meteor.subscribe 'streamMessages', streamId, ->
+      console.log "Loaded " + StreamMessages.find().count() + " stream messages"
+
     Meteor.subscribe 'messageAnnotations', messageId, ->
+      console.log "Loaded " + MessageAnnotations.find().count() + " annotations"
       loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, false
 
     Meteor.subscribe 'users', userId

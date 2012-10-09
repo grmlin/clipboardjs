@@ -4,6 +4,20 @@ MessagesController = do () ->
   Messages.update = ->
   
   class MessagesController
+    constructor: ->
+      Messages.find().observe
+        added: =>
+          @getMessageCount()
+        removed: =>
+          @getMessageCount()
+          
+    getMessageCount: ->
+      userId = Session.get(SESSION_USER)
+      Meteor.call("getMessageCount", userId, (err, res) ->
+        console?.error(err) if err
+        Session.set SESSION_MESSAGE_COUNT, res
+      )
+    
     resetMessageSession: ->
       Session.set SESSION_SHORT_MESSAGE_ID, ""
 

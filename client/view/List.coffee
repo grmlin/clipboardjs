@@ -36,8 +36,8 @@ do ->
           {time: -1}
         }).fetch().slice(0, 10)
 
-    message_count: ->
-      Messages.find({user_id: Session.get(SESSION_USER), stream_id: null}).count()
+    message_count: () ->
+      Session.get SESSION_MESSAGE_COUNT
 
     stream_count: ->
       Streams.find({users: Session.get(SESSION_USER)}).count()

@@ -8,6 +8,9 @@ do() ->
 
   # TODO check user ids on existence?
   Meteor.methods
+    getMessageCount: (userId) ->
+      Messages.find(user_id: userId).count()
+      
     getUserMessages: (userId) ->
       messages = Messages.find user_id: userId
       return messages.fetch()

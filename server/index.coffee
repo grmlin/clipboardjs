@@ -11,7 +11,7 @@ Meteor.startup ->
     streams = Streams.find users: userId
     return streams
 
-  Meteor.publish "messages", (userId, streamId) ->
+  Meteor.publish "messages", (userId, streamId, pageNumber = 1, nPerPage = 10) ->
     # Get the corrosponding messages
     messages = Messages.find({
     $or: [
@@ -23,11 +23,13 @@ Meteor.startup ->
     ]
     }, {
     fields:
-      {
       raw: false
       highlighted: false
       user_id: false
-      }
+    sort:
+      time: -1  
+    skip: (pageNumber-1)*nPerPage 
+    limit: nPerPage
     })
 
     console.log "publishing #{messages.count()} messages for user #{userId}"
