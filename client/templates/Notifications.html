@@ -3,28 +3,17 @@
     {{#with count this}}
     {{#if this}}
     <div class="pull-right">
-        &nbsp; <button class="btn btn-info btn-small show-notifications"><i class="icon-envelope icon-white"></i> {{this}}</button>
+        &nbsp;
+        <button class="btn btn-info btn-small show-notifications"><i class="icon-envelope icon-white"></i> {{this}}
+        </button>
     </div>
     {{else}}
     <div class="pull-right">
-        &nbsp; <button class="btn btn-small" disabled="disabled"><i class="icon-envelope icon-white"></i> 0</button>
+        &nbsp;
+        <button class="btn btn-small" disabled="disabled"><i class="icon-envelope icon-white"></i> 0</button>
     </div>
     {{/if}}
     {{/with}}
-    {{/with}}
-</template>
-        
-<template name="loading_notifications">
-    {{#with items}}
-        {{#if has_items this}}
-            <div class="loading-list">
-                <p>
-                {{#each this}}
-                    <span>{{hint this}}</span> <br>
-                {{/each}}
-                </p>
-            </div>
-        {{/if}}
     {{/with}}
 </template>
 

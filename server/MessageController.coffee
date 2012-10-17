@@ -27,24 +27,6 @@ do() ->
 
       return message
 
-
-
-    getHighlightedMessage: (userId, shortId) ->
-      #TODO validation "canView..." for server and client
-      console.log "loading message #{shortId}"
-      message = Messages.findOne short_id: shortId
-      if typeof message isnt "undefined"
-        return "<code class=#{message.language}>#{message.highlighted}</code>"
-      else
-        throw new Meteor.Error(404, "Message not found")
-
-    getRawMessage: (userId, shortId) ->
-      message = Messages.findOne short_id: shortId
-      if typeof message isnt "undefined"
-        return message.raw
-      else
-        throw new Meteor.Error(404, "Message not found")
-
     createMessage: (userId, content, type, streamId = null) ->
       highlighter = new Highlighter()
       abstractor = new MessageAbstractor()

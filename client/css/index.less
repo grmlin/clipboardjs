@@ -218,7 +218,7 @@ code {
 }
 
 .app .nav a i {
-  opacity: 0.5;
+  //opacity: 0.5;
 }
 
 .app .nav a:hover i,
@@ -254,19 +254,19 @@ code {
   text-align: center;
   z-index:11;
   font-size: 12px;
-  opacity: 0;
-  .transition(opacity, 150ms);
+  display: none;
 }
 
-.loading-list.visible {
-  opacity: 1;
-}
-.loading-list p {
+.loading-list ul {
   display: inline-block; 
   background: @grey;
   color: #ffffff;
   padding: 2px 4px;
   .drop-shadow(0,0,4px,0.2);
+}
+
+.loading-list ul li {
+  list-style: none;
 }
 
 #notifications {
@@ -411,6 +411,20 @@ line-height: 18px;*/
   font-weight: normal;
 }
 
+#sidebar .nav-list .nav-header .nav-pagination {
+  position: relative;
+  top: -4px;
+  display: inline-block;
+}
+#sidebar .nav-list .nav-header .nav-pagination button {
+  margin: 0;
+  padding: 0;
+}
+
+#sidebar .nav-list .nav-header .nav-pagination button i {
+  margin: 0;
+}
+
 #sidebar .nav-list .alert {
   margin: 0 -15px;
   font-size: 12px;
@@ -431,13 +445,16 @@ line-height: 18px;*/
   text-align: center;
 }
 
-.nav-list .nav-header a.btn.btn-mini.pull-right {
+.nav-list .nav-header .pull-right .btn.btn-mini {
   padding: 0px 4px 2px 6px;
   margin-right: 0;
   position: relative;
   top: -3px;
 }
 
+.nav-list .nav-header .pull-right + .pull-right {
+  margin-right: 10px;
+}
 .nav-list li.nav-link-icon a {
   color: lighten(#000, 60%);
   background: #fff;

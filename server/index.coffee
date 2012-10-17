@@ -1,4 +1,5 @@
 Meteor.startup ->
+
   Meteor.publish "users", (userId) ->
     user = Users.find userId,
       fields:
@@ -11,7 +12,7 @@ Meteor.startup ->
     streams = Streams.find users: userId
     return streams
 
-  Meteor.publish "messages", (userId, streamId, pageNumber = 1, nPerPage = 10) ->
+  Meteor.publish "messages", (userId, pageNumber = 1, nPerPage = 10) ->
     # Get the corrosponding messages
     messages = Messages.find({
     $or: [
@@ -27,12 +28,21 @@ Meteor.startup ->
       highlighted: false
       user_id: false
     sort:
-      time: -1  
-    skip: (pageNumber-1)*nPerPage 
+      time: -1
+    skip: (pageNumber - 1) * nPerPage
     limit: nPerPage
     })
 
     console.log "publishing #{messages.count()} messages for user #{userId}"
+    return messages
+
+  Meteor.publish "current_message", (messageId) ->
+    sleep(3)
+    messages = Messages.find({short_id: messageId},
+      {
+      fields:
+        user_id: false
+      })
     return messages
 
   Meteor.publish "streamMessages", (streamId, offset, max) ->
@@ -53,3 +63,10 @@ Meteor.startup ->
 
   Meteor.publish "invitations", (userId) ->
     Invitations.find invitee: userId
+
+
+  sleep = (s) ->
+    e = new Date().getTime() + (s * 1000);
+    nthg() while (new Date().getTime()) <= e
+
+  nthg = ->

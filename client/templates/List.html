@@ -2,27 +2,53 @@
     {{#if show}}
     {{#with messages}}
     <ul class="nav nav-list">
-        <li class="nav-header">Pastes <span class="label">{{message_count this}}</span>
-            <a href="/list"
-               class="internal-link btn btn-mini pull-right"
-               title="Paste something"><i
-                    class="icon-plus"></i></a></li>
+        <li class="nav-header">Pastes 
+            <span class="label">{{message_count this}}</span>
+            <div class="nav-pagination clearfix">
+                {{#if has_less_messages}}
+                <button class="pull-left btn btn-mini btn-link show-less-messages"><i class="icon-chevron-left"></i></button>
+                {{else}}
+                <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-left"></i></button>
+                {{/if}}
+                {{#if has_more_messages}}
+                <button class="pull-left btn btn-mini btn-link show-more-messages"><i class="icon-chevron-right"></i></button>
+                {{else}}
+                <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-right"></i></button>
+                {{/if}}
+            </div>
+            <div class="pull-right">
+                {{#if is_pasting}}
+                <a href="/list"
+                   class="internal-link btn btn-mini btn-inverse"
+                   title="Paste something"><i
+                        class="icon-pencil icon-white"></i>
+                </a>
+                {{else}}
+                <a href="/list"
+                   class="internal-link btn btn-mini"
+                   title="Paste something"><i
+                        class="icon-pencil"></i>
+                </a>
+                {{/if}}
+                
+            </div>
+        </li>
     </ul>
     <ul class="nav nav-list messages-list">
         {{#each this}}
         {{> message_abstr}}
         {{/each}}
-        {{#if has_more this}}
-        
-        {{/if}}
     </ul>
     {{/with}}
     <ul class="nav nav-list">
         <li class="nav-header">Paste Streams <span class="label">{{stream_count}}</span>
+            <div class="pull-right">
             <a href="#"
                class="new-stream btn btn-mini pull-right"
                title="Create a stream"><i
-                    class="icon-plus"></i></a></li>
+                    class="icon-plus"></i></a>
+                </div>
+        </li>
     </ul>
 
     <ul class="nav nav-list messages-list">

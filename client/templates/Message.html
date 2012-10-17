@@ -1,13 +1,15 @@
 <template name="message_view">
     {{#if show}}
+    
     {{#with message}}
+    {{#if this}}
     <div class="clearfix view-toolbar">
         <div class="btn-toolbar pull-left">
             <p class="message-actions btn-group">
                 {{#with comments _id}}
                 <button class="btn btn-small collapsing-btn" title="comments" data-placement="bottom"><i class="icon-comment"></i> {{this.count}}</button>
                 {{/with}}
-                {{#if is_bookmarked _id}}
+                {{#if is_bookmarked bookmarked_by}}
                 <button class="remove-bookmark btn btn-small btn-info collapsing-btn" title="remove bookmark" data-placement="bottom" data-original-title="remove bookmark"><i class="icon-bookmark icon-white"></i></button>
                 {{else}}
                 <button class="add-bookmark btn btn-small collapsing-btn" title="add bookmark" data-placement="bottom" data-original-title="add bookmark"><i class="icon-bookmark"></i></button>
@@ -28,8 +30,6 @@
         </div>
     </div>
 
-    {{/with}}
-
     <div class="message-annotations">
         <h4>Comments</h4>
         <ol>
@@ -42,21 +42,19 @@
         </ol>
     </div>
     
-    {{#constant}}
-    <div class="message-view loading">
-        <pre class="prettyprint"><code></code></pre>
+    <div class="message-view">
+        <p class="message-detail">
+            <span class="lang">{{language}}</span></span>
+        </p>
+        <p class="author-detail">
+            <span class="lang">{{user_name}}</span>
+        </p>
+        <pre class="prettyprint"><code class="code-annotated">{{{annotated this}}}</code><code class="code-view {{language}}">{{{highlighted}}}</code><code class="code-raw">{{{raw this}}}</code></pre>
     </div>
-    {{/constant}}
     {{/if}}
-</template>
-<template name="message_detail">
-    <p class="message-detail">
-        <span class="lang">{{language}}</span></span>
-    </p>
-    <p class="author-detail">
-        <span class="lang">{{user_name}}</span>
-    </p>
-    <pre class="prettyprint"><code class="code-annotated">{{{annotated this}}}</code><code class="code-view {{language}}">{{{highlighted}}}</code><code class="code-raw">{{{raw this}}}</code></pre>
+    {{/with}}
+    
+    {{/if}}
 </template>
 <template name="message_detail_unavailable">
     <div class="alert alert-block">
@@ -75,6 +73,6 @@
 <template name="message_raw">
     <div class="raw-file">
         <button class="close">&times;</button>
-        <textarea>{{message}}</textarea>
+        <textarea>{{raw}}</textarea>
     </div>
 </template>

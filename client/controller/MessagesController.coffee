@@ -5,19 +5,7 @@ MessagesController = do () ->
   
   class MessagesController
     constructor: ->
-      Messages.find().observe
-        added: =>
-          @getMessageCount()
-        removed: =>
-          @getMessageCount()
           
-    getMessageCount: ->
-      userId = Session.get(SESSION_USER)
-      Meteor.call("getMessageCount", userId, (err, res) ->
-        console?.error(err) if err
-        Session.set SESSION_MESSAGE_COUNT, res
-      )
-    
     resetMessageSession: ->
       Session.set SESSION_SHORT_MESSAGE_ID, ""
 
@@ -84,15 +72,4 @@ MessagesController = do () ->
 
     updateUserName: (userId, userName) ->
       Meteor.call "updateMessageOwner", userId, userName, (err, res) ->
-        console?.log err, res
-      
-    getHighlightedMessage: (messageShortId, callback) ->
-      Meteor.call("getHighlightedMessage", Session.get(SESSION_USER), messageShortId, (err, message) ->
-        callback.call this, message
-      )
-
-    getRawMessage: (messageId, callback) ->
-      Meteor.call("getRawMessage", Session.get(SESSION_USER), messageId, (err, message) ->
-        callback.call this, message
-      )
-      
+        console?.log err, res    

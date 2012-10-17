@@ -1,13 +1,18 @@
 boardsRouter = new BoardsRouter()
+
+progress = new SubscriptionProgress()
+progressView = new SubscriptionProgressTemplateHelper(progress)
+
 usersController = new UsersController()
 messagesController = new MessagesController()
 streamController = new StreamController()
 
 loadingIndicator = new LoadingIndicator()
 
+messagePagination = new MessagesPagination "Messages", Messages.find()
+
 
 Meteor.startup ->
-
   Session.set SESSION_BOARD_ID, null
   Session.set SESSION_USER, null
 
@@ -30,11 +35,11 @@ Meteor.startup ->
       ctx = new Meteor.deps.Context()
       ctx.on_invalidate(update)
       ctx.run ->
-          userId = Session.get SESSION_USER
-          unless userId is null
-            console.log("The current user is now", userId);
-            initializeApp()
-            
+        userId = Session.get SESSION_USER
+        unless userId is null
+          console.log("The current user is now", userId);
+          initializeApp()
+
     update()
 
   Meteor.autosubscribe ->
@@ -42,13 +47,8 @@ Meteor.startup ->
     streamId = Session.get SESSION_SHORT_STREAM_ID
     messageId = Session.get SESSION_SHORT_MESSAGE_ID
 
-    loadingIndicator.setState LoadingIndicator.types.MESSAGE_LIST, true
     loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, true
 
-    
-    Meteor.subscribe 'messages', userId, streamId, ->
-      loadingIndicator.setState LoadingIndicator.types.MESSAGE_LIST, false
-      
     Meteor.subscribe 'streamMessages', streamId, ->
       console.log "Loaded " + StreamMessages.find().count() + " stream messages"
 
@@ -59,5 +59,5 @@ Meteor.startup ->
     Meteor.subscribe 'users', userId
     Meteor.subscribe 'streams', userId
     Meteor.subscribe 'invitations', userId
-    
+
   watchUser()

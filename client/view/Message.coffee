@@ -16,62 +16,21 @@ do ->
       isRightState and isMessageSelected
 
     message: ->
-      Messages.findOne({short_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
+      messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
+      message = Messages.findOne({short_id: messageId})
 
+      if message and message.raw and message.highlighted
+        return message
+      else 
+        return null
+        
     comments: ->
       MessageAnnotations.find({message_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
 
-    is_bookmarked: (messageId) ->
+    is_bookmarked: (bookmarkedByArray) ->
       userId = Session.get SESSION_USER
-      Messages.find({_id: messageId, bookmarked_by: userId}).count() > 0
-
-  Template.message_view.rendered = ->
-    messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
-    view = this.find '.message-view'
-    commentButton = new ToggleButton("comments", $(this.find('.comments-toggle')), $('#content'))
-
-    refresh = ->
-      Meteor.clearTimeout(refreshTimeout)
-      refreshTimeout = Meteor.setTimeout(->
-        console?.log "refreshing message view"
-        if view or $(view).hasClass("loading")
-          Meteor.call "getMessage", messageId, Session.get(SESSION_USER), (err, message) =>
-            view.className = view.className.replace "loading", ""
-            if typeof err is "undefined"
-              view.innerHTML = Template.message_detail(message)
-            else
-              console.log err
-              view.innerHTML = Template.message_detail_unavailable()
-      , 250)
-
-
-    view?.className = view.className.replace "editing", ""
-
-    $('.tooltip').remove()
-    $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
-
-    messageQuery = Messages.find({short_id: messageId})
-    annotationQuery = MessageAnnotations.find(message_id: messageId)
-
-    messageObserver.stop() unless messageObserver is null
-    annotationObserver.stop() unless annotationObserver is null
-
-    if messageQuery
-      messageObserver = messageQuery.observe(
-        added: (message) ->
-          refresh()
-        removed: ->
-          refresh()
-      )
-    if annotationQuery
-      annotationObserver = annotationQuery.observe(
-        added: (message) ->
-          refresh()
-        changed: () ->
-          refresh()
-      )
-
-  Template.message_detail.helpers
+      _.indexOf(bookmarkedByArray, userId) isnt -1
+      
     raw: (message) ->
       return HtmlEncoder.encode(message.raw)
 
@@ -100,6 +59,16 @@ do ->
 
       return letters.join("")
 
+  Template.message_view.rendered = ->
+    messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
+    view = this.find '.message-view'
+    commentButton = new ToggleButton("comments", $(this.find('.comments-toggle')), $('#content'))
+
+    view?.className = view.className.replace "editing", ""
+
+    $('.tooltip').remove()
+    $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
+
   Template.message_view.events =
     'click .share': (evt) ->
       evt.preventDefault()
@@ -108,15 +77,14 @@ do ->
         url: url
 
     "click .raw": (evt) ->
-      messagesController.getRawMessage(Session.get(SESSION_SHORT_MESSAGE_ID), (message) ->
-        raw = $ Template.message_raw({message: message})
-        $('body').append(raw)
-        $('body').children('.app').hide()
+      message = Messages.findOne({short_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
+      raw = $ Template.message_raw({raw: message.raw})
+      $('body').append(raw)
+      $('body').children('.app').hide()
 
-        $('.raw-file .close').click(->
-          raw.remove()
-          $('body').children('.app').show()
-        )
+      $('.raw-file .close').click(->
+        raw.remove()
+        $('body').children('.app').show()
       )
 
     'click .add-bookmark': (evt) ->

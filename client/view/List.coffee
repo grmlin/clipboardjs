@@ -16,14 +16,14 @@ do ->
       Streams.find({users: Session.get(SESSION_USER)}).count() > 0
 
     messages: ->
-      Messages.find(
-        {
-        stream_id: null
-        },
-        {sort:
-          {time: -1}
-        }).fetch().slice(0, 10)
+      Messages.find()
 
+    has_more_messages: () ->
+      messagePagination.hasMore()
+
+    has_less_messages: () ->
+      messagePagination.hasLess()
+      
     bookmarked_messages: ->
       Messages.find({bookmarked_by: Session.get(SESSION_USER)},
         {sort:
@@ -36,7 +36,7 @@ do ->
           {time: -1}
         }).fetch().slice(0, 10)
 
-    message_count: () ->
+    message_count: ->
       Session.get SESSION_MESSAGE_COUNT
 
     stream_count: ->
@@ -46,6 +46,12 @@ do ->
       Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
 
   Template.list.events =
+    'click .show-more-messages': (evt) ->
+      messagePagination.next()
+    
+    'click .show-less-messages': (evt) ->
+      messagePagination.back()
+      
     'click .new-stream': (evt) ->
       evt.preventDefault()
       messagesController.createStream (id) ->

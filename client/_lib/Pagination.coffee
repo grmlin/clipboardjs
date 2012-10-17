@@ -1,4 +1,0 @@
-class Pagination
-  constructor: ->
-    
-  
