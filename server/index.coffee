@@ -37,7 +37,7 @@ Meteor.startup ->
     return messages
 
   Meteor.publish "current_message", (messageId) ->
-    sleep(3)
+    #sleep(3)
     messages = Messages.find({short_id: messageId},
       {
       fields:
