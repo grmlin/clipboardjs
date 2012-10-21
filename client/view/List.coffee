@@ -17,8 +17,10 @@ do ->
 
     messages: ->
       Messages.find({
-        stream_id: null
-      },{
+      $and: [
+        {stream_id: null}
+      ]
+      }, {
       sort:
         time: -1
       })
@@ -28,7 +30,7 @@ do ->
 
     has_less_messages: () ->
       messagePagination.hasLess()
-      
+
     bookmarked_messages: ->
       Messages.find({bookmarked_by: Session.get(SESSION_USER)},
         {sort:
@@ -39,24 +41,36 @@ do ->
       Streams.find({users: Session.get(SESSION_USER)},
         {sort:
           {time: -1}
-        }).fetch().slice(0, 10)
+        })
+      
+    has_more_streams: () ->
+      streamsPagination.hasMore()
+
+    has_less_streams: () ->
+      streamsPagination.hasLess()
 
     message_count: ->
-      Session.get SESSION_MESSAGE_COUNT
+      messagePagination.getCount()
 
     stream_count: ->
-      Streams.find({users: Session.get(SESSION_USER)}).count()
+      streamsPagination.getCount()
 
-    bookmark_count = ->
-      Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
+  bookmark_count = ->
+    Messages.find({bookmarked_by: Session.get(SESSION_USER)}).count()
 
   Template.list.events =
     'click .show-more-messages': (evt) ->
       messagePagination.next()
-    
+
     'click .show-less-messages': (evt) ->
       messagePagination.back()
-      
+    
+    'click .show-more-streams': (evt) ->
+      streamsPagination.next()
+
+    'click .show-less-streams': (evt) ->
+      streamsPagination.back()
+
     'click .new-stream': (evt) ->
       evt.preventDefault()
       messagesController.createStream (id) ->

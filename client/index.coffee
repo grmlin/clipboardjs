@@ -7,9 +7,10 @@ usersController = new UsersController()
 messagesController = new MessagesController()
 streamController = new StreamController()
 
-loadingIndicator = new LoadingIndicator()
+#loadingIndicator = new LoadingIndicator()
 
-messagePagination = new MessagesPagination "Messages", Messages.find()
+messagePagination = new MessagesPagination()
+streamsPagination = new StreamsPagination()
 
 
 Meteor.startup ->
@@ -44,16 +45,10 @@ Meteor.startup ->
 
   # Subscribing 
   progress.addSubscription (subscribe) ->
-    subscribe 'stream_messages', Session.get(SESSION_SHORT_STREAM_ID)
-
-  progress.addSubscription (subscribe) ->
     subscribe 'messageAnnotations', Session.get(SESSION_SHORT_MESSAGE_ID)
 
   progress.addSubscription (subscribe) ->
     subscribe 'users', Session.get(SESSION_USER)
-
-  progress.addSubscription (subscribe) ->
-    subscribe 'streams', Session.get(SESSION_USER)
 
   progress.addSubscription (subscribe) ->
     subscribe 'invitations', Session.get(SESSION_USER)

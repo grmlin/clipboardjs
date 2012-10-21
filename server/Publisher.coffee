@@ -8,8 +8,15 @@ Publisher =
       console.log "Publishing user #{userId}"
       return user
   
-    Meteor.publish "streams", (userId) ->
-      streams = Streams.find users: userId
+    Meteor.publish "streams", (userId, pageNumber = 1, nPerPage = 10) ->
+      streams = Streams.find({users: userId},{
+        skip: (pageNumber - 1) * nPerPage
+        limit: nPerPage
+      })
+      console.log "skipping #{(pageNumber - 1) * nPerPage}"
+      console.log "limit #{nPerPage}"
+      console.log("Publishing #{streams.fetch().length}/#{Streams.find().count()} streams, page: ", pageNumber," n: ", nPerPage)
+
       return streams
   
     Meteor.publish "messages", (userId, pageNumber = 1, nPerPage = 10) ->
@@ -37,13 +44,18 @@ Publisher =
       return messages
   
     Meteor.publish "current_message", (messageId) ->
-      #sleep(3)
       messages = Messages.find({short_id: messageId},
         {
         fields:
           user_id: false
         })
       return messages
+      
+    Meteor.publish "current_stream", (streamid) ->
+      streams = Streams.find({short_id: streamid},
+        {
+        })
+      return streams
   
     Meteor.publish "stream_messages", (streamId, offset, max) ->
       messages = Messages.find stream_id: streamId

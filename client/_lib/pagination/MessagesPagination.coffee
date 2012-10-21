@@ -1,43 +1,16 @@
 class MessagesPagination extends AbstractPagination
   @N_PER_PAGE: 10
+  @getCountOptions: ->
+    {user_id: Session.get(SESSION_USER)}
 
   constructor: () ->
-    super(SESSION_MESSAGE_COUNT, MessagesPagination.N_PER_PAGE)
+    super("Messages", MessagesPagination.getCountOptions, MessagesPagination.N_PER_PAGE)
 
     progress.addSubscription (subscribe) ->
       subscribe 'current_message', Session.get(SESSION_SHORT_MESSAGE_ID)
-    
-    ###Meteor.autosubscribe =>
-      messageId = Session.get SESSION_SHORT_MESSAGE_ID
-      Meteor.subscribe 'current_message', messageId, ->
-        console.log("message arrived")
-    ###
+
     progress.addSubscription (subscribe) =>
-      userId = Session.get SESSION_USER
-      page = @_getPageNumber()
-      Meteor.subscribe 'messages', userId, page, @nPerPage, userId
-      
-      subscribe 'messages', userId, page, @nPerPage, userId 
-    
-      ###
-    Meteor.autosubscribe =>
-      userId = Session.get SESSION_USER
-      page = @_getPageNumber()
-      
-      loadingIndicator?.setState LoadingIndicator.types.MESSAGE_LIST, true
+      subscribe 'messages', Session.get(SESSION_USER), @_getPageNumber(), @nPerPage
 
-      Meteor.subscribe 'messages', userId, page, @nPerPage, userId, ->
-        loadingIndicator?.setState LoadingIndicator.types.MESSAGE_LIST, false
-    ###
-
-    Messages.find().observe
-      added: =>
-        @getCollectionCount()
-      removed: =>
-        @getCollectionCount()
-
-  getCollectionCount: ->
-    Meteor.call("getCollectionCount", 'Messages', {user_id: Session.get(SESSION_USER)}, (err, res) ->
-      console?.error(err) if err
-      Session.set SESSION_MESSAGE_COUNT, res
-    )
+    progress.addSubscription (subscribe) ->
+      subscribe 'stream_messages', Session.get(SESSION_SHORT_STREAM_ID)

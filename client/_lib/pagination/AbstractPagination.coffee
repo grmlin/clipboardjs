@@ -1,10 +1,24 @@
 class AbstractPagination
-  constructor: (@sessionCountKey, @nPerPage = 10) ->
-    @sessionPageNumberKey = "#{@sessionCountKey}_page_number"
+  constructor: (@collectionName, @countOptionsCb, @nPerPage = 10) ->
+    @sessionCountKey = "#{@collectionName}_pagination_count"
+    @sessionPageNumberKey = "#{@collectionName}_pagination_page_number"
     
     Session.set @sessionCountKey, 0
+
+    window[@collectionName].find().observe
+      added: =>
+        @_getCollectionCount()
+      removed: =>
+        @_getCollectionCount()
+        
     @_setPageNumber()
 
+  _getCollectionCount: ->
+    Meteor.call("getCollectionCount", @collectionName, @countOptionsCb(), (err, res) =>
+      console?.error(err) if err
+      Session.set @sessionCountKey, res
+    )
+    
   _getPageNumber: ->
     Session.get @sessionPageNumberKey
   
@@ -16,6 +30,9 @@ class AbstractPagination
   
   hasLess: ->
     @_getPageNumber() > 1
+  
+  getCount: ->
+    Session.get @sessionCountKey
     
   next: ->
     page = @_getPageNumber()
