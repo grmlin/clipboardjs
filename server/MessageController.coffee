@@ -3,14 +3,14 @@ do() ->
   ABSTRACT_PUFFER = 10
   ABSTRACT_LINES = 20
   ABSTRACT_LINE_PUFFER = 5
-  
+
   shortid = meteorNpm.require "shortid"
 
   # TODO check user ids on existence?
   Meteor.methods
     getMessageCount: (userId) ->
       Messages.find(user_id: userId).count()
-      
+
     getUserMessages: (userId) ->
       messages = Messages.find user_id: userId
       return messages.fetch()
@@ -18,9 +18,7 @@ do() ->
     getMessage: (shortId, userId) ->
       console.log "loading message #{shortId}"
       message = Messages.findOne short_id: shortId
-      unless message
-        message = StreamMessages.findOne short_id: shortId
-        
+
       throw new Meteor.Error(404, "Message not found") unless message
 
       throw new Meteor.Error(403, "Access Denied") if message.is_private and userId isnt message.user_id
@@ -30,14 +28,13 @@ do() ->
     createMessage: (userId, content, type, streamId = null) ->
       highlighter = new Highlighter()
       abstractor = new MessageAbstractor()
-      
+
       message_raw = content
-        
+
       messageHighlighted = highlighter.highlight message_raw, type
       messageAbstract = abstractor.getAbstract message_raw, messageHighlighted.language
-      
-      collection = if streamId is null then Messages else StreamMessages
-      newid = collection.insert
+
+      newid = Messages.insert
         abstract: messageAbstract
         bookmarked_by: []
         highlighted: messageHighlighted.value
@@ -69,7 +66,7 @@ do() ->
           }, multi: true
         )
       return "messages updated"
-      
+
     addAnnotation: (shortMessageId, userId, start, end, comment) ->
       id = MessageAnnotations.insert
         comment: comment
@@ -78,14 +75,14 @@ do() ->
         end: end
         user_id: userId
         author: Users.findOne(userId)?.user_name
-        
+
       console.log "New annotation added: #{id}"
-      
+
       return id
 
     updateAnnotationOwner: (userId, userName) ->
       MessageAnnotations.update(
-        {user_id:userId},
+        {user_id: userId},
         {$set:
           {user_name: userName}
         }, multi: true

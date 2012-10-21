@@ -10,7 +10,7 @@ do ->
 
   reactiveList = () ->
     Meteor.renderList(
-      StreamMessages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)},{sort:{time: 1}})
+      Messages.find({stream_id: Session.get(SESSION_SHORT_STREAM_ID)},{sort:{time: 1}})
     , (message) ->
       Meteor.defer(-> 
         $('html,body').stop(true, true).animate(

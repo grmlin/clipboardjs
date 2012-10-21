@@ -16,7 +16,12 @@ do ->
       Streams.find({users: Session.get(SESSION_USER)}).count() > 0
 
     messages: ->
-      Messages.find()
+      Messages.find({
+        stream_id: null
+      },{
+      sort:
+        time: -1
+      })
 
     has_more_messages: () ->
       messagePagination.hasMore()

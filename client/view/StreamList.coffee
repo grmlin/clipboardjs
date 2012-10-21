@@ -7,7 +7,7 @@ Template.stream_list.show = ->
 Template.stream_list.events = 
   'click .prettyprint code': (evt) ->
     code = evt.currentTarget
-    message = StreamMessages.findOne({short_id:code.getAttribute('data-message-id')})
+    message = Messages.findOne({short_id:code.getAttribute('data-message-id')})
     isAbstract = code.getAttribute("data-is-abstract") is "yes"
     
     if isAbstract

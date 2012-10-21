@@ -42,22 +42,20 @@ Meteor.startup ->
 
     update()
 
-  Meteor.autosubscribe ->
-    userId = Session.get SESSION_USER
-    streamId = Session.get SESSION_SHORT_STREAM_ID
-    messageId = Session.get SESSION_SHORT_MESSAGE_ID
+  # Subscribing 
+  progress.addSubscription (subscribe) ->
+    subscribe 'stream_messages', Session.get(SESSION_SHORT_STREAM_ID)
 
-    loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, true
+  progress.addSubscription (subscribe) ->
+    subscribe 'messageAnnotations', Session.get(SESSION_SHORT_MESSAGE_ID)
 
-    Meteor.subscribe 'streamMessages', streamId, ->
-      console.log "Loaded " + StreamMessages.find().count() + " stream messages"
+  progress.addSubscription (subscribe) ->
+    subscribe 'users', Session.get(SESSION_USER)
 
-    Meteor.subscribe 'messageAnnotations', messageId, ->
-      console.log "Loaded " + MessageAnnotations.find().count() + " annotations"
-      loadingIndicator.setState LoadingIndicator.types.ANNOTATIONS, false
+  progress.addSubscription (subscribe) ->
+    subscribe 'streams', Session.get(SESSION_USER)
 
-    Meteor.subscribe 'users', userId
-    Meteor.subscribe 'streams', userId
-    Meteor.subscribe 'invitations', userId
+  progress.addSubscription (subscribe) ->
+    subscribe 'invitations', Session.get(SESSION_USER)
 
   watchUser()

@@ -12,7 +12,14 @@ class MessagesPagination extends AbstractPagination
       Meteor.subscribe 'current_message', messageId, ->
         console.log("message arrived")
     ###
-  
+    progress.addSubscription (subscribe) =>
+      userId = Session.get SESSION_USER
+      page = @_getPageNumber()
+      Meteor.subscribe 'messages', userId, page, @nPerPage, userId
+      
+      subscribe 'messages', userId, page, @nPerPage, userId 
+    
+      ###
     Meteor.autosubscribe =>
       userId = Session.get SESSION_USER
       page = @_getPageNumber()
@@ -21,6 +28,7 @@ class MessagesPagination extends AbstractPagination
 
       Meteor.subscribe 'messages', userId, page, @nPerPage, userId, ->
         loadingIndicator?.setState LoadingIndicator.types.MESSAGE_LIST, false
+    ###
 
     Messages.find().observe
       added: =>
