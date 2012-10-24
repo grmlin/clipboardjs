@@ -3,7 +3,7 @@ do ->
   inviteModal = new InviteModal()
   
   isSubscribed = ->
-    userId = Session.get SESSION_USER
+    userId = Meteor.userId()
     streamShortId = Session.get SESSION_SHORT_STREAM_ID
 
     Streams.find({short_id: streamShortId, users: userId}).count() > 0
@@ -18,7 +18,7 @@ do ->
           scrollTop: $('#stream-list').height()
           }, 400)
       )
-      return Template.stream_list_item({message:message,is_user:message.user_id is Session.get(SESSION_USER)})
+      return Template.stream_list_item({message:message,is_user:message.user_id is Meteor.userId()})
     , ->
       return Template.stream_list_empty()
     )
@@ -39,7 +39,7 @@ do ->
 
     is_owner: ->
       streamId = Session.get(SESSION_SHORT_STREAM_ID)
-      userId = Session.get(SESSION_USER)
+      userId = Meteor.userId()
       Streams.findOne({short_id: streamId})?.owner is userId
 
     is_subscribed: ->

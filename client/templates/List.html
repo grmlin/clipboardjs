@@ -1,17 +1,19 @@
 <template name="list">
-    {{#if show}}
     {{#with messages}}
     <ul class="nav nav-list">
-        <li class="nav-header">Pastes 
+        <li class="nav-header">Pastes
             <span class="label">{{message_count this}}</span>
+
             <div class="nav-pagination clearfix">
                 {{#if has_less_messages}}
-                <button class="pull-left btn btn-mini btn-link show-less-messages"><i class="icon-chevron-left"></i></button>
+                <button class="pull-left btn btn-mini btn-link show-less-messages"><i class="icon-chevron-left"></i>
+                </button>
                 {{else}}
                 <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-left"></i></button>
                 {{/if}}
                 {{#if has_more_messages}}
-                <button class="pull-left btn btn-mini btn-link show-more-messages"><i class="icon-chevron-right"></i></button>
+                <button class="pull-left btn btn-mini btn-link show-more-messages"><i class="icon-chevron-right"></i>
+                </button>
                 {{else}}
                 <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-right"></i></button>
                 {{/if}}
@@ -30,7 +32,7 @@
                         class="icon-pencil"></i>
                 </a>
                 {{/if}}
-                
+
             </div>
         </li>
     </ul>
@@ -41,26 +43,29 @@
     </ul>
     {{/with}}
     <ul class="nav nav-list">
-        <li class="nav-header">Paste Streams 
+        <li class="nav-header">Paste Streams
             <span class="label">{{stream_count}}</span>
+
             <div class="nav-pagination clearfix">
                 {{#if has_less_streams}}
-                <button class="pull-left btn btn-mini btn-link show-less-streams"><i class="icon-chevron-left"></i></button>
+                <button class="pull-left btn btn-mini btn-link show-less-streams"><i class="icon-chevron-left"></i>
+                </button>
                 {{else}}
                 <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-left"></i></button>
                 {{/if}}
                 {{#if has_more_streams}}
-                <button class="pull-left btn btn-mini btn-link show-more-streams"><i class="icon-chevron-right"></i></button>
+                <button class="pull-left btn btn-mini btn-link show-more-streams"><i class="icon-chevron-right"></i>
+                </button>
                 {{else}}
                 <button class="pull-left btn btn-mini btn-link" disabled><i class="icon-chevron-right"></i></button>
                 {{/if}}
             </div>
             <div class="pull-right">
-            <a href="#"
-               class="new-stream btn btn-mini pull-right"
-               title="Create a stream"><i
-                    class="icon-plus"></i></a>
-                </div>
+                <a href="#"
+                   class="new-stream btn btn-mini pull-right"
+                   title="Create a stream"><i
+                        class="icon-plus"></i></a>
+            </div>
         </li>
     </ul>
 
@@ -68,14 +73,7 @@
         {{#each streams}}
         {{> stream_abstr}}
         {{/each}}
-        <li class="nav-header">Bookmarks <span class="label">{{bookmark_count}}</span></li>
     </ul>
-    <ul class="nav nav-list messages-list">
-        {{#each bookmarked_messages}}
-        {{> message_bookmarked_abstr}}
-        {{/each}}
-    </ul>
-    {{/if}}
 </template>
 
 <template name="message_abstr">
@@ -103,30 +101,7 @@
     </div>
     </li>
 </template>
-<template name="message_bookmarked_abstr">
-    <li
-    {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}"
-       class="message-link internal-link">
-        <span class="message-abstr">{{{abstract}}}</span>
-    </a>
 
-    <div class="abstract-wrapper">
-        <div>
-            <div class="popover message-abstract bottom">
-                <h6 class="popover-title"><i class='icon-user'></i> {{user_name}}<span class="pull-right">{{get_date time}}</span>
-
-                    <div class="arrow"></div>
-
-                </h6>
-                <div class="popover-content">
-                    <pre><code class='{{language}}'>{{{abstract}}}</code></pre>
-                </div>
-            </div>
-        </div>
-    </div>
-    </li>
-</template>
 <template name="stream_abstr">
     <li
     {{#if is_active short_id}} class="active"{{/if}}>

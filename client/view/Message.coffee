@@ -27,10 +27,6 @@ do ->
     comments: ->
       MessageAnnotations.find({message_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
 
-    is_bookmarked: (bookmarkedByArray) ->
-      userId = Session.get SESSION_USER
-      _.indexOf(bookmarkedByArray, userId) isnt -1
-      
     raw: (message) ->
       return HtmlEncoder.encode(message.raw)
 
@@ -87,14 +83,6 @@ do ->
         $('body').children('.app').show()
       )
 
-    'click .add-bookmark': (evt) ->
-      messageId = Session.get SESSION_SHORT_MESSAGE_ID
-      messagesController.addBookmark messageId
-
-    'click .remove-bookmark': (evt) ->
-      messageId = Session.get SESSION_SHORT_MESSAGE_ID
-      messagesController.deleteBookmark messageId
-
     'click .edit': (evt) ->
       button = $(evt.currentTarget)
       toolbar = button.parents('.view-toolbar')
@@ -121,7 +109,7 @@ do ->
           end = range.endOffset
           modal = new Modal(Template.annotate_modal, new CommentValidator())
           modal.submit = (formData) ->
-            Meteor.call("addAnnotation", Session.get(SESSION_SHORT_MESSAGE_ID), Session.get(SESSION_USER), start, end, formData.comment, (err, aId)->
+            Meteor.call("addAnnotation", Session.get(SESSION_SHORT_MESSAGE_ID), Meteor.userId(), start, end, formData.comment, (err, aId)->
               console?.error(err) if err
               modal.close()
             )

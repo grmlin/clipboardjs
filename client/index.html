@@ -6,7 +6,7 @@
                 <div class="action-bar">
                     <h1 id="logo">ClipboardJS</h1>
                     {{> notifications}}
-                    {{> user}}
+                    <div class="pull-right">{{loginButtons}}</div>
                 </div>
 
                 {{> create}}
@@ -38,8 +38,8 @@
 
 
 <template name="language_btn_group">
-    <button class="current-lang btn btn-small" data-toggle="dropdown">Plain Text</button>
-    <button class="language-toggle btn btn-small dropdown-toggle" data-toggle="dropdown">
+    <button class="current-lang btn btn-small">Plain Text</button>
+    <button class="language-toggle btn btn-small dropdown-toggle">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">

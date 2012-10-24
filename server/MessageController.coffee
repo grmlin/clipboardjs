@@ -36,7 +36,6 @@ do() ->
 
       newid = Messages.insert
         abstract: messageAbstract
-        bookmarked_by: []
         highlighted: messageHighlighted.value
         is_private: false
         language: messageHighlighted.language
@@ -45,24 +44,18 @@ do() ->
         stream_id: streamId
         time: (new Date()).getTime()
         user_id: userId
-        user_name: Users.findOne(userId)?.user_name
+        user_name: Meteor.users.findOne(userId)?.username
 
       return newid
 
-    addMessageBookmark: (userId, shortId) ->
-      Messages.update {short_id: shortId}, {$addToSet:
-        {bookmarked_by: userId}}
-
-    deleteMessageBookmark: (userId, shortId) ->
-      Messages.update {short_id: shortId}, {$pull:
-        {bookmarked_by: userId}}
-
-    updateMessageOwner: (userId, userName) ->
-      [Messages, StreamMessages].forEach (collection) ->
-        collection.update(
-          {user_id: userId},
+    updateMessageOwner: (oldId, newId) ->
+      Messages.update(
+          {user_id: oldId},
           {$set:
-            {user_name: userName}
+            {
+              user_id: newId,
+              user_name: Meteor.users.findOne(newId)?.username
+            }
           }, multi: true
         )
       return "messages updated"
@@ -74,7 +67,7 @@ do() ->
         start: start
         end: end
         user_id: userId
-        author: Users.findOne(userId)?.user_name
+        author: Meteor.users.findOne(userId)?.username
 
       console.log "New annotation added: #{id}"
 

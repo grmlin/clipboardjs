@@ -6,3 +6,6 @@
 coffeescript
 less
 backbone
+accounts-ui
+accounts-base
+accounts-password

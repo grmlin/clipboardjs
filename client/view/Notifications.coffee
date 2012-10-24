@@ -1,14 +1,14 @@
 do ->
   Template.notifications.helpers
     items: ->
-      Invitations.find({invitee: Session.get(SESSION_USER)})
+      Invitations.find({invitee: Meteor.userId()})
 
     count: (items) ->
       items.count()
 
   Template.notifications_modal.helpers
     items: ->
-      Invitations.find({invitee: Session.get(SESSION_USER)})
+      Invitations.find({invitee: Meteor.userId()})
 
   Template.notifications.rendered = ->
     modal = document.getElementById("notifications")

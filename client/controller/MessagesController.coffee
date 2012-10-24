@@ -1,11 +1,17 @@
 MessagesController = do () ->
-  Messages.remove = ->
-  Messages.insert = ->
-  Messages.update = ->
   
   class MessagesController
     constructor: ->
-          
+      checkUser = =>
+        ctx = new Meteor.deps.Context()
+        ctx.on_invalidate(checkUser)
+        ctx.run =>
+          userId = Meteor.userId()
+          unless userId is null
+            @updateUserName(usersController.getTempUserId(), userId)
+    
+      checkUser()
+      
     resetMessageSession: ->
       Session.set SESSION_SHORT_MESSAGE_ID, ""
 
@@ -19,22 +25,23 @@ MessagesController = do () ->
     createMessage: (message, type, callback) ->
       @createStreamMessage message, type, null, callback
   
+    #TODO handle anonymous messages
     createStreamMessage: (message, type, streamId, callback = ->) ->
-      userId = Session.get(SESSION_USER)
+      userId = usersController.getUserId()
       Meteor.call("createMessage", userId, message, type, streamId, (err, res) ->
         console?.error(err) if err
         callback.call(this, res) unless typeof err isnt "undefined"
       )
       
     createStream: (callback) ->
-      userId = Session.get(SESSION_USER)
+      userId = Meteor.userId()
       Meteor.call("createStream", userId, (err, res) ->
         console?.error err if err
         callback.call(this, res)
       )
 
     joinStream: (streamShortId) ->
-      userId = Session.get(SESSION_USER)
+      userId = Meteor.userId()
       Meteor.call("joinStream", streamShortId, userId, (err,res) ->
         if typeof err isnt "undefined"
           alert err.reason
@@ -43,14 +50,14 @@ MessagesController = do () ->
       )
 
     leaveStream: (streamShortId) ->
-      userId = Session.get SESSION_USER
+      userId = Meteor.userId()
       Meteor.call("leaveStream", streamShortId, userId, (err,res) ->
         alert err.reason if err
         boardsRouter.navigate "/list", trigger: true
       )
       
     deleteStream: (streamShortId) ->
-      userId = Session.get SESSION_USER
+      userId = Meteor.userId()
       Meteor.call("deleteStream", streamShortId, userId, (err,res) ->
         alert err.reason if err
         boardsRouter.navigate "/list", trigger:true
@@ -58,18 +65,6 @@ MessagesController = do () ->
       
     deleteMessage: (user_id, message_id) ->
 
-    addBookmark: (messageId) ->
-      userId = Session.get(SESSION_USER)
-      Meteor.call("addMessageBookmark", userId, messageId, (err, res) ->
-        console?.error err if typeof err isnt "undefined"
-      )
-
-    deleteBookmark: (messageId) ->
-      userId = Session.get(SESSION_USER)
-      Meteor.call("deleteMessageBookmark", userId, messageId, (err, res) ->
-        console?.error err if typeof err isnt "undefined"
-      )
-
-    updateUserName: (userId, userName) ->
-      Meteor.call "updateMessageOwner", userId, userName, (err, res) ->
+    updateUserName: (oldId, newId) ->
+      Meteor.call "updateMessageOwner", oldId, newId, (err, res) ->
         console?.log err, res    

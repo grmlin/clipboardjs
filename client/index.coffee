@@ -15,42 +15,35 @@ streamsPagination = new StreamsPagination()
 
 Meteor.startup ->
   Session.set SESSION_BOARD_ID, null
-  Session.set SESSION_USER, null
+
+  userid = localStorage["cjs_temp_user"]
+  if typeof userid is "undefined"
+    userid = Meteor.uuid()
+    localStorage["cjs_temp_user"] = Meteor.uuid()
+
+  Session.set SESSION_TEMP_USER_ID, userid
 
   initializeApp = ->
     if Session.get(SESSION_STATE) is appState.LOADING
       appState.setState(appState.LOADED)
+      Accounts.ui.config({
+      passwordSignupFields: 'USERNAME_ONLY'
+      })
+      #observer.stop()
       Backbone.history.start({pushState: true})
 
       if Backbone.history.fragment is ""
         boardsRouter.navigate "list", trigger: true
 
-  userid = localStorage[SESSION_USER]
-  if typeof userid is "undefined"
-    usersController.createUser()
-  else
-    usersController.loadUser(userid)
-
-  watchUser = () ->
-    update = ->
-      ctx = new Meteor.deps.Context()
-      ctx.on_invalidate(update)
-      ctx.run ->
-        userId = Session.get SESSION_USER
-        unless userId is null
-          console.log("The current user is now", userId);
-          initializeApp()
-
-    update()
-
   # Subscribing 
   progress.addSubscription (subscribe) ->
-    subscribe 'messageAnnotations', Session.get(SESSION_SHORT_MESSAGE_ID)
+    subscribe 'message_annotations', Session.get(SESSION_SHORT_MESSAGE_ID)
 
   progress.addSubscription (subscribe) ->
-    subscribe 'users', Session.get(SESSION_USER)
+    subscribe 'invitations', usersController.getUserId()
 
-  progress.addSubscription (subscribe) ->
-    subscribe 'invitations', Session.get(SESSION_USER)
 
-  watchUser()
+  #observer = Meteor.users.find().observe
+  # added: =>
+  initializeApp()
+

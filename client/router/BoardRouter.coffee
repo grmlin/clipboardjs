@@ -1,6 +1,6 @@
 BoardsRouter = do ->
   isSubscribed = (streamShortId) ->
-    userId = Session.get SESSION_USER
+    userId = Meteor.userId()
     return Streams.find({short_id: streamShortId, users: userId}).count() > 0
 
   streamToJoin = null
@@ -38,7 +38,7 @@ BoardsRouter = do ->
 
     stream: (stream_id) ->
       @_closeRawFileDialog()
-      Meteor.call("isSubscribed", stream_id, Session.get(SESSION_USER), (err, isSubscribed) =>
+      Meteor.call("isSubscribed", stream_id, Meteor.userId(), (err, isSubscribed) =>
         if isSubscribed
           console.log "loading stream #{stream_id}"
           appState.setState appState.STREAM

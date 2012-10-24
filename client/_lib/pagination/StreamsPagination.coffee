@@ -1,7 +1,7 @@
 class StreamsPagination extends AbstractPagination
   @N_PER_PAGE: 5
   @getCountOptions: ->
-    {users: Session.get(SESSION_USER)}
+    {users: usersController.getUserId()}
   
   constructor: () ->
     super("Streams", StreamsPagination.getCountOptions, StreamsPagination.N_PER_PAGE)
@@ -10,4 +10,4 @@ class StreamsPagination extends AbstractPagination
       subscribe 'current_stream', Session.get(SESSION_SHORT_STREAM_ID)
       
     progress.addSubscription (subscribe) =>
-      subscribe 'streams', Session.get(SESSION_USER), @_getPageNumber(), @nPerPage
+      subscribe 'streams', usersController.getUserId(), @_getPageNumber(), @nPerPage

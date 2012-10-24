@@ -1,21 +1,6 @@
 do() ->
-  checkUser: (userId) ->
-    interval = Meteor.setInterval(=>
-      now = (new Date()).getTime()
-      user = Users.findOne userId
-      if now - user.last_beat > 30 * 1000
-        Users.update(userId,
-          $set: connected = false)
-    , 6 * 1000)
-
   Meteor.methods
-    heartBeat: (userId) ->
-      user = Users.findOne(userId)
-      user.last_beat = (new Date()).getTime()
-
-
-
-    createUser: ->
+    createUser__: ->
       userId = Users.insert
         is_connected: false
         is_registered: false
@@ -62,12 +47,12 @@ do() ->
       return existing
 
     doesUserExist: (username) ->
-      Users.find(user_name: username).count() > 0
+      Meteor.users.find(username: username).count() > 0
 
     invite: (userName, byUserId, fragment) ->
-      invitee = Users.findOne({user_name: userName})
-      inviter = Users.findOne(byUserId)
-      throw new Meteor.error(404, "Invite failed") unless invitee and inviter
+      invitee = Meteor.users.findOne({username: userName})
+      inviter = Meteor.users.findOne(byUserId)
+      throw new Meteor.Error(404, "Invite failed") unless invitee
       
       desc = "stream" if fragment.indexOf("stream") isnt -1
       desc = "message" if fragment.indexOf("message") isnt -1
@@ -75,7 +60,7 @@ do() ->
       
       Invitations.insert
         invitee: invitee._id
-        inviter: inviter.user_name
+        inviter: inviter and inviter.username ? "<unregistered user>"
         fragment: fragment
         description: desc
 

@@ -13,10 +13,6 @@ do ->
     is_active: (id)->
       id is Session.get(SESSION_SHORT_MESSAGE_ID)
   
-  Template.message_bookmarked_abstr.helpers
-    is_active: (id)->
-      id is Session.get SESSION_SHORT_MESSAGE_ID
-  
   Template.stream_abstr.helpers
     is_active : (id) ->
       id is Session.get SESSION_SHORT_STREAM_ID

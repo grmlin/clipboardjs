@@ -2,25 +2,26 @@ do ->
   snippet = null
   hightlighted = null
   langNotepad = null
-
+  dropdown = null
+  
   Template.create.helpers
     show : ->
       appState.isState appState.LIST
   
-    user_name : ->
-      Boards.findOne(Session.get(SESSION_BOARD_ID))?.user_name
-
   Template.create.rendered = ->
     snippet = this.find ".text-board"
     hightlighted = this.find ".prettyprint code"
     langNotepad = this.find '[name="current-lang-notepad"]'
-
+    dropdown = new LangDropdown($(this.find('.language-toggle')))
+    dropdown.onLangChanged = (langDescription) =>
+      this.find('.current-lang-preview').textContent = langDescription
+      
     $('.tooltip').remove()
     $(this.findAll('.preview')).tooltip()
     
   #TODO use LangDropdown class 
   Template.create.events =
-    'click .text-type .dropdown-menu li:not(.active) a': (evt) ->
+    ###'clickss .text-type .dropdown-menu li:not(.active) a': (evt) ->
       $lang = $(evt.currentTarget)
       $view = $lang.parents('.show:first')
       lang = evt.currentTarget.getAttribute "data-val"
@@ -35,7 +36,8 @@ do ->
       
       if $view.hasClass "previewed"
         $view.find('.preview:first').click().click() #hrrrr
-
+     ###
+  
     'click .preview': (evt) ->
       $button = $ evt.currentTarget
       $view = $button.parents '.show:first'
@@ -82,7 +84,7 @@ do ->
     "click .paste-text-board:not(:disabled)": (evt) ->
       $button = $(evt.currentTarget)
       txt = $(snippet).text()
-      type = langNotepad.value
+      type = dropdown.getLang()
 
       if txt isnt ""
         $button.attr("disabled", "disabled")
