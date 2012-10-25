@@ -15,6 +15,9 @@ do ->
 
       isRightState and isMessageSelected
 
+    show_editor: ->
+      Meteor.userId() isnt null
+      
     message: ->
       messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
       message = Messages.findOne({short_id: messageId})
@@ -24,9 +27,6 @@ do ->
       else 
         return null
         
-    comments: ->
-      MessageAnnotations.find({message_id: Session.get(SESSION_SHORT_MESSAGE_ID)})
-
     raw: (message) ->
       return HtmlEncoder.encode(message.raw)
 
@@ -98,6 +98,9 @@ do ->
       if (selection.rangeCount > 0)
         window.getSelection().removeAllRanges();
 
+    'click .login-proxy': (evt) ->
+      document.querySelector('#login-buttons .login-link-text').click()
+      
     'click .add-annotation': (evt) ->
       selection = window.getSelection();
       if selection.rangeCount > 0
@@ -109,10 +112,8 @@ do ->
           end = range.endOffset
           modal = new Modal(Template.annotate_modal, new CommentValidator())
           modal.submit = (formData) ->
-            Meteor.call("addAnnotation", Session.get(SESSION_SHORT_MESSAGE_ID), Meteor.userId(), start, end, formData.comment, (err, aId)->
-              console?.error(err) if err
-              modal.close()
-            )
+            messagesController.addAnnotation(Session.get(SESSION_SHORT_MESSAGE_ID),start,end,formData.comment)
+            modal.close()
 
           modal.show {title: "Login", user_name: "", submit_text: "Login"}
       else

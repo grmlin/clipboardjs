@@ -1,10 +1,12 @@
 class LangDropdown 
   constructor: (@toggle) ->
-    @toggle.dropdown()
     
     @button = @toggle.prev()
     @list = @toggle.next()
-  
+
+    @button.dropdown()
+    @toggle.dropdown()
+
     @list.on 'click', 'li:not(.active) a', @_onLangSelect
     
   _onLangSelect: (evt) =>

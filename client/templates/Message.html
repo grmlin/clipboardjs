@@ -18,25 +18,19 @@
         </div>
         
         <div class="message-editor btn-toolbar pull-left">
+            {{#if show_editor}}
             <p class="btn-group pull-left" title="Change paste language" data-placement="bottom">{{> language_btn_group}}</p>
             <p class="btn-group pull-left" title="1. Select text below <br>2. add the annotation" data-placement="bottom">
                 <button class="add-annotation btn btn-small"><i class="icon-comment"></i></button>
             </p>
+            {{else}}
+                <p class="btn-group pull-left">
+                    <button class="btn btn-small btn-warning login-proxy"><i class="icon-warning-sign icon-white"></i>&nbsp;Login to add comments</button>
+                </p>
+            {{/if}}
         </div>
     </div>
 
-    <div class="message-annotations">
-        <h4>Comments</h4>
-        <ol>
-            {{#each comments _id}}
-            <li id="{{_id}}">
-                <span class="label">{{author}}</span>
-                <p id="{{_id}}-target" class="hide">{{comment}}</p>
-            </li>
-            {{/each}}
-        </ol>
-    </div>
-    
     <div class="message-view">
         <p class="message-detail">
             <span class="lang">{{language}}</span></span>

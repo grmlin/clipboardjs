@@ -1,16 +1,6 @@
 MessagesController = do () ->
   
   class MessagesController
-    constructor: ->
-      checkUser = =>
-        ctx = new Meteor.deps.Context()
-        ctx.on_invalidate(checkUser)
-        ctx.run =>
-          userId = Meteor.userId()
-          unless userId is null
-            @updateUserName(usersController.getTempUserId(), userId)
-    
-      checkUser()
       
     resetMessageSession: ->
       Session.set SESSION_SHORT_MESSAGE_ID, ""
@@ -65,6 +55,17 @@ MessagesController = do () ->
       
     deleteMessage: (user_id, message_id) ->
 
-    updateUserName: (oldId, newId) ->
-      Meteor.call "updateMessageOwner", oldId, newId, (err, res) ->
-        console?.log err, res    
+    addAnnotation: (shortMessageId, start, end, comment) ->
+      id = MessageAnnotations.insert
+        comment: comment
+        message_id: shortMessageId
+        start: start
+        end: end
+        user_id: Meteor.user()
+        author: Meteor.users.findOne(userId)?.username
+  
+      console.log "New annotation added: #{id}"
+  
+      return id
+
+

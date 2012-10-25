@@ -1,13 +1,5 @@
 Publisher =
   wirePublications: ->
-    Meteor.publish "users", (userId) ->
-      user = Users.find userId,
-        fields:
-          pwd: false
-
-      console.log "Publishing user #{userId}"
-      return user
-
     Meteor.publish "streams", (userId, pageNumber = 1, nPerPage = 10) ->
       streams = Streams.find({users: userId}, {
       skip: (pageNumber - 1) * nPerPage
@@ -85,6 +77,13 @@ Publisher =
           }
         })
 
+    MessageAnnotations.allow({
+    insert: (userId, doc) ->
+      console.log "INSERTING Comment? ", userId, doc
+      messages = Messages.find(short_id:doc.message_id)
+      messages.count() > 0 and doc.user_id isnt null
+    })
+    
     Meteor.publish "invitations", (userId) ->
       Invitations.find invitee: userId
 
