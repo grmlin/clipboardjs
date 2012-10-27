@@ -55,6 +55,9 @@ do ->
       
 
   Template.stream.rendered = ->
+    $('.tooltip').remove()
+    $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
+    
     if isSubscribed()
       list = this.find(".stream-list ul")
       document.getElementById("stream-list").appendChild reactiveList()
@@ -77,7 +80,4 @@ do ->
 
     'click .remove': (evt) ->
       messagesController.leaveStream(Session.get(SESSION_SHORT_STREAM_ID))
-
-    'click .delete': (evt) ->
-      messagesController.deleteStream(Session.get(SESSION_SHORT_STREAM_ID))
 

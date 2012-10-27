@@ -44,20 +44,8 @@ MessagesController = do () ->
 
     leaveStream: (streamShortId) ->
       userId = Meteor.userId()
-      Meteor.call("leaveStream", streamShortId, userId, (err,res) ->
-        alert err.reason if err
-        boardsRouter.navigate "/list", trigger: true
-      )
+      Meteor.call "leaveStream", streamShortId, userId
       
-    deleteStream: (streamShortId) ->
-      userId = Meteor.userId()
-      Meteor.call("deleteStream", streamShortId, userId, (err,res) ->
-        alert err.reason if err
-        boardsRouter.navigate "/list", trigger:true
-      )
-      
-    deleteMessage: (user_id, message_id) ->
-
     addAnnotation: (shortMessageId, start, end, comment) ->
       id = MessageAnnotations.insert
         comment: comment
