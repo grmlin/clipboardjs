@@ -38,12 +38,16 @@
 
 
 <template name="language_btn_group">
-    <button class="current-lang btn btn-small">Plain Text</button>
+    <button class="current-lang btn btn-small">{{#if is_message_opened}}Change language{{else}}Plain Text{{/if}}</button>
     <button class="language-toggle btn btn-small dropdown-toggle">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
+        {{#if is_message_opened}}
+        <li><a href="#" data-val="plain">Plain text</a></li>
+        {{else}}
         <li class="active"><a href="#" data-val="plain">Plain text</a></li>
+        {{/if}}
         <li><a href="#" data-val="auto">Auto Detection</a></li>
         <li><a href="#" data-val="xml">HTML</a></li>
         <li><a href="#" data-val="javascript">Javascript</a></li>

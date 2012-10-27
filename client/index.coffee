@@ -38,6 +38,9 @@ Meteor.startup ->
   # Subscribing 
   progress.addSubscription (subscribe) ->
     subscribe 'message_annotations', Session.get(SESSION_SHORT_MESSAGE_ID)
+  
+  progress.addSubscription (subscribe) ->
+      subscribe 'stream_message_annotation', Session.get(SESSION_SHORT_STREAM_ID)
 
   progress.addSubscription (subscribe) ->
     subscribe 'invitations', usersController.getUserId()
@@ -45,5 +48,8 @@ Meteor.startup ->
 
   #observer = Meteor.users.find().observe
   # added: =>
-  initializeApp()
+  progress.registerInitialLoadHandler(->
+    Meteor._debug "#{progress.getSubscriptionCount()} subscriptions loaded initially"
+    initializeApp()
+  )
 

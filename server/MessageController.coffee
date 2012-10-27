@@ -47,7 +47,29 @@ do() ->
         user_name: Meteor.users.findOne(userId)?.username
 
       return newid
-
+      
+    updateMessageType: (userId, messageId, newType) ->
+      message = Messages.findOne messageId
+      if message and userId is message.user_id
+        Meteor._debug "Updating message #{messageId} type to #{newType}"
+        highlighter = new Highlighter()
+        abstractor = new MessageAbstractor()
+  
+        message_raw = message.raw
+  
+        messageHighlighted = highlighter.highlight message_raw, newType
+        messageAbstract = abstractor.getAbstract message_raw, messageHighlighted.language
+        Messages.update(messageId, {
+          $set:
+            {
+            abstract: messageAbstract
+            highlighted: messageHighlighted.value
+            language: messageHighlighted.language
+            }
+        })  
+      else
+        new Meteor.Error(500, "Message couldn't be updated")
+      
     updateMessageOwner: (oldId, newId) ->
       Messages.update(
           {user_id: oldId},

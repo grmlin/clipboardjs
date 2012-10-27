@@ -33,9 +33,15 @@ do ->
   Template.stream.helpers
     show: ->
       streamId = Session.get(SESSION_SHORT_STREAM_ID)
-      isRightState = appState.getState() is appState.STREAM
-
-      isRightState and streamId isnt ""
+      if isSubscribed()
+        isRightState = appState.getState() is appState.STREAM
+        isRightState and streamId isnt ""
+        return true
+        
+      else if streamId
+        Meteor._debug "Not allowed to open stream #{streamId}"
+        boardsRouter.navigate "/stream/join/#{streamId}", trigger: true
+        return false
 
     is_owner: ->
       streamId = Session.get(SESSION_SHORT_STREAM_ID)
@@ -44,6 +50,9 @@ do ->
 
     is_subscribed: ->
       isSubscribed()
+
+    comment_count: (messageId) ->
+      
 
   Template.stream.rendered = ->
     if isSubscribed()

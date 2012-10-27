@@ -11,9 +11,10 @@ class LangDropdown
     
   _onLangSelect: (evt) =>
     evt.preventDefault()
+    $(evt.currentTarget).parent().addClass('active').siblings('.active').removeClass "active"
+
     @button.text evt.currentTarget.textContent
     @onLangChanged evt.currentTarget.textContent
-    $(evt.currentTarget).parent().addClass('active').siblings('.active').removeClass "active"
     
   onLangChanged : (langDescription) ->
     

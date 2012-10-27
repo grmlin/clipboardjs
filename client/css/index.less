@@ -236,7 +236,8 @@ code {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8) url(/img/load.gif) no-repeat center;
+  background: rgba(255, 255, 255, 0.8) url(/img/load.gif) no-repeat center;
+  z-index: 20;
 }
 
 .modal,
@@ -252,7 +253,7 @@ code {
   left: 0;
   width: 100%;
   text-align: center;
-  z-index:11;
+  z-index:21;
   font-size: 12px;
   display: none;
 }
@@ -503,6 +504,14 @@ line-height: 18px;*/
   cursor: default;
 }
 
+.messages-list li.notice a {
+  color: @grey;
+}
+
+.messages-list li.notice a i,
+.messages-list li.notice a:hover i {
+  opacity: 0.5;
+}
 .messages-list .message-link {
   font-size: 11px;
   white-space: nowrap;
@@ -726,6 +735,10 @@ line-height: 18px;*/
 .view-toolbar .btn-toolbar .btn-group.editing {
   background: rgba(91,183,91,0.3);
   padding-left: 10px;
+}
+
+.view-toolbar .btn-toolbar .message-actions button[disabled] {
+  opacity: 1;
 }
 
 .message-editor {     
@@ -1019,10 +1032,22 @@ line-height: 18px;*/
   font-size: 10px;
 }
 
-#stream-list li p + pre {
-  overflow: hidden;
+#stream-list li p + div.message {
+  overflow: auto;
 }
 
+#stream-list div.message .message-header {
+  margin-bottom: 7px;
+}
+
+#stream-list div.message .message-header code {
+  position: relative;
+  top: 1px;
+}
+
+#stream-list div.message .message-header button[disabled] {
+  opacity: 1;
+}
 #stream-list .prettyprint {
   cursor: pointer;
   margin-bottom: 0;

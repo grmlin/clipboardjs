@@ -1,22 +1,13 @@
 do ->
   inviteModal = new InviteModal()
-
-  messageObserver = null
-  annotationObserver = null
-  refreshTimeout = null
-
   commentPopover = null
 
   Template.message_view.helpers
-    show: ->
-      messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
-      isRightState = appState.getState() is appState.MESSAGE
-      isMessageSelected = messageId isnt ""
-
-      isRightState and isMessageSelected
-
     show_editor: ->
       Meteor.userId() isnt null
+
+    is_owner: (userId) ->
+      userId is Meteor.userId()
       
     message: ->
       messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
@@ -26,7 +17,7 @@ do ->
         return message
       else 
         return null
-        
+
     raw: (message) ->
       return HtmlEncoder.encode(message.raw)
 
@@ -56,14 +47,17 @@ do ->
       return letters.join("")
 
   Template.message_view.rendered = ->
-    messageId = Session.get(SESSION_SHORT_MESSAGE_ID)
     view = this.find '.message-view'
-    commentButton = new ToggleButton("comments", $(this.find('.comments-toggle')), $('#content'))
-
     view?.className = view.className.replace "editing", ""
 
     $('.tooltip').remove()
     $(this.findAll('.view-toolbar .btn, .message-editor .btn-group')).tooltip()
+
+    dropdown = new LangDropdown($(this.find('.language-toggle')))
+    dropdown.onLangChanged = (langDescription) =>
+      id = Messages.findOne({short_id:Session.get(SESSION_SHORT_MESSAGE_ID)})?._id
+      messagesController.updateMessageType(id,dropdown.getLang())
+      #this.find('.current-lang-preview').textContent = langDescription
 
   Template.message_view.events =
     'click .share': (evt) ->

@@ -4,10 +4,14 @@
         <div class="clearfix view-toolbar">
             <p class="stream-actions pull-left btn-group">
                 <!--button class="share btn btn-small collapsing-btn" title="share this stream" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button-->
-                <button class="invite btn btn-small collapsing-btn" title="invite another uster to this stream" data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
-                <button class="remove btn btn-small collapsing-btn" title="remove this stream" data-placement="bottom" data-original-title="leave stream"><i class="icon-remove-sign"></i></button>
+                <button class="invite btn btn-small collapsing-btn" title="invite another uster to this stream"
+                        data-placement="bottom" data-original-title="share message"><i class="icon-share"></i></button>
+                <button class="remove btn btn-small collapsing-btn" title="remove this stream" data-placement="bottom"
+                        data-original-title="leave stream"><i class="icon-remove-sign"></i></button>
                 {{#if is_owner}}
-                <button class="delete btn btn-small btn-danger collapsing-btn" title="delete this stream" data-placement="bottom" data-original-title="delete stream"><i class="icon-trash icon-white"></i></button>
+                <button class="delete btn btn-small btn-danger collapsing-btn" title="delete this stream"
+                        data-placement="bottom" data-original-title="delete stream"><i
+                        class="icon-trash icon-white"></i></button>
                 {{/if}}
             </p>
         </div>
@@ -17,7 +21,10 @@
                 <p class="btn-group dropup">
                     {{> language_btn_group}}
                 </p>
-                <p><button class="paste btn btn-small btn-block">Paste</button></p>
+
+                <p>
+                    <button class="paste btn btn-small btn-block">Paste</button>
+                </p>
             </div>
             <div class="paste-area"><textarea name="stream-message" id="stream-message"></textarea></div>
         </div>
@@ -29,7 +36,7 @@
     {{#if show}}
     <div id="stream-list-wrapper">
         <ul id="stream-list" class="unstyled">
-            
+
         </ul>
     </div>
     {{/if}}
@@ -38,23 +45,50 @@
 <template name="stream_list_item">
     <li class="clearfix{{#if is_user}} myself{{/if}}">
         <p>
-            <span class="username">{{#if is_user}}myself{{else}}{{message.user_name}}{{/if}}</span> <br>
-            <code>{{message.language}}</code>    <br>
-            <a class="internal-link" href="/message/{{message.short_id}}"><i class="icon-edit"></i> open paste</a>
-            
-        </p> 
-        <pre class="prettyprint"><code lang="{{message.language}}" data-message-id="{{message.short_id}}" data-is-abstract="yes" title="click to show/hide full paste">{{{message.abstract}}}</code></pre>
+            <span class="username">{{message.user_name}}</span> <br>
+
+
+        </p>
+
+        <div class="message">
+            <div class="message-header clearfix">
+                <code>{{message.language}}</code>
+
+                <div class="btn-group pull-right">
+                    <button class="btn btn-small" title="comments" data-placement="bottom" disabled>
+                        <i class="icon-comment"></i> {{message_comment_count message.short_id}}
+                    </button>
+                    <a class="btn btn-small internal-link" title="Open paste" href="/paste/{{message.short_id}}">
+                        <i class="icon-share-alt"></i>
+                    </a>
+                </div>
+            </div>
+            <pre class="prettyprint"><code lang="{{message.language}}" data-message-id="{{message.short_id}}"
+                                           data-is-abstract="yes" title="click to show/hide full paste">{{{message.abstract}}}</code></pre>
+        </div>
     </li>
 </template>
 <template name="stream_list_empty">
-    <li><div class="alert">Empty Stream</div></li>
+    <li>
+        <div class="alert">Empty Stream</div>
+    </li>
 </template>
-        
+
 <template name="join_stream">
     {{#if show}}
     <div class="join-stream">
         <p><strong>You're currently not subscribed to this paste stream.</strong></p>
-        <p><button class="btn btn-large">Join Stream</button></p>
+        {{#if is_user}}
+        <p>
+            <button class="btn btn-large join">Join Stream</button>
+        </p>
+        {{else}}
+        <p>
+            <button class="btn btn-warning login-proxy"><i class="icon-exclamation-sign icon-white"></i> Log in to join
+                a stream
+            </button>
+        </p>
+        {{/if}}
     </div>
     {{/if}}
 </template>

@@ -15,13 +15,16 @@ MessagesController = do () ->
     createMessage: (message, type, callback) ->
       @createStreamMessage message, type, null, callback
   
-    #TODO handle anonymous messages
     createStreamMessage: (message, type, streamId, callback = ->) ->
       userId = usersController.getUserId()
       Meteor.call("createMessage", userId, message, type, streamId, (err, res) ->
         console?.error(err) if err
         callback.call(this, res) unless typeof err isnt "undefined"
       )
+     
+    updateMessageType: (messageId, newType) ->
+      userId = usersController.getUserId()
+      Meteor.call "updateMessageType", userId, messageId, newType
       
     createStream: (callback) ->
       userId = Meteor.userId()

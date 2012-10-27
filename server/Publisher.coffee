@@ -14,22 +14,22 @@ Publisher =
     Meteor.publish "messages", (userId, pageNumber = 1, nPerPage = 10) ->
       # Get the corrosponding messages
       messages = Messages.find({
-        $or: [
-          {$and: [
-            {user_id: userId},
-            {stream_id: null}
-          ]}
-        ]
-        }, {
-        fields:
-          raw: false
-          highlighted: false
-          #user_id: false
-        sort:
-          time: -1
-        skip: (pageNumber - 1) * nPerPage
-        limit: nPerPage
-        })
+      $or: [
+        {$and: [
+          {user_id: userId},
+          {stream_id: null}
+        ]}
+      ]
+      }, {
+      fields:
+        raw: false
+        highlighted: false
+      #user_id: false
+      sort:
+        time: -1
+      skip: (pageNumber - 1) * nPerPage
+      limit: nPerPage
+      })
 
       console.log "publishing #{messages.count()} messages for user #{userId}"
       console.log("Publishing #{messages.fetch().length}/#{Messages.find().count()} messages, page: ", pageNumber, " n: ", nPerPage)
@@ -77,13 +77,19 @@ Publisher =
           }
         })
 
+    Meteor.publish "stream_message_annotation", (streamId) ->
+      messages = Messages.find stream_id: streamId
+      ids = messages.map((doc) -> doc.short_id)
+      return MessageAnnotations.find(message_id:
+        {$in: ids})
+
     MessageAnnotations.allow({
     insert: (userId, doc) ->
       console.log "INSERTING Comment? ", userId, doc
-      messages = Messages.find(short_id:doc.message_id)
+      messages = Messages.find(short_id: doc.message_id)
       messages.count() > 0 and doc.user_id isnt null
     })
-    
+
     Meteor.publish "invitations", (userId) ->
       Invitations.find invitee: userId
 

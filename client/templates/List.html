@@ -42,6 +42,8 @@
         {{/each}}
     </ul>
     {{/with}}
+    {{#if is_user}}
+
     <ul class="nav nav-list">
         <li class="nav-header">Paste Streams
             <span class="label">{{stream_count}}</span>
@@ -74,12 +76,21 @@
         {{> stream_abstr}}
         {{/each}}
     </ul>
+    {{else}}
+    <ul class="nav nav-list">
+        <li class="nav-header">Paste Streams
+            </li>
+        </ul>
+    <ul class="nav nav-list messages-list">
+        <li class="notice"><a href="#" class="login-proxy"><i class="icon-exclamation-sign"></i> Please log in to add streams</a></li>
+    </ul>
+    {{/if}}
 </template>
 
 <template name="message_abstr">
     <li
     {{#if is_active short_id}} class="active"{{/if}}>
-    <a href="/message/{{short_id}}"
+    <a href="/paste/{{short_id}}"
        class="message-link internal-link">
         <span class="message-abstr">{{{abstract}}}</span>
     </a>

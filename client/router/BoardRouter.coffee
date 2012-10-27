@@ -8,10 +8,11 @@ BoardsRouter = do ->
   BoardsRouter = Backbone.Router.extend
     routes:
       "list": "list"
-      "message/": "list"
-      "message/:message_id": "message"
-      "stream/": "list"
+      "paste/": "redirectList"
+      "paste/:message_id": "message"
+      "stream/": "redirectList"
       "stream/:stream_id": "stream"
+      "stream/join/": "redirectList"
       "stream/join/:stream_id": "joinStream"
 
     initialize: ->
@@ -29,6 +30,9 @@ BoardsRouter = do ->
       messagesController.resetMessageSession()
       messagesController.resetStreamSession()
 
+    redirectList: ->
+      this.navigate "/list", trigger: true
+      
     message: (message_id) ->
       @_closeRawFileDialog()
       console.log "loading message #{message_id}"
@@ -49,13 +53,18 @@ BoardsRouter = do ->
       )
 
     joinStream: (stream_id) ->
-      streamController.isStream stream_id, (isStream) =>
-        if isStream
-          appState.setState appState.STREAM_JOIN
-
-          Session.set SESSION_SHORT_STREAM_ID_JOINING, stream_id
-          messagesController.resetMessageSession()
-          messagesController.resetStreamSession()
-        else
-          alert "This stream does not exist"
-          @navigate "/list", trigger: true
+      # already subscribed?
+      if Streams.find({short_id: stream_id, users: Meteor.userId()}).count() > 0
+        this.navigate "/stream/#{stream_id}", trigger: true
+        
+      else  
+        streamController.isStream stream_id, (isStream) =>
+          if isStream
+            appState.setState appState.STREAM_JOIN
+  
+            Session.set SESSION_SHORT_STREAM_ID_JOINING, stream_id
+            messagesController.resetMessageSession()
+            messagesController.resetStreamSession()
+          else
+            alert "This stream does not exist"
+            @navigate "/list", trigger: true

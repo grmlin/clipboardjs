@@ -49,6 +49,9 @@ do ->
 
 
   Template.list.events =
+    'click .login-proxy': (evt) ->
+      document.querySelector('#login-buttons .login-link-text').click()
+
     'click .show-more-messages': (evt) ->
       messagePagination.next()
 

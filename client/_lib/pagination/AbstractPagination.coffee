@@ -1,4 +1,5 @@
 class AbstractPagination
+  _countFetchDelay: null,
   constructor: (@collectionName, @countOptionsCb, @nPerPage = 10) ->
     @sessionCountKey = "#{@collectionName}_pagination_count"
     @sessionPageNumberKey = "#{@collectionName}_pagination_page_number"
@@ -14,6 +15,10 @@ class AbstractPagination
     @_setPageNumber()
 
   _getCollectionCount: ->
+    Meteor.clearTimeout @_countFetchDelay
+    @_countFetchDelay = Meteor.setTimeout(@_fetchCount, 500)
+  
+  _fetchCount: =>
     Meteor.call("getCollectionCount", @collectionName, @countOptionsCb(), (err, res) =>
       console?.error(err) if err
       console?.log "#{@collectionName} has #{res} items"

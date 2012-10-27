@@ -14,11 +14,16 @@ SubscriptionProgress = do ->
       return items
 
     # instance
+    _firstLoadCallback: null
+    _firstLoadFinished: no
+    _subscriptionsInitiallyLoaded: 0
+    
     constructor: () ->
       @_uid = uid++;
       @_subscriptions = {}
 
     addSubscription: (getArgs) ->
+      firstTime = yes
       Meteor.autosubscribe =>
         getArgs(() =>
           subscribeArguments = Array.prototype.slice.call(arguments)
@@ -31,6 +36,9 @@ SubscriptionProgress = do ->
             cb = ->
 
           args = subscribeArguments.concat([=>
+            @_subscriptionsInitiallyLoaded++ if firstTime
+            firstTime = no
+            
             @_onLoadComplete(_.first(subscribeArguments))
             cb.apply @
           ])
@@ -44,7 +52,6 @@ SubscriptionProgress = do ->
       isLoading = false
       for own name, type of @_subscriptions
         if @isSubscriptionLoading(name)
-          console.log name, "''''''LLLOOOOAAADDDSSS''''''"
           isLoading = true
           break
 
@@ -60,6 +67,12 @@ SubscriptionProgress = do ->
 
       return items
 
+    getSubscriptionCount: ->
+      Object.keys(@_subscriptions).length
+    
+    registerInitialLoadHandler: (cb) ->
+      @_firstLoadCallback = cb     
+      
     #private
     _getKey: (name) ->
       "#{SESSION_KEY}_#{name}_#{@_uid}"
@@ -72,8 +85,15 @@ SubscriptionProgress = do ->
 
     _onBeforeLoad: (name) ->
       @_setLoadState name, true
-      console?.log "####LOADER#### Subscription \"#{name}\" loads new data now "
+      #console?.log "####LOADER#### Subscription \"#{name}\" loads new data now "
 
     _onLoadComplete: (name) =>
+      Meteor._debug "<SubscriptionProgress> #{name} loaded "
+
       @_setLoadState name, false
-      console?.log "####LOADER#### Subscription \"#{name}\" was sucessfully refreshed "
+      
+      if not @_firstLoadFinished and @_subscriptionsInitiallyLoaded >= @getSubscriptionCount()
+        @_firstLoadFinished = yes
+        @_firstLoadCallback?.call(this)
+      
+      #console?.log "####LOADER#### Subscription \"#{name}\" was sucessfully refreshed "
