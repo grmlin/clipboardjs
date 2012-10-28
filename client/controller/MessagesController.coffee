@@ -47,12 +47,13 @@ MessagesController = do () ->
       Meteor.call "leaveStream", streamShortId, userId
       
     addAnnotation: (shortMessageId, start, end, comment) ->
+      userId = Meteor.userId()
       id = MessageAnnotations.insert
         comment: comment
         message_id: shortMessageId
         start: start
         end: end
-        user_id: Meteor.user()
+        user_id: userId
         author: Meteor.users.findOne(userId)?.username
   
       Meteor._debug "New annotation added: #{id}"

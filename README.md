@@ -21,26 +21,4 @@ open `.meteor/local/build/static/packages/stream/client.js` and add websockets t
             'websocket', 'xdr-polling', 'xhr-polling', 'iframe-xhr-polling', 'jsonp-polling'
           ]});
           
-## TODO
-
-### Messages
-* message delete
-* message editing (?)
-* message count in list
-* lazy loading of messages
-* all messages views
-* message privacy / password protection
-* message annotation
-* message embedding
-
-### Message streams
-* Streams of messages
-* drag n drop messages into streams
-* invite other users
-* participating users list
-
-### Friend-List
-* have a list of friends
-
-### MISC
-* keep alive 
+ 
