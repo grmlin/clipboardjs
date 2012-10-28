@@ -47,7 +47,10 @@ do ->
     has_less_streams: () ->
       streamsPagination.hasLess()
 
-
+  Template.list.rendered = ->
+    $('.tooltip').remove()
+    $(this.findAll('.with-tt')).tooltip()
+    
   Template.list.events =
     'click .login-proxy': (evt) ->
       document.querySelector('#login-buttons .login-link-text').click()

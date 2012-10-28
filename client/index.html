@@ -4,11 +4,12 @@
         <div class="row-fluid">
             <div id="content" class="content">
                 <div class="action-bar">
-                    <h1 id="logo">ClipboardJS</h1>
+                    <a class="internal-link" href="/home"><h1 id="logo">ClipboardJS</h1></a>
                     {{> notifications}}
                     <div class="pull-right">{{loginButtons}}</div>
                 </div>
 
+                {{> home}}
                 {{> create}}
                 {{> message_view}}
                 {{> stream}}
@@ -17,7 +18,7 @@
             </div>
             <div id="sidebar" class="sidebar">
                 <div class="lists">{{> list}}</div>
-                <footer>ClipboardJS, powered by <a href="http://meteor.com">meteor</a>, sources on <a
+                <footer>powered by <a href="http://meteor.com">meteor</a>, sources on <a
                         href="https://github.com/grmlin/clipboardjs">github</a></footer>
             </div>
         </div>
@@ -50,7 +51,9 @@
         {{/if}}
         <li><a href="#" data-val="auto">Auto Detection</a></li>
         <li><a href="#" data-val="xml">HTML</a></li>
+        <li><a href="#" data-val="css">CSS</a></li>
         <li><a href="#" data-val="javascript">Javascript</a></li>
         <li><a href="#" data-val="coffeescript">Coffeescript</a></li>
+        <li><a href="#" data-val="ruby">Ruby</a></li>
     </ul>
 </template>

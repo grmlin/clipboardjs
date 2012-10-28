@@ -7,8 +7,6 @@ usersController = new UsersController()
 messagesController = new MessagesController()
 streamController = new StreamController()
 
-#loadingIndicator = new LoadingIndicator()
-
 messagePagination = new MessagesPagination()
 streamsPagination = new StreamsPagination()
 
@@ -33,7 +31,7 @@ Meteor.startup ->
       Backbone.history.start({pushState: true})
 
       if Backbone.history.fragment is ""
-        boardsRouter.navigate "list", trigger: true
+        boardsRouter.navigate "/home", trigger: true
 
   # Subscribing 
   progress.addSubscription (subscribe) ->

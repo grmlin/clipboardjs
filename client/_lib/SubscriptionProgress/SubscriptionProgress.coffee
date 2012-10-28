@@ -4,16 +4,6 @@ SubscriptionProgress = do ->
 
 
   class SubscriptionLoader
-  # static
-    @subscriptions: []
-    @getLoadingItems: ->
-      items = []
-      for own key, type of LoadingIndicator.types
-        items.push(type.hint) if @isLoading(type)
-
-      return items
-
-    # instance
     _firstLoadCallback: null
     _firstLoadFinished: no
     _subscriptionsInitiallyLoaded: 0

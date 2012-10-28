@@ -1,12 +1,7 @@
 BoardsRouter = do ->
-  isSubscribed = (streamShortId) ->
-    userId = Meteor.userId()
-    return Streams.find({short_id: streamShortId, users: userId}).count() > 0
-
-  streamToJoin = null
-
   BoardsRouter = Backbone.Router.extend
     routes:
+      "home": "home"
       "list": "list"
       "paste/": "redirectList"
       "paste/:message_id": "message"
@@ -24,6 +19,11 @@ BoardsRouter = do ->
     _closeRawFileDialog: ->
       $('.raw-file .close').click()
 
+    home: ->
+      appState.setState appState.HOME
+      messagesController.resetMessageSession()
+      messagesController.resetStreamSession()
+      
     list: ->
       @_closeRawFileDialog()
       appState.setState appState.LIST
@@ -53,6 +53,7 @@ BoardsRouter = do ->
       )
 
     joinStream: (stream_id) ->
+      @_closeRawFileDialog
       # already subscribed?
       if Streams.find({short_id: stream_id, users: Meteor.userId()}).count() > 0
         this.navigate "/stream/#{stream_id}", trigger: true

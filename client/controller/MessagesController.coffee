@@ -55,7 +55,7 @@ MessagesController = do () ->
         user_id: Meteor.user()
         author: Meteor.users.findOne(userId)?.username
   
-      console.log "New annotation added: #{id}"
+      Meteor._debug "New annotation added: #{id}"
   
       return id
 

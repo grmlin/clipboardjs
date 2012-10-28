@@ -1,12 +1,6 @@
 do() ->
-  ABSTRACT_LENGTH = 160
-  ABSTRACT_PUFFER = 10
-  ABSTRACT_LINES = 20
-  ABSTRACT_LINE_PUFFER = 5
-
   shortid = meteorNpm.require "shortid"
 
-  # TODO check user ids on existence?
   Meteor.methods
     getMessageCount: (userId) ->
       Messages.find(user_id: userId).count()

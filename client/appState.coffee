@@ -2,6 +2,7 @@ appState = do() ->
   appState =
     LOADING : "loading"
     LOADED: "loaded"
+    HOME: "home"
     LIST : "list"
     SHOW : "show"
     MESSAGE: "message"

@@ -1,7 +1,7 @@
 class MessagesPagination extends AbstractPagination
   @N_PER_PAGE: 10
   @getCountOptions: ->
-    {user_id: usersController.getUserId()}
+    {user_id: usersController.getUserId(),stream_id:null}
 
   constructor: () ->
     super("Messages", MessagesPagination.getCountOptions, MessagesPagination.N_PER_PAGE)
